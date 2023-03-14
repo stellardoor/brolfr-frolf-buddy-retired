@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %} {{user.name}} {% endblock %}
+
+{% block body %}
+<div class="container">
+<h1>{{user.fname}} {{user.pronouns}}</h1>
+<img class = "profile" src="{{user.photo_link}}" >
+<li> {{user.gender}}, {{user.birthday}}, {{user.location}}</li>
+<p> {{user.intro_text}}</p>
+        <text>Member since: {{user.member_since}}</text>
+        <li>Looking to throw with: {{user.gender_preference}}</li>
+        <li>Availability: {{user.calendar}}</li>
+        <li>Skill Level: {{user.skill_level}}</li>
+        <li>Age Range: {{user.age_range}}</li>
+        <li>Frequented Courses: {{user.frequented_courses}}</li>
+        <li>Kids: {{user.kids_okay}}</li>
+        <li>Dogs: {{user.dogs_okay}}</li>
+        <li>Friendly/Stakes: {{user.friendly_or_stakes_game}}</li>
+        <li>Game preference: {{user.type_of_game}}</li>
+        <li>Alcohol: {{user.alcohol_okay}}</li>
+        <li>Tobacco: {{user.tobacco_okay}}</li>
+        <li>420 Friendly: {{user.smoke_420_okay}}</li>
+        <li>profile pic {{user.photo_link}}</li>
+    </ul>
+</div> 
+<input type="button" onclick="window.location.href='/edit-profile';" value="Edit Profile" />
+
+{% endblock %}

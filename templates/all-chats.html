@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %} Messages {% endblock %}
+
+{% block body %}
+<br>
+    {% for user in chat_list %}
+    <img class = "tiny" src="{{user[1].photo_link}}">
+    <input type="button" onclick="window.location.href='/chat/{{user[0]}}';" value="Chat with {{user[1].fname}}!" />
+
+    {% endfor %}
+
+
+    <script src="/static/js/accept-reject-buddy.js"></script>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %} create account {% endblock %}
+
+{% block body %}
+    <h1> Create an account </h1>
+    <br>
+<body>
+    <form action="/create-new-account" method="POST">
+        <label for = "fname"> First Name: </label>
+        <input type="text" name="fname" id="fname">
+        <br>
+        <label for = "pronouns"> Pronouns: </label>
+        <input type="text" name="pronouns" id="pronouns">
+        <br>
+        <label for = "gender"> Gender: </label>
+        <input type="text" name="gender" id="gender">
+        <br>
+        <label for = "birthday"> Date of Birth: </label>
+        <input type="text" name="birthday" id="birthday">
+        <br>
+        <label for = "email"> Email: </label>
+        <br>
+        <input type="text" name="email" id="email">
+        <br>
+        <label for="password"> Create a password: </label>
+        <br>
+        <input type="password" name="password" id="password"> <br>
+        <br>
+        <br>
+        <input type="submit" value="Let's goooo">
+    </form>
+    </body>
+
+
+{% endblock %}

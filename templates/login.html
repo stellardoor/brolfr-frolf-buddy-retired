@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} welcome frolf buds {% endblock %}
+
+{% block body %}
+    <h1> welcome bro, frolf much?</h1>
+    <br>
+<body>
+    <form action="/process-login" method="POST">
+        <p> Login Below: </p>
+        <p> Email:</p>
+        <input type="text" name="email">
+        <p> Password: </p>
+        <input type="password" name="password"> <br>
+        <a href="/login-help" >Forgot username/password?</a>
+        <br>
+        <input type="submit" value="Let's goooo">
+    </form>
+    <br>
+        <a href="/new-account" >Click here to create an account!</a>
+    </body>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+p.flash {
+    color: rgb(159, 0, 0)
+}
+
+/* form.chat-message {
+    
+} */
+
+div.buddy-message {
+    font-size: large;
+    height: 480px;
+    width: 400px;
+    border: 5px solid rgb(99, 172, 138);
+    margin-bottom: 10px; 
+    overflow: auto;
+}
+
+img.tiny {
+    height: 30px;
+    width: flex;
+    border: 5px solid rgb(81, 116, 100);
+}
+
+img.profile {
+    height: 300px;
+    width: flex;
+    border: 5px solid rgb(81, 116, 100)
+}
+
+text.timestamp {
+    font-size: x-small;
+    font-style: italic;
+    color: rgb(120, 120, 120);
+}

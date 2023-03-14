@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %} Denied Buds {% endblock %}
+
+{% block body %}
+
+    {% for user in denied_buddies %}
+        <h1>{{user.fname}}</h1>
+        <img class = "profile" src="{{user.photo_link}}" >
+        <li> {{user.gender}}, {{user.birthday}} </li>
+        <li> Located in {{user.location}}</li>
+        <p> {{user.intro_text}}</p>
+            <ul>
+                <li>Member since: {{user.member_since}}</li>
+                <li>Looking to throw with: {{user.gender_preference}}</li>
+                <li>Availability: {{user.calendar}}</li>
+                <li>Skill Level: {{user.skill_level}}</li>
+                <li>Frequented Courses: {{user.frequented_courses}}</li>
+                <li>Kids: {{user.kids_okay}}</li>
+                <li>Dogs: {{user.dogs_okay}}</li>
+                <li>Friendly/Stakes: {{user.friendly_or_stakes_game}}</li>
+                <li>Game preference: {{user.type_of_game}}</li>
+                <li>Alcohol: {{user.alcohol_okay}}</li>
+                <li>Tobacco: {{user.tobacco_okay}}</li>
+                <li>420 Friendly: {{user.smoke_420_okay}}</li>
+            </ul>
+            <form action="/accept-buddy" method="POST" class="accept-buddy">
+                <input type="hidden" name="buddy-accept-id" value="{{user.user_id}}">
+                <button for="buddy-accept-id" type="submit" > I changed my mind, accept buddy! </button>
+            </form>
+           
+    {% endfor %}
+    
+    <script src="/static/js/accept-reject-buddy.js"></script>
+{% endblock %}

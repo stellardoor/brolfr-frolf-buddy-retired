@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %} Chat with {{user_2.fname}} {% endblock %}
+
+{% block body %}
+<h1> Chatting with {{user_2.fname}}</h1>
+<br>
+{% if not chat_messages %}
+<div class= "buddy-message" id="message-content" >
+     Send a message to {{user_2.fname}}!
+</div>
+{% else %}
+<div class= "buddy-message" id="message-content" >
+{% for message in chat_messages %} <br>
+<b>{{message.sender_name}}: </b>{{message.message}} <br>
+    <text class = "timestamp">{{message.time_stamp}} </text> 
+{% endfor %}
+</div>
+{% endif %}
+    <form action="/send-message" method="POST" class="chat-message">
+        <input type="text" name="send-message">
+        <input type="hidden" name="receiver-id" value="{{user_2.user_id}}">
+        <button for= "send-message receiver-id" type="submit" > Send Message! </button>
+    </form>
+
+    <script src="/static/js/chat.js"></script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %} {{user.name}} {% endblock %}
+
+{% block body %}
+<br>
+<input type="button" onclick="window.location.href='/profile';" value="Back to profile" />
+<br>
+<br>
+<div class="container">
+<form action="/process-edit" method="POST">
+<label for = "fname"> First Name: </label>
+<input type="text" name="fname" id="fname" placeholder="{{user.fname}}">
+<br>
+<label for = "pronouns"> Pronouns: </label>
+<input type="text" name="pronouns" id="pronouns"  placeholder="{{user.pronouns}}">
+<br>
+<label for = "gender"> Gender: </label>
+<input type="text" name="gender" id="gender" placeholder="{{user.gender}}">
+<br>
+<label for = "birthday"> Date of Birth: </label>
+<input type="text" name="birthday" id="birthday" placeholder="{{user.birthday}}">
+<br>
+<label for="user-location" class="form-label">Location: </label>
+<input class="form-control" list="datalistOptions" name = "user-location" id="user-location" placeholder="Type to search your closest city...">
+<datalist id="datalistOptions">
+    {% for city in city_list %} 
+    <option value="{{city}}">
+    {% endfor %}
+</datalist>
+<input type="submit">
+</form>
+</div>
+<br>
+<div class="container">
+    <form action="/process-photo" method="POST" enctype="multipart/form-data">
+<div class="mb-3">
+    <label for="form-file" class="form-label">Upload a photo of yourself:</label>
+    <input class="form-control" type="file" id="form-file" name="form-file">
+    <input type="submit">
+    </div>
+</form>
+</div>
+
+{% endblock %}
