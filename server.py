@@ -4,7 +4,6 @@ from flask import (Flask, render_template, request, flash, session, redirect, js
 #adding functions for page view
 from model import connect_to_db, db
 import crud
-import json
 from datetime import datetime
 import cloudinary.uploader
 import os
@@ -145,10 +144,15 @@ def show_profiles():
 @app.route("/buddies")
 def show_user_matches():
     if crud.user_logged_in():
-        all_buddies = crud.get_accepted_buddies(session['user_id'])
-        return render_template("show-buddies.html", all_buddies=all_buddies)
+        return render_template("show-buddies.html")
     else:
         return redirect("/")
+
+@app.route("/get-buddies")
+def show_buddies():
+   all_buddies = crud.get_accepted_buddies(session['user_id'])
+   return jsonify(all_buddies)
+
     
 @app.route("/send-buddy-request", methods=["POST"])
 def request_buddy():
@@ -162,14 +166,6 @@ def request_buddy():
     else:
         return  f"cannot request {user_2.fname}!"
 
-
-# @app.route("/requests")
-# def show_buddy_requests():
-#     if crud.user_logged_in():
-#         pending_buddies = crud.get_all_pending_buddies(session['user_id'])
-#         return render_template('buddy-requests.html', pending_buddies = pending_buddies)
-#     else:
-#         return redirect("/")
     
 @app.route("/requests")
 def show_buddy_requests():
@@ -178,10 +174,11 @@ def show_buddy_requests():
     else:
         return redirect("/")
     
-@app.route("/get-requests")
+@app.route('/get-requests')
 def get_requests():
     pending_buddies = crud.get_all_pending_buddies(session['user_id'])
-    return pending_buddies
+    
+    return jsonify(pending_buddies)
     
 @app.route("/denied-buddies")
 def show_denied_buddies():
@@ -212,20 +209,18 @@ def deny_buddy():
     buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
     crud.deny_buddy_request(buddy_id)
     # committing in the crud file ^
-    return  f"Rejected request from {user_2.fname}!"
+    return  f"Rejected {user_2.fname}!"
 
 
 @app.route("/chat", methods = ["POST"]) #no js
 def open_buddy_chat():
-    if crud.user_logged_in():
-        user_id_1 = session["user_id"]
-        user_id_2 = request.form["chat-buddy-id"]
-        user_id_2 = int(user_id_2)
-        # user_2 = crud.get_user_by_id(user_id_2)
-        buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
-        return redirect (f"/chat/{buddy_id}")
-    else:
-        return redirect("/")
+    user_id_1 = session["user_id"]
+    user_id_2 = request.json.get("chat-buddy-id")
+    user_id_2 = int(user_id_2)
+    # user_2 = crud.get_user_by_id(user_id_2)
+    buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
+    # return redirect (f"/chat/{buddy_id}")
+    return f"/chat/{buddy_id}"
     
 @app.route("/chats") 
 def show_open_chats():

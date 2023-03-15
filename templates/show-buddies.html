@@ -2,41 +2,18 @@
 {% block title %} Buddies {% endblock %}
 
 {% block body %}
+    <div id="buddies" >
 
-    {% for user in all_buddies %}
-        <h1>{{user.fname}}</h1>
-        <img class = "profile" src="{{user.photo_link}}" >
-        <li> {{user.gender}}, {{user.birthday}} </li>
-        <li> Located in {{user.location}}</li>
-        <p> {{user.intro_text}}</p>
-            <ul>
-                <li>Member since: {{user.member_since}}</li>
-                <li>Looking to throw with: {{user.gender_preference}}</li>
-                <li>Availability: {{user.calendar}}</li>
-                <li>Skill Level: {{user.skill_level}}</li>
-                <li>Frequented Courses: {{user.frequented_courses}}</li>
-                <li>Kids: {{user.kids_okay}}</li>
-                <li>Dogs: {{user.dogs_okay}}</li>
-                <li>Friendly/Stakes: {{user.friendly_or_stakes_game}}</li>
-                <li>Game preference: {{user.type_of_game}}</li>
-                <li>Alcohol: {{user.alcohol_okay}}</li>
-                <li>Tobacco: {{user.tobacco_okay}}</li>
-                <li>420 Friendly: {{user.smoke_420_okay}}</li>
-            </ul>
-            <form action="/chat" method="POST" class="chat-buddy">
-                <input type="hidden" name="chat-buddy-id" value="{{user.user_id}}">
-                <button for="chat-buddy-id" type="submit" > Propose a round! Send a message to {{user.fname}}. </button>
-            </form>
+    </div>
 
-            <form action="/deny-buddy" method="POST" class="deny-buddy">
-                <input type="hidden" name="buddy-deny-id" value="{{user.user_id}}">
-                <button for="buddy-deny-id" type="submit" > I hate this dude, deny buddy! </button>
-            </form>
-            
-    {% endfor %}
-    <br>
-    <br>
     <input type="button" onclick="window.location.href='/denied-buddies';" value="View rejected buddies" />
+    
+    <script type="text/jsx" src="/static/jsx/buddies.jsx"></script>
+    <script type="text/jsx">
+        ReactDOM.render(
+            <App />,
+            document.querySelector('#buddies')
+        )
+    </script>
 
-    <script src="/static/js/accept-reject-buddy.js"></script>
 {% endblock %}
