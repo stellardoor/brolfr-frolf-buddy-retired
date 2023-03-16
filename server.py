@@ -177,16 +177,20 @@ def show_buddy_requests():
 @app.route('/get-requests')
 def get_requests():
     pending_buddies = crud.get_all_pending_buddies(session['user_id'])
-    
     return jsonify(pending_buddies)
     
 @app.route("/denied-buddies")
-def show_denied_buddies():
+def open_denied_buddies():
     if crud.user_logged_in():
-        denied_buddies = crud.get_all_rejected_buddies(session['user_id'])
-        return render_template('rejections.html', denied_buddies = denied_buddies)
+        return render_template('rejections.html')
     else:
         return redirect("/")
+    
+@app.route("/show-denied-buddies")
+def show_denied_buddies():
+    denied_buddies = crud.get_all_rejected_buddies(session['user_id'])
+    return jsonify(denied_buddies)
+
 
 @app.route("/accept-buddy", methods=["POST"])
 def accept_buddy():
@@ -200,6 +204,17 @@ def accept_buddy():
     
     return  f"Now buds with {user_2.fname}!"
 
+@app.route("/accept-buddy-again", methods=["POST"])
+def accept_buddy_again():
+    user_id_1 = session["user_id"]
+    user_id_2 = request.json.get("buddy-accept-again-id")
+    user_id_2 = int(user_id_2)
+    user_2 = crud.get_user_by_id(user_id_2) #for the confirmation message
+    buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
+    crud.accept_buddy_again(buddy_id, user_id_1)
+    
+    return  f"Now buds again with {user_2.fname}!"
+
 @app.route("/deny-buddy", methods=["POST"])
 def deny_buddy():
     user_id_1 = session["user_id"]
@@ -211,16 +226,27 @@ def deny_buddy():
     # committing in the crud file ^
     return  f"Rejected {user_2.fname}!"
 
-
-@app.route("/chat", methods = ["POST"]) #no js
-def open_buddy_chat():
+@app.route("/deny-buddy-again", methods=["POST"])
+def deny_buddy_again():
     user_id_1 = session["user_id"]
-    user_id_2 = request.json.get("chat-buddy-id")
+    user_id_2 = request.json.get("buddy-deny-again-id")
     user_id_2 = int(user_id_2)
-    # user_2 = crud.get_user_by_id(user_id_2)
+    user_2 = crud.get_user_by_id(user_id_2)
     buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
-    # return redirect (f"/chat/{buddy_id}")
-    return f"/chat/{buddy_id}"
+    crud.deny_buddy_again(buddy_id, user_id_1)
+    # committing in the crud file ^
+    return  f"No longer buds {user_2.fname}!"
+
+
+# @app.route("/chat", methods = ["POST"]) #no js
+# def open_buddy_chat():
+#     user_id_1 = session["user_id"]
+#     user_id_2 = request.json.get("chat-buddy-id")
+#     user_id_2 = int(user_id_2)
+#     # user_2 = crud.get_user_by_id(user_id_2)
+#     buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
+#     # return redirect (f"/chat/{buddy_id}")
+#     return f"/chat/{buddy_id}"
     
 @app.route("/chats") 
 def show_open_chats():

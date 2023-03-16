@@ -3,21 +3,21 @@ function App() {
     const [users, setUsers] = React.useState([]);
 
     React.useEffect(() => {
-        fetch("/get-buddies")
+        fetch("/show-denied-buddies")
             .then(response => response.json())
             .then(result => {
                 setUsers(result);
                 console.log(result)
             });
     }, []);
-    const userBuddies = [];
+    const userRejections = [];
     for (const user of users) {
         // userRequests.push(<loadRequests item = {user} key={user.user_id}/>);
-        userBuddies.push(<LoadRequest user={user} key={user.user_id} />);
+        userRejections.push(<LoadRequest user={user} key={user.user_id} />);
     }
     return (
         <div>
-            {userBuddies}
+            {userRejections}
         </div>
     );
 }
@@ -26,28 +26,13 @@ function LoadRequest(props) {
 
     const [click, setClick] = React.useState(false);
     // const [ClickChat, setClickChat] = React.useState("");
-    const [BuddyDenyAgain, setBuddyDenyAgain] = React.useState("jk I hate this dude, deny buddy!");
+    const [BuddyAcceptAgain, setBuddyAcceptAgain] = React.useState("Oops I still like this person, accept as a buddy again!");
 
-//     React.useEffect(() => {
-//         fetch("/chat", {
-//             method: 'POST',
-//             body: JSON.stringify({"chat-buddy-id": props.user.user_id}),
-//             redirect: 'follow',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             credentials: "same-origin" //sends the cookies with it
-//         })
-//             .then(response => response.text())
-//             .then(result => {
-//                 setClickChat(result);
-//     });
-// })
 
-    function clickDenyAgain() {
-        fetch("/deny-buddy-again", {
+    function clickAcceptAgain() {
+        fetch("/accept-buddy-again", {
             method: 'POST',
-            body: JSON.stringify({ "buddy-deny-again-id": props.user.user_id }),
+            body: JSON.stringify({ "buddy-accept-again-id": props.user.user_id }),
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -55,7 +40,7 @@ function LoadRequest(props) {
         })
             .then(response => response.text())
             .then(result => {
-                setBuddyDenyAgain(result)
+                setBuddyAcceptAgain(result)
                 setClick(true)
             });
     }
@@ -82,10 +67,8 @@ function LoadRequest(props) {
                 <li>420 Friendly: {props.user.smoke_420_okay}</li>
             </ul>
 
-            <a href={props.user.chat_link} type="button" > Chat with {props.user.fname}! </a>
-
             <br></br>
-            <button disabled={click} onClick={clickDenyAgain} type="submit" > {BuddyDenyAgain} </button>
+            <button disabled={click} onClick={clickAcceptAgain} type="submit" > {BuddyAcceptAgain} </button>
         </div>
     );
 }

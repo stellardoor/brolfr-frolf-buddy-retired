@@ -66,11 +66,11 @@ def seed_city_data(filename):
     with open (filename) as file:
         for line in file:
             city_details = line.strip().split(",")
-            city = city_details[0]
+            city = f"{city_details[0]}, {city_details[1]}"
             state_id = city_details[1]
             state_name = city_details[2]
             county_fips = city_details[3]
-            county_name = city_details[4]
+            county_name = f"{city_details[4]}, {city_details[1]}"
             lat = city_details[5]
             lng = city_details[6]
             timezone = city_details[7]

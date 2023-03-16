@@ -107,6 +107,9 @@ def turn_profiles_to_dict(profiles):
         user_list.append(user_dict)
     return user_list
 
+def turn_date_to_age(date):
+    pass
+
 def turn_profiles_to_dict_bud(profiles):
     user_list = []
     for user in profiles:
@@ -209,13 +212,12 @@ def get_all_rejected_buddies(user_id):
     buddy_data = []
     for buddy in buddies:
         if buddy.rejected == True:
-            if buddy.user_id_2 == user_id:
-                user = get_user_by_id(buddy.user_id_1)
-                buddy_data.append(user)
+            user = get_user_by_id(buddy.user_id_1)
+            buddy_data.append(user)
         else:
             continue
-    # return turn_profiles_to_dict(buddy_data)
-    return buddy_data
+    new_buddy_data = turn_profiles_to_dict(buddy_data)
+    return new_buddy_data
 
             
 def create_buddy_request(user_id_1, user_id_2):
@@ -277,12 +279,31 @@ def accept_buddy_request(buddy_id):
     
     db.session.commit()
 
+def accept_buddy_again(buddy_id, user_id):
+    buddy = Buddy.query.get(buddy_id)
+    if buddy.user_id_2 == user_id:
+        buddy.user_id_2 = buddy.user_id_1
+        buddy.user_id_1 = user_id
+    buddy.pending = False
+    buddy.accepted = True
+    buddy.rejected = False
+    db.session.commit()
+
 def deny_buddy_request(buddy_id):
     buddy = Buddy.query.get(buddy_id)
     buddy.pending = False
     buddy.accepted = False
     buddy.rejected = True
-    
+    db.session.commit()
+
+def deny_buddy_again(buddy_id, user_id):
+    buddy = Buddy.query.get(buddy_id)
+    if buddy.user_id_1 == user_id:
+        buddy.user_id_1 = buddy.user_id_2
+        buddy.user_id_2 = user_id
+    buddy.pending = False
+    buddy.accepted = False
+    buddy.rejected = True
     db.session.commit()
 
 def create_city(city, state_id, state_name, county_fips, county_name, lat, lng, timezone, zips):
