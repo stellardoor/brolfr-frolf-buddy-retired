@@ -3,45 +3,23 @@
 
 {% block body %}
 
-<label for="user-location" class="form-label">Location: </label>
-<input class="form-control" list="datalistOptions" name = "user-location" id="user-location" placeholder="Type to search your closest city...">
-<datalist id="datalistOptions">
-    {% for city in city_list %} 
-    <option value="{{city}}">
-    {% endfor %}
-</datalist>
-<input type="submit" value = "Search">
+    <div id="search-city"> 
 
-<div class="buddy-profile" id="search-results">
-    {% for user in all_users %}
-    <div class="container">
-            <h1>{{user.fname}} {{user.pronouns}}</h1>
-            <img class = "profile" src="{{user.photo_link}}" >
-            <li> {{user.gender}}, {{user.birthday}}, {{user.location}}</li>
-            <p> {{user.intro_text}}</p>
-                    <text>Member since: {{user.member_since}}</text>
-                    <li>Looking to throw with: {{user.gender_preference}}</li>
-                    <li>Availability: {{user.calendar}}</li>
-                    <li>Skill Level: {{user.skill_level}}</li>
-                    <li>Age Range: {{user.age_range}}</li>
-                    <li>Frequented Courses: {{user.frequented_courses}}</li>
-                    <li>Kids: {{user.kids_okay}}</li>
-                    <li>Dogs: {{user.dogs_okay}}</li>
-                    <li>Friendly/Stakes: {{user.friendly_or_stakes_game}}</li>
-                    <li>Game preference: {{user.type_of_game}}</li>
-                    <li>Alcohol: {{user.alcohol_okay}}</li>
-                    <li>Tobacco: {{user.tobacco_okay}}</li>
-                    <li>420 Friendly: {{user.smoke_420_okay}}</li>
-                </ul>
-            <form action="/send-buddy-request" method="POST" class="get-buddy">
-                <input type="hidden" name="buddy-id" value="{{user.user_id}}">
-                <button for="buddy-id" type="submit" > Send a buddy request! </button>
-            </form>
-        </div>
-    {% endfor %}
     </div>
+    <div id="brolfrs" >
 
-    <script src="/static/js/send-buddy-request.js"></script>
+    </div>
     
+    <script type="text/jsx" src="/static/jsx/profiles.jsx"></script>
+    <script type="text/jsx">
+        ReactDOM.render(
+            <App />,
+            document.querySelector('#brolfrs')
+        )
+        ReactDOM.render(
+            <CitySearch />,
+            document.querySelector('#search-city')
+        )
+    </script>
 
 {% endblock %}

@@ -1,4 +1,4 @@
-// """functions for accepting and rejecting buddy requests"""
+// """functions loading all rejected folks"""
 function App() {
     const [users, setUsers] = React.useState([]);
 
@@ -12,7 +12,6 @@ function App() {
     }, []);
     const userRejections = [];
     for (const user of users) {
-        // userRequests.push(<loadRequests item = {user} key={user.user_id}/>);
         userRejections.push(<LoadRequest user={user} key={user.user_id} />);
     }
     return (
@@ -25,7 +24,6 @@ function App() {
 function LoadRequest(props) {
 
     const [click, setClick] = React.useState(false);
-    // const [ClickChat, setClickChat] = React.useState("");
     const [BuddyAcceptAgain, setBuddyAcceptAgain] = React.useState("Oops I still like this person, accept as a buddy again!");
 
 

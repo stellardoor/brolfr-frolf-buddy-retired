@@ -147,8 +147,8 @@ def get_all_profiles(user_id):
     for user in users:
         if user.user_id not in buddies:
             profiles_data.append(user)
-    # return turn_profiles_to_dict(profiles_data)
-    return profiles_data
+    new_buddy_data = turn_profiles_to_dict(profiles_data)
+    return new_buddy_data
         
 def get_all_buddy_user_ids(user_id):
     '''returns a list of user ids that are matched with session user'''

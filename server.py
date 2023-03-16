@@ -101,6 +101,11 @@ def edit_profile():
         return render_template("edit-profile.html",user=user, city_list=city_list)
     else:
         return redirect("/")
+    
+@app.route("/load-cities")
+def load_cities():
+    city_list = crud.get_all_cities()
+    return jsonify(city_list)
 
 @app.route("/process-edit", methods=["POST"])
 def process_edit():
@@ -136,10 +141,14 @@ def process_photo():
 @app.route("/brolfrs")
 def show_profiles():
     if crud.user_logged_in():
-        all_users = crud.get_all_profiles(session['user_id'])
-        return render_template('profiles.html', all_users = all_users)
+        return render_template('profiles.html')
     else:
         return redirect("/")
+
+@app.route("/load-profiles")
+def load_profiles():
+    all_users = crud.get_all_profiles(session['user_id'])
+    return jsonify(all_users)
 
 @app.route("/buddies")
 def show_user_matches():
@@ -157,7 +166,7 @@ def show_buddies():
 @app.route("/send-buddy-request", methods=["POST"])
 def request_buddy():
     user_id_1 = session["user_id"]
-    user_id_2 = request.json.get("buddy-id")
+    user_id_2 = request.json.get("user-request-id")
     user_id_2 = int(user_id_2)
     user_2 = crud.get_user_by_id(user_id_2)
     create_match = crud.create_buddy_request(user_id_1, user_id_2)
@@ -251,10 +260,14 @@ def deny_buddy_again():
 @app.route("/chats") 
 def show_open_chats():
     if crud.user_logged_in():
-        chat_list = crud.get_chat_by_user_id(session["user_id"])
-        return render_template('all-chats.html', chat_list = chat_list)
+        return render_template('all-chats.html')
     else:
         return redirect("/")
+
+# @app.route("/load-chats") 
+# def load_chats():
+#     chat_list = crud.get_chat_by_user_id(session["user_id"])
+#     return jsonify(chat_list)
     
 @app.route("/chat/<buddy_id>")
 def show_buddy_chat(buddy_id):

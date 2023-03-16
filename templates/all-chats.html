@@ -2,13 +2,16 @@
 {% block title %} Messages {% endblock %}
 
 {% block body %}
-<br>
-    {% for user in chat_list %}
-    <img class = "tiny" src="{{user[1].photo_link}}">
-    <input type="button" onclick="window.location.href='/chat/{{user[0]}}';" value="Chat with {{user[1].fname}}!" />
+    <div id="all-chats" >
 
-    {% endfor %}
+    </div>
 
+    <script type="text/jsx" src="/static/jsx/chats-page.jsx"></script>
+    <script type="text/jsx">
+        ReactDOM.render(
+            <App />,
+            document.querySelector('#all-chats')
+        )
+    </script>
 
-    <script src="/static/js/accept-reject-buddy.js"></script>
 {% endblock %}

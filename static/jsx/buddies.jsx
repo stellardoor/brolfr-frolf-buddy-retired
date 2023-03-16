@@ -1,4 +1,4 @@
-// """functions for accepting and rejecting buddy requests"""
+// """loading buddies"""
 function App() {
     const [users, setUsers] = React.useState([]);
 
@@ -12,37 +12,26 @@ function App() {
     }, []);
     const userBuddies = [];
     for (const user of users) {
-        // userRequests.push(<loadRequests item = {user} key={user.user_id}/>);
         userBuddies.push(<LoadRequest user={user} key={user.user_id} />);
     }
     return (
         <div>
+            <div>
             {userBuddies}
+            </div>
+            <br></br>
+            <button>
+                <a className="button-link" href='/denied-buddies'> View rejected buddies </a>
+            </button>
         </div>
+
     );
 }
 
 function LoadRequest(props) {
 
     const [click, setClick] = React.useState(false);
-    // const [ClickChat, setClickChat] = React.useState("");
     const [BuddyDenyAgain, setBuddyDenyAgain] = React.useState("jk I hate this dude, deny buddy!");
-
-//     React.useEffect(() => {
-//         fetch("/chat", {
-//             method: 'POST',
-//             body: JSON.stringify({"chat-buddy-id": props.user.user_id}),
-//             redirect: 'follow',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             credentials: "same-origin" //sends the cookies with it
-//         })
-//             .then(response => response.text())
-//             .then(result => {
-//                 setClickChat(result);
-//     });
-// })
 
     function clickDenyAgain() {
         fetch("/deny-buddy-again", {
@@ -81,8 +70,9 @@ function LoadRequest(props) {
                 <li>Tobacco: {props.user.tobacco_okay}</li>
                 <li>420 Friendly: {props.user.smoke_420_okay}</li>
             </ul>
-
-            <a href={props.user.chat_link} type="button" > Chat with {props.user.fname}! </a>
+            <button>
+            <a className="button-link" href={props.user.chat_link} type="button" > Chat with {props.user.fname}! </a>
+            </button>
 
             <br></br>
             <button disabled={click} onClick={clickDenyAgain} type="submit" > {BuddyDenyAgain} </button>
