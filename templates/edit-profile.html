@@ -1,44 +1,65 @@
 {% extends 'base.html' %}
-{% block title %} {{user.name}} {% endblock %}
+{% block title %} Edit Profile {% endblock %}
 
 {% block body %}
-<br>
-<input type="button" onclick="window.location.href='/profile';" value="Back to profile" />
-<br>
-<br>
-<div class="container">
-<form action="/process-edit" method="POST">
-<label for = "fname"> First Name: </label>
-<input type="text" name="fname" id="fname" placeholder="{{user.fname}}">
-<br>
-<label for = "pronouns"> Pronouns: </label>
-<input type="text" name="pronouns" id="pronouns"  placeholder="{{user.pronouns}}">
-<br>
-<label for = "gender"> Gender: </label>
-<input type="text" name="gender" id="gender" placeholder="{{user.gender}}">
-<br>
-<label for = "birthday"> Date of Birth: </label>
-<input type="text" name="birthday" id="birthday" placeholder="{{user.birthday}}">
-<br>
-<label for="user-location" class="form-label">Location: </label>
-<input class="form-control" list="datalistOptions" name = "user-location" id="user-location" placeholder="Type to search your closest city...">
-<datalist id="datalistOptions">
-    {% for city in city_list %} 
-    <option value="{{city}}">
-    {% endfor %}
-</datalist>
-<input type="submit">
-</form>
-</div>
-<br>
-<div class="container">
-    <form action="/process-photo" method="POST" enctype="multipart/form-data">
-<div class="mb-3">
-    <label for="form-file" class="form-label">Upload a photo of yourself:</label>
-    <input class="form-control" type="file" id="form-file" name="form-file">
-    <input type="submit">
-    </div>
-</form>
-</div>
+        <text>Name: </text>
+        <input type="text" placeholder={{user.fname}}> </input>
+        <div className="profile-detail" > Gender: {{user.gender}}
+            <input type="radio" name="gender" value="(She/Her)" id="she/her" ></input>
+            <label for="she/her"> She/Her </label>
+            <input type="radio" name="gender" value="(He/Him)" id="he/him"></input>
+            <label for="he/him"> He/Him </label>
+            <input type="radio" name="gender" value="(They/Them)" id="they/them"></input>
+            <label for="they/them"> They/Them </label>
+            <input type="radio" name="gender" value="(She/They)" id="she/they"></input>
+            <label for="she/they"> She/They </label>
+            <input type="radio" name="gender" value="(He/They)" id="he/they"></input>
+            <label for="he/they"> He/They </label>
+            <input type="radio" name="gender" value="(He/She/They)" id="he/she/they"></input>
+            <label for="he/she/they"> He/She/They </label>
+            <input type="radio" name="gender" value="" id="none-gender"></input>
+            <label for="none-gender"> I prefer not to say </label>
+            <button onclick = ""></button>
+        </div>
+        <div> Birthday: {{user.birthday}} </div>
+        <text>MM / DD / YYYY</text>
+        <input type="tel" id="month" name="month" size="2" minlength="1" maxlength= "2" pattern="[0-9]{2}" placeholder="MM"/> /
+        <input type="tel" id="day" name="day" size="2" minlength="1" maxlength= "2" pattern="[0-9]{2}" placeholder="DD"/> /
+        <input type="tel" id="day" name="day" size="4" minlength="4" maxlength= "4" pattern="[0-9]{4}" placeholder="YYYY"/>
+        <li> Location: {{user.location}}</li>
+        <div id="cities" >
+
+        </div>
+        <text>Intro Text:</text>
+        <input type="text" maxlength="200" placeholder="{{user.intro_text}}">
+        <text> Looking to throw with: {{user.gender_preference}}</text>
+        <li> Availability: {{user.calendar}}</li>
+        <li> Skill Level: {{user.skill_level}}</li>
+        <li> Frequented Courses: {{user.frequented_courses}}</li>
+        <li> Kids: {{user.kids_okay}}</li>
+        <li> Dogs: {{user.dogs_okay}}</li>
+        <li> Friendly/Stakes: {{user.friendly_or_stakes_game}}</li>
+        <li> Game preference: {{user.type_of_game}}</li>
+        <li> Alcohol: {{user.alcohol_okay}}</li>
+        <li> Tobacco: {{user.tobacco_okay}}</li>
+        <li> 420 Friendly: {{user.smoke_420_okay}}</li>
+    </ul>
+    <button type="submit" > 
+    </button>
+
+
+
+
+
+
+    
+    <script type="text/jsx" src="/static/jsx/edit-profile.jsx"></script>
+    <script type="text/jsx">
+        ReactDOM.render(
+            <LoadCities />,
+            document.querySelector('#cities')
+        )
+    </script>
+    <script src="/static/js/edit-profile.js"></script>
 
 {% endblock %}

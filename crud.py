@@ -79,6 +79,31 @@ def edit_profile(user, location):
     user.location = location
     db.session.commit()
 
+def turn_one_profile_to_dict(user):
+        user_dict = {}
+        user_dict["fname"] = getattr(user, "fname")
+        user_dict["user_id"] = getattr(user, "user_id")
+        user_dict["pronouns"] = getattr(user, "pronouns")
+        user_dict["gender"] = getattr(user, "gender")
+        user_dict["birthday"] = getattr(user, "birthday")
+        user_dict["member_since"] = getattr(user, "member_since")
+        user_dict["photo_link"] = getattr(user, "photo_link")
+        user_dict["intro_text"] = getattr(user, "intro_text")
+        user_dict["calendar"] = getattr(user, "calendar")
+        user_dict["location"] = getattr(user, "location")
+        user_dict["skill_level"] = getattr(user, "skill_level")
+        user_dict["age_range"] = getattr(user, "age_range")
+        user_dict["frequented_courses"] = getattr(user, "frequented_courses")
+        user_dict["gender_preference"] = getattr(user, "gender_preference")
+        user_dict["kids_okay"] = getattr(user, "kids_okay")
+        user_dict["dogs_okay"] = getattr(user, "dogs_okay")
+        user_dict["friendly_or_stakes_game"] = getattr(user, "friendly_or_stakes_game")
+        user_dict["type_of_game"] = getattr(user, "type_of_game")
+        user_dict["alcohol_okay"] = getattr(user, "alcohol_okay")
+        user_dict["tobacco_okay"] = getattr(user, "tobacco_okay")
+        user_dict["smoke_420_okay"] = getattr(user, "smoke_420_okay")
+        return user_dict
+
 def turn_profiles_to_dict(profiles):
     user_list = []
     for user in profiles:

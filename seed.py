@@ -51,13 +51,13 @@ def add_profile_specifics():
         user.age_range = choice(["18-25", "26-30", "31-35", "36-40", "41-50", "51+"])
         user.frequented_courses = choice(["Hooker Oak", "Peregrine Point", "Golden Gate Park", "Oyster Bay", "John Mackey", "Bijou", "Lagoon Valley", "Anderson Valley", "Your mom"])
         user.gender_preference = choice(["men", "women", "all genders"])
-        user.kids_okay = choice([True, False])
-        user.dogs_okay = choice([True, False])
+        user.kids_okay = choice(["Yes", "No", "No Preference"])
+        user.dogs_okay = choice(["Yes", "No", "No Preference"])
         user.friendly_or_stakes_game = choice(["Friendly game", "Stakes game", "Friendly and Stakes"])
         user.type_of_game = choice(["Full Course", "Front 9", "Back 9", "No preference"])
-        user.alcohol_okay = choice([True, False])
-        user.tobacco_okay = choice([True, False])
-        user.smoke_420_okay = choice([True, False])
+        user.alcohol_okay = choice(["Yes", "No", "No Preference"])
+        user.tobacco_okay = choice(["Yes", "No", "No Preference"])
+        user.smoke_420_okay = choice(["Yes", "No", "No Preference"])
 
         model.db.session.commit()
 
