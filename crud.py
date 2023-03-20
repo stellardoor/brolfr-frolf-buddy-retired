@@ -4,6 +4,7 @@
 from model import db, User, Buddy, Chat, City,  connect_to_db
 
 import server 
+from datetime import date
 
 # missing import ^  Chat
 
@@ -24,9 +25,8 @@ def create_user(email, password, fname, pronouns, gender, birthday, member_since
     db.session.add(user)
     db.session.commit()
 
-def update_user_info(user_id, photo_link, intro_text, calendar, location, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay):
+def update_user_info(user_id, intro_text, calendar, location, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay):
     user = get_user_by_id(user_id)
-    user.photo_link = photo_link, 
     user.intro_text = intro_text,
     user.calendar = calendar, 
     user.location = location, 
@@ -60,6 +60,34 @@ def get_user_by_id(user_id):
 def get_buddy_from_id(buddy_id):
     return Buddy.query.filter(Buddy.buddy_id == buddy_id).first()
 
+def get_age_by_birthday(birthday):
+    dates = birthday.split("/")
+    today = date.today()
+    age_year = today.year - int(dates[2]) #2023 - 1988 = 35
+    age_month_equal = today.month == int(dates[0]) # 3 < 10 = true
+    if age_month_equal:
+        age_day = today.day < int(dates[1]) 
+        if age_day:
+            age = age_year - 1
+        else:
+            age = age_year
+    elif not age_month_equal:
+        age_month = today.month < int(dates[0])
+        if age_month:
+            age = age_year - 1
+        else:
+            age = age_year
+    return age
+
+
+
+    
+    
+
+
+
+
+
 def get_other_user_id_from_buddy(buddy, user_id):
     """gets the other user from session user in a buddy match"""
     if buddy.user_id_1 == user_id:
@@ -86,6 +114,8 @@ def turn_one_profile_to_dict(user):
         user_dict["pronouns"] = getattr(user, "pronouns")
         user_dict["gender"] = getattr(user, "gender")
         user_dict["birthday"] = getattr(user, "birthday")
+        age = get_age_by_birthday(getattr(user, "birthday"))
+        user_dict["age"] = age
         user_dict["member_since"] = getattr(user, "member_since")
         user_dict["photo_link"] = getattr(user, "photo_link")
         user_dict["intro_text"] = getattr(user, "intro_text")
@@ -112,7 +142,8 @@ def turn_profiles_to_dict(profiles):
         user_dict["user_id"] = getattr(user, "user_id")
         user_dict["pronouns"] = getattr(user, "pronouns")
         user_dict["gender"] = getattr(user, "gender")
-        user_dict["birthday"] = getattr(user, "birthday")
+        age = get_age_by_birthday(getattr(user, "birthday"))
+        user_dict["age"] = age
         user_dict["member_since"] = getattr(user, "member_since")
         user_dict["photo_link"] = getattr(user, "photo_link")
         user_dict["intro_text"] = getattr(user, "intro_text")
@@ -143,7 +174,8 @@ def turn_profiles_to_dict_bud(profiles):
         user_dict["user_id"] = getattr(user[0], "user_id")
         user_dict["pronouns"] = getattr(user[0], "pronouns")
         user_dict["gender"] = getattr(user[0], "gender")
-        user_dict["birthday"] = getattr(user[0], "birthday")
+        age = get_age_by_birthday(getattr(user[0], "birthday"))
+        user_dict["age"] = age
         user_dict["member_since"] = getattr(user[0], "member_since")
         user_dict["photo_link"] = getattr(user[0], "photo_link")
         user_dict["intro_text"] = getattr(user[0], "intro_text")

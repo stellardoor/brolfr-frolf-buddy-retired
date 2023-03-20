@@ -26,8 +26,8 @@ def add_test_users():
         email = f"{user}@testing.com".lower()
         password = "testing"
         fname = f"{user}"
-        pronouns = choice(["(she/her)", "(he/him)", "(they/them)", "(he/they)", "(she/they)"])
-        gender = choice(["man", "woman", "non-binary", "other"])
+        pronouns = choice(["(She/Her)", "(He/Him)", "(They/Them)", "(He/They)", "(She/They)"])
+        gender = choice(["Man", "Woman", "Non-Binary", ""])
         birthday = choice(["12/25/1989", "1/2/2000", "3/6/1975"])
         member_since = date.today()
 
@@ -46,15 +46,15 @@ def add_profile_specifics():
         user.photo_link = f"/static/images/{user.fname.lower()}.jpeg"
         user.intro_text = f"Hi, I'm {user.fname}! Let's Play!"
         user.calendar = "nothing for now"
-        user.location = choice(["Sacramento", "San Francisco", "Chicago", "San Diego", "Oakland", "Roseville"])
+        user.location = choice(["Sacramento, CA", "San Francisco, CA", "Chicago, IL", "San Diego, CA", "Oakland, CA", "Roseville, CA"])
         user.skill_level = choice(["Beginner", "Intermediate", "Advanced"])
         user.age_range = choice(["18-25", "26-30", "31-35", "36-40", "41-50", "51+"])
         user.frequented_courses = choice(["Hooker Oak", "Peregrine Point", "Golden Gate Park", "Oyster Bay", "John Mackey", "Bijou", "Lagoon Valley", "Anderson Valley", "Your mom"])
-        user.gender_preference = choice(["men", "women", "all genders"])
+        user.gender_preference = choice(["Men", "Women", "All Genders"])
         user.kids_okay = choice(["Yes", "No", "No Preference"])
         user.dogs_okay = choice(["Yes", "No", "No Preference"])
         user.friendly_or_stakes_game = choice(["Friendly game", "Stakes game", "Friendly and Stakes"])
-        user.type_of_game = choice(["Full Course", "Front 9", "Back 9", "No preference"])
+        user.type_of_game = choice(["Full Course", "Front 9", "Back 9", "No Preference"])
         user.alcohol_okay = choice(["Yes", "No", "No Preference"])
         user.tobacco_okay = choice(["Yes", "No", "No Preference"])
         user.smoke_420_okay = choice(["Yes", "No", "No Preference"])
@@ -66,11 +66,11 @@ def seed_city_data(filename):
     with open (filename) as file:
         for line in file:
             city_details = line.strip().split(",")
-            city = f"{city_details[0]}, {city_details[1]}"
+            city = city_details[0]
             state_id = city_details[1]
             state_name = city_details[2]
             county_fips = city_details[3]
-            county_name = f"{city_details[4]}, {city_details[1]}"
+            county_name = city_details[4]
             lat = city_details[5]
             lng = city_details[6]
             timezone = city_details[7]

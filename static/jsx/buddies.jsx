@@ -53,7 +53,7 @@ function LoadRequest(props) {
         <div>
             <h1>{props.user.fname}</h1>
             <img className="profile" src={props.user.photo_link} ></img>
-            <li> {props.user.gender}, {props.user.birthday} </li>
+            <li> {props.user.gender}, {props.user.age} </li>
             <li> Located in {props.user.location}</li>
             <p> {props.user.intro_text}</p>
             <ul>

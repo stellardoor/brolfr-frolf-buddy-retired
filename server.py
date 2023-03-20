@@ -94,7 +94,8 @@ def create_new_account():
 @app.route("/profile") #<user_id>
 def user_profile():
     if crud.user_logged_in():
-        user = crud.get_user_by_id(session['user_id'])
+        user_info = crud.get_user_by_id(session['user_id'])
+        user= crud.turn_one_profile_to_dict(user_info)
         return render_template("user-profile.html", user=user)
     else:
         return redirect("/")
@@ -113,30 +114,53 @@ def load_user_details():
     return jsonify(user)
 #-----------------------------
 #------------complete-----------------
-@app.route("/load-cities")
-def load_cities():
+@app.route("/load-cities-regular")
+def load_cities_regular():
     city_list = crud.get_all_cities()
     return jsonify(city_list)
-# @app.route("/load-cities")
-# def load_cities():
-#     user_input = request.args.get("userInput")
-#     city_list = crud.get_all_cities()
-#     for city in city_list:
-#         if user_input in city:
-#     return jsonify(city_list)
+
+@app.route("/load-cities")
+def load_cities():
+    # user_input = request.args.get("userInput").lower()
+    city_list = crud.get_all_cities()
+    # for city in city_list:
+    #     if user_input in city.lower():
+    return jsonify(city_list)
 #-----------------------------
 #CHECK******************
+# @app.route("/process-edit", methods=["POST"])
+# def process_edit():
+#     user = crud.get_user_by_id(session['user_id'])
+#     location = request.form.get("user-location") 
+#     city_list = crud.get_all_cities()
+#     if location not in city_list:
+#         flash("Please use autocompleted city only.")
+#         return redirect("/edit-profile")
+#     crud.edit_profile(user, location)
+#     flash("success")
+#     return "Successfully Edited Profile!"
+
 @app.route("/process-edit", methods=["POST"])
 def process_edit():
-    user = crud.get_user_by_id(session['user_id'])
+    # user = crud.get_user_by_id(session['user_id'])
     location = request.form.get("user-location") 
-    city_list = crud.get_all_cities()
-    if location not in city_list:
-        flash("Please use autocompleted city only.")
-        return redirect("/edit-profile")
-    crud.edit_profile(user, location)
+    intro_text =  request.form.get("intro-text") 
+    calendar = request.form.get("calendar") 
+    skill_level = request.form.get("skill-level") 
+    age_range = request.form.get("age-range") 
+    frequented_courses = request.form.get("frequented-courses")
+    gender_preference = request.form.get("gender-pref") 
+    kids_okay = request.form.get("kids-ok")
+    dogs_okay = request.form.get("dogs-ok") 
+    friendly_or_stakes_game = request.form.get("friendly-stakes")
+    type_of_game = request.form.get("game-type")
+    alcohol_okay = request.form.get("alcohol-ok")
+    tobacco_okay = request.form.get("tobacco-ok")
+    smoke_420_okay = request.form.get("smoke-420-ok")
+    crud.update_user_info(session['user_id'], intro_text, calendar, location, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay)
     flash("success")
-    return "Successfully Edited Profile!"
+
+    return redirect('/edit-profile')
 
 #CHECK******************
 @app.route("/process-photo", methods=["POST"])
