@@ -61,18 +61,18 @@ def get_buddy_from_id(buddy_id):
     return Buddy.query.filter(Buddy.buddy_id == buddy_id).first()
 
 def get_age_by_birthday(birthday):
-    dates = birthday.split("/")
+    dates = birthday.split("/") 
     today = date.today()
     age_year = today.year - int(dates[2]) #2023 - 1988 = 35
-    age_month_equal = today.month == int(dates[0]) # 3 < 10 = true
+    age_month_equal = today.month == int(dates[0]) 
     if age_month_equal:
-        age_day = today.day < int(dates[1]) 
+        age_day = today.day < int(dates[1]) # 20 < 3 = false
         if age_day:
             age = age_year - 1
         else:
             age = age_year
     elif not age_month_equal:
-        age_month = today.month < int(dates[0])
+        age_month = today.month < int(dates[0])  #3 < 10 = true
         if age_month:
             age = age_year - 1
         else:
@@ -219,20 +219,6 @@ def get_all_buddy_user_ids(user_id):
             buddy_list.append(buddy.user_id_1)
     return buddy_list
 
-# def get_accepted_buddies(user_id):
-#     "pulls buddies that are instantiated as a Buddy as of now - filters out session user, rejected buds"
-#     buddies = Buddy.query.filter(db.or_(Buddy.user_id_1 == user_id, Buddy.user_id_2 == user_id)).all()
-#     buddy_data = []
-#     for buddy in buddies:
-#         if buddy.accepted == True:
-#             if buddy.user_id_1 == user_id:
-#                 user = get_user_by_id(buddy.user_id_2)
-#                 buddy_data.append(user)
-#             elif buddy.user_id_2 == user_id:
-#                 user = get_user_by_id(buddy.user_id_1)
-#                 buddy_data.append(user)
-#     new_buddy_data = turn_profiles_to_dict(buddy_data)
-#     return new_buddy_data
 def get_accepted_buddies(user_id):
     "pulls buddies that are instantiated as a Buddy as of now - filters out session user, rejected buds"
     buddies = Buddy.query.filter(db.or_(Buddy.user_id_1 == user_id, Buddy.user_id_2 == user_id)).all()
@@ -377,6 +363,66 @@ def create_city(city, state_id, state_name, county_fips, county_name, lat, lng, 
                 zips = zips
                 )
     return city_data
+
+def get_states():
+    states = ['Alabama',
+'Alaska',
+'Arizona',
+'Arkansas',
+'California',
+'Colorado',
+'Connecticut',
+'Delaware',
+'Florida',
+'Georgia',
+'Hawaii',
+'Idaho',
+'Illinois',
+'Indiana',
+'Iowa',
+'Kansas',
+'Kentucky',
+'Louisiana',
+'Maine',
+'Maryland',
+'Massachusetts',
+'Michigan',
+'Minnesota',
+'Mississippi',
+'Missouri',
+'Montana',
+'Nebraska',
+'Nevada',
+'New Hampshire',
+'New Jersey',
+'New Mexico',
+'New York',
+'North Carolina',
+'North Dakota',
+'Ohio',
+'Oklahoma',
+'Oregon',
+'Pennsylvania',
+'Rhode Island',
+'South Carolina',
+'South Dakota',
+'Tennessee',
+'Texas',
+'Utah',
+'Vermont',
+'Virginia',
+'Washington',
+'West Virginia',
+'Wisconsin',
+'Wyoming',]
+    return states
+
+def get_all_cities_by_state(state):
+    cities = City.query.filter(City.state_name == state).all()
+    city_names = []
+    for city in cities:
+        city_names.append(city.city)
+    return city_names
 
 
 if __name__ == "__main__":

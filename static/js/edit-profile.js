@@ -1,30 +1,29 @@
 // // """Functions for Profile searching"""
 // 'use strict';
 
-// const userProfileInput = document.querySelectorAll('.get-input');
+// // const userProfilePic = document.querySelector('#form-file');
+// function uploadProfilePicture() {
+//     const buttonPhoto = document.querySelector("photo-submit")
 
 
+//     buttonPhoto.addEventListener('submit', (evt) => {
+//         evt.preventDefault();
 
-// form.addEventListener('submit',(evt) => {
-//     evt.preventDefault();
+//         const photoInput = { 'form-file': document.querySelector('#form-file') };
 
-//     const buddyInput = {'buddy-id' : form.querySelector("input").value}; 
-//     // we need to put .value and NOT .value() - not a function!
-
-//     fetch('/process-edit', {method: 'POST',
-//     body: JSON.stringify(buddyInput),
-//     headers: {
-//     'Content-Type': 'application/json',
-//     },
-//     credentials: "same-origin", 
-//     // sends cookies w/ app route ^
-// })
-//     .then((response) => response.text())
-//     .then((responseBuddyId) => { 
-//         const button = form.querySelector('button')
-//         button.innerHTML = responseBuddyId
-//         button.disabled = true
-//         location.reload()
-//     })
+//         fetch('/process-photo', {
+//             method: 'POST', enctype: "multipart/form-data",
+//             body: JSON.stringify(photoInput),
+//             headers: {
+//                 'Content-Type': 'application/json',
+//             },
+//             credentials: "same-origin",
+//             // sends cookies w/ app route ^
+//         })
+//             .then((response) => response.text())
+//             .then((responsePhoto) => {
+//                 alert(responsePhoto)
+//             })
+//     }
+//     )
 // }
-// )

@@ -46,7 +46,8 @@ def add_profile_specifics():
         user.photo_link = f"/static/images/{user.fname.lower()}.jpeg"
         user.intro_text = f"Hi, I'm {user.fname}! Let's Play!"
         user.calendar = "nothing for now"
-        user.location = choice(["Sacramento, CA", "San Francisco, CA", "Chicago, IL", "San Diego, CA", "Oakland, CA", "Roseville, CA"])
+        user.location = choice(["Sacramento", "San Francisco", "San Diego", "Oakland", "Roseville"])
+        user.us_state = "California"
         user.skill_level = choice(["Beginner", "Intermediate", "Advanced"])
         user.age_range = choice(["18-25", "26-30", "31-35", "36-40", "41-50", "51+"])
         user.frequented_courses = choice(["Hooker Oak", "Peregrine Point", "Golden Gate Park", "Oyster Bay", "John Mackey", "Bijou", "Lagoon Valley", "Anderson Valley", "Your mom"])

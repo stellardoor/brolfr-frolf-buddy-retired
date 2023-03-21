@@ -119,13 +119,17 @@ def load_cities_regular():
     city_list = crud.get_all_cities()
     return jsonify(city_list)
 
-@app.route("/load-cities")
+@app.route("/load-cities", methods=["POST"])
 def load_cities():
-    # user_input = request.args.get("userInput").lower()
-    city_list = crud.get_all_cities()
-    # for city in city_list:
-    #     if user_input in city.lower():
+    state = request.json.get("user-state")
+    city_list = crud.get_all_cities_by_state(state)
     return jsonify(city_list)
+
+@app.route("/get-states")
+def load_states():
+    state_list = crud.get_states()
+    return jsonify(state_list)
+
 #-----------------------------
 #CHECK******************
 # @app.route("/process-edit", methods=["POST"])
@@ -174,8 +178,7 @@ def process_photo():
     user.photo_link = result['secure_url']
 
     if not photo_upload:
-        flash("photo not uploaded")
-        return redirect("/edit-profile")
+        return "photo not uploaded"
     # user.photo_link = photo_link
     db.session.commit()
     # flash("success")

@@ -3,14 +3,7 @@
 
 {% block body %}
 <input type="button" onclick="window.location.href='/profile';" value="Back to profile" />
-<div class="container">
-    <form action="/process-photo" method="POST" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="form-file" class="form-label">Upload a new profile photo:</label>
-            <input class="form-control" type="file" id="form-file" name="form-file">
-            <input type="submit">
-        </div>
-    </form> 
+<div id="photo-uploader">
 </div>
 <text> Location: {{user.location}}</text>
 <div id="cities">
@@ -143,6 +136,13 @@
         ReactDOM.render(
             <LoadCities />,
             document.querySelector('#cities')
+        )
+</script>
+<script type="text/jsx" src="/static/jsx/edit-profile.jsx"></script>
+<script type="text/jsx">
+        ReactDOM.render(
+            <UploadProfilePicture />,
+            document.querySelector('#photo-uploader')
         )
     </script>
 <script src="/static/js/edit-profile.js"></script>

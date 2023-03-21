@@ -14,6 +14,7 @@ class User(db.Model):
     gender = db.Column(db.String)
     birthday = db.Column(db.String)
     location = db.Column(db.String)
+    us_state = db.Column(db.String)
     member_since = db.Column(db.String)
     photo_link = db.Column(db.String)
     intro_text = db.Column(db.Text)
