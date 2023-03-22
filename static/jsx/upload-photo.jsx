@@ -1,4 +1,4 @@
-// """loads edit profile page for user"""
+// """loads upload photo feature"""
 
 function UploadProfilePicture() {
     // const buttonPhoto = document.querySelector("photo-submit")
@@ -8,21 +8,18 @@ function UploadProfilePicture() {
         evt.preventDefault()
         const formData = new FormData(evt.target); // need to understand formdata
 
-        const submitUpload = () => {
             // const photoInput = { 'form-file': document.querySelector('#form-file') };
 
-            fetch('/process-photo', {
-                method: 'POST',
-                body: formData,
-                credentials: "same-origin",
-                // sends cookies w/ app route ^
+        fetch('/process-photo', {
+            method: 'POST',
+            body: formData,
+            credentials: "same-origin",
+            // sends cookies w/ app route ^
+        })
+            .then((response) => response.text())
+            .then((responsePhoto) => {
+                alert(responsePhoto)
             })
-                .then((response) => response.text())
-                .then((responsePhoto) => {
-                    alert(responsePhoto)
-                })
-        }
-        submitUpload()
 
     }
     return (

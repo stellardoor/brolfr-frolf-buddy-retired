@@ -1,29 +1,68 @@
-// // """Functions for Profile searching"""
+// """Functions for Profile edit form"""
 // 'use strict';
 
-// // const userProfilePic = document.querySelector('#form-file');
-// function uploadProfilePicture() {
-//     const buttonPhoto = document.querySelector("photo-submit")
+// const buttonToggle = document.querySelector("#button-toggle")
+const profileForm = document.querySelector('#edit-profile-form')
 
+// function DisableEnableElement(evt, elementName) {
+//     evt.preventDefault();
+//     const disabledElement = document.getElementById(elementName)
 
-//     buttonPhoto.addEventListener('submit', (evt) => {
-//         evt.preventDefault();
+//     clickEnabled = false
+// };
+        
+// //     if (disabledElement.disabled = true) {
+// //         disabledElement.disabled = false
+    
+// //     }
+// //     else {
+// //         disabledElement.disabled = true
+// //         buttonToggle.innerHTML = "Edit"
+// //     }
+// })
 
-//         const photoInput = { 'form-file': document.querySelector('#form-file') };
+profileForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-//         fetch('/process-photo', {
-//             method: 'POST', enctype: "multipart/form-data",
-//             body: JSON.stringify(photoInput),
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             credentials: "same-origin",
-//             // sends cookies w/ app route ^
-//         })
-//             .then((response) => response.text())
-//             .then((responsePhoto) => {
-//                 alert(responsePhoto)
-//             })
-//     }
-//     )
-// }
+    // const ageRange = document.querySelectorAll("#age-range")
+
+    // console.log(ageRangeCheck)
+    // const ageRangeList = []
+    // for (input in ageRangeCheck) {
+    //   ageRangeList.push(input.value)
+    //     }
+    // console.log(ageRangeList)
+
+    const formInputs = {
+        "user-state" : document.querySelector("#user-state").value,
+        "user-location": document.querySelector("#user-location").value,
+        "intro-text": document.querySelector("#intro-text").value,
+        // calendar: document.querySelector("#calendar"),
+        "skill-level": document.querySelector("#skill-level").value,
+        // age_range: ageRangeList,
+        "frequented-courses": document.querySelector("#frequented-courses").value,
+        "gender-pref": document.querySelector("#gender-pref").value,
+        "kids-ok": document.querySelector("#kids-ok").value,
+        "dogs-ok": document.querySelector("#dogs-ok").value,
+        "friendly-stakes": document.querySelector("#friendly-stakes").value,
+        "game-type": document.querySelector("#game-type").value,
+        "alcohol-ok": document.querySelector("#alcohol-ok").value,
+        "tobacco-ok": document.querySelector("#tobacco-ok").value,
+        "smoke-420-ok": document.querySelector("#smoke-420-ok").value
+    };
+
+    console.log(formInputs)
+
+    fetch('/process-edit', {
+        method: 'POST',
+        body: JSON.stringify(formInputs),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: "same-origin"
+    })
+        .then((response) => response.text())
+        .then((responseProfileEdit) => {
+            alert(responseProfileEdit);
+        })
+    });

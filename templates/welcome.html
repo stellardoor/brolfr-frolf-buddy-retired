@@ -2,7 +2,7 @@
 {% block title %} {{name}} {% endblock %}
 
 {% block body %}
-    <h1> Welcome dude, so happy you made it! cheers brah </h1>
+    <h1> Welcome {{name}}, so happy you made it! cheers brah </h1>
     <button>
         <a href="/profile"> Your profile</a>
     </button>
@@ -15,6 +15,9 @@
     <br>
     <button>
         <a href="/buddies"> View your buds.</a>
+    </button>
+    <button>
+        <a href="/edit-account"> Edit your account</a>
     </button>
     
 

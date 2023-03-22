@@ -1,47 +1,51 @@
 function LoadCities() {
 
     //create outer function for componen
-    const [userInput, setUserInput] = React.useState("")
+    // const [userInput, setUserInput] = React.useState("")
     const [cityNames, setCityNames] = React.useState([])
-    const [getStates, setGetStates] = React.useState([])
+    const [stateNames, setStateNames] = React.useState([])
 
     React.useEffect(() => {
         fetch("/get-states")
             .then(response => response.json())
-            .then(result => {
-                setGetStates(result);
+            .then(stateList=> {
+                const states = []
+                for (const state of stateList) {
+                    states.push(<option value={state} key={state} >{state}</option>);
+                }
+                setStateNames(states)
             });
     }, []);
-    const stateNames = []
-    for (const state of getStates) {
-        stateNames.push(<LoadCityOrStates name={state} key={state} />);
-    }
+
 
     const captureUserInput = (evt) => { //idk how capture ???
-        evt.preventDefault()
-        setUserInput(document.querySelector("user-state").value)
+        // evt.preventDefault()
+        // setUserInput(evt.target.value) asyncro
 
-        const loadCityNames = () => {
-            fetch("/load-cities"), {
-                method: 'POST',
-                body: JSON.stringify({ "user-state": userInput }),
-                credentials: "same-origin"
-            }
-                .then((response) => response.json())
-                .then((responseCities) => {
-                    for (const city of responseCities) {
-                        cityNames.push(<LoadCityOrStates name={city} key={city} />);
-                    }
-                })
-            setGetStates(cityNames)
-        };
-        loadCityNames()
+        fetch("/load-cities", {
+            method: 'POST', 
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "user-state": evt.target.value}),
+            credentials: "same-origin"
+        })
+            .then((response) => response.json())
+            .then((responseCities) => {
+                const cityList = []
+                for (const city of responseCities) {
+                    cityList.push(<option value={city} key={city} >{city}</option>);
+                }
+                setCityNames(cityList)
+            })
+            
+    
     };
-
+// on
     return (
         <div>
             <form>
-                <select onChange={captureUserInput} name="user-state" id="user-state">
+                <select onChange={(evt)=>captureUserInput(evt)} name="user-state" id="user-state">
                     {stateNames} 
                 </select><br></br>
             </form>
@@ -56,9 +60,9 @@ function LoadCities() {
     )
 };
 
-function LoadCityOrStates(props) {
-    return (
-        <option value={props.name}>{props.name}</option>
-    )
-};
+// function LoadCityOrStates(props) {
+//     return (
+//         <option value={props.name}>{props.name}</option>
+//     )
+// };
 

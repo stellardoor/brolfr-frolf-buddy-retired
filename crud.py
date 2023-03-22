@@ -2,7 +2,7 @@
 
 
 from model import db, User, Buddy, Chat, City,  connect_to_db
-
+import json
 import server 
 from datetime import date
 
@@ -12,7 +12,7 @@ from datetime import date
 # animals = Animal.query.options(db.joinedload("human")).filter(Animal.animal_species == animal_species).all()
 
 
-def create_user(email, password, fname, pronouns, gender, birthday, member_since):
+def create_user(email, password, fname, pronouns, gender, birthday, member_since, photo_link):
     user = User(
         email=email, 
         password=password, 
@@ -21,15 +21,24 @@ def create_user(email, password, fname, pronouns, gender, birthday, member_since
         gender = gender,
         birthday = birthday,
         member_since=member_since,
+        photo_link=photo_link,
         )
     db.session.add(user)
     db.session.commit()
 
-def update_user_info(user_id, intro_text, calendar, location, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay):
+def update_user_account(user, fname, pronouns, gender, birthday):
+    user.fname = fname, 
+    user.pronouns = pronouns, 
+    user.gender = gender, 
+    user.birthday = birthday
+    db.session.commit()
+
+def update_user_info(user_id, intro_text, calendar, location, state, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay):
     user = get_user_by_id(user_id)
     user.intro_text = intro_text,
     user.calendar = calendar, 
     user.location = location, 
+    user.state = state,
     user.skill_level = skill_level, 
     user.age_range = age_range,
     user.frequented_courses = frequented_courses,
@@ -60,7 +69,7 @@ def get_user_by_id(user_id):
 def get_buddy_from_id(buddy_id):
     return Buddy.query.filter(Buddy.buddy_id == buddy_id).first()
 
-def get_age_by_birthday(birthday):
+def get_age_by_birthday_old_way(birthday):
     dates = birthday.split("/") 
     today = date.today()
     age_year = today.year - int(dates[2]) #2023 - 1988 = 35
@@ -79,13 +88,23 @@ def get_age_by_birthday(birthday):
             age = age_year
     return age
 
-
-
-    
-    
-
-
-
+def get_age_by_birthday(birthday):
+    today = date.today()
+    age_year = today.year - birthday.year #2023 - 1988 = 35
+    age_month_equal = today.month == birthday.month
+    if age_month_equal:
+        age_day = today.day < birthday.day # 20 < 3 = false
+        if age_day:
+            age = age_year - 1
+        else:
+            age = age_year
+    elif not age_month_equal:
+        age_month = today.month < birthday.month #3 < 10 = true
+        if age_month:
+            age = age_year - 1
+        else:
+            age = age_year
+    return age
 
 
 def get_other_user_id_from_buddy(buddy, user_id):
@@ -121,6 +140,7 @@ def turn_one_profile_to_dict(user):
         user_dict["intro_text"] = getattr(user, "intro_text")
         user_dict["calendar"] = getattr(user, "calendar")
         user_dict["location"] = getattr(user, "location")
+        user_dict["state"] = getattr(user, "state")
         user_dict["skill_level"] = getattr(user, "skill_level")
         user_dict["age_range"] = getattr(user, "age_range")
         user_dict["frequented_courses"] = getattr(user, "frequented_courses")
@@ -137,34 +157,9 @@ def turn_one_profile_to_dict(user):
 def turn_profiles_to_dict(profiles):
     user_list = []
     for user in profiles:
-        user_dict = {}
-        user_dict["fname"] = getattr(user, "fname")
-        user_dict["user_id"] = getattr(user, "user_id")
-        user_dict["pronouns"] = getattr(user, "pronouns")
-        user_dict["gender"] = getattr(user, "gender")
-        age = get_age_by_birthday(getattr(user, "birthday"))
-        user_dict["age"] = age
-        user_dict["member_since"] = getattr(user, "member_since")
-        user_dict["photo_link"] = getattr(user, "photo_link")
-        user_dict["intro_text"] = getattr(user, "intro_text")
-        user_dict["calendar"] = getattr(user, "calendar")
-        user_dict["location"] = getattr(user, "location")
-        user_dict["skill_level"] = getattr(user, "skill_level")
-        user_dict["age_range"] = getattr(user, "age_range")
-        user_dict["frequented_courses"] = getattr(user, "frequented_courses")
-        user_dict["gender_preference"] = getattr(user, "gender_preference")
-        user_dict["kids_okay"] = getattr(user, "kids_okay")
-        user_dict["dogs_okay"] = getattr(user, "dogs_okay")
-        user_dict["friendly_or_stakes_game"] = getattr(user, "friendly_or_stakes_game")
-        user_dict["type_of_game"] = getattr(user, "type_of_game")
-        user_dict["alcohol_okay"] = getattr(user, "alcohol_okay")
-        user_dict["tobacco_okay"] = getattr(user, "tobacco_okay")
-        user_dict["smoke_420_okay"] = getattr(user, "smoke_420_okay")
+        user_dict = turn_one_profile_to_dict(user)
         user_list.append(user_dict)
     return user_list
-
-def turn_date_to_age(date):
-    pass
 
 def turn_profiles_to_dict_bud(profiles):
     user_list = []
@@ -181,6 +176,7 @@ def turn_profiles_to_dict_bud(profiles):
         user_dict["intro_text"] = getattr(user[0], "intro_text")
         user_dict["calendar"] = getattr(user[0], "calendar")
         user_dict["location"] = getattr(user[0], "location")
+        user_dict["state"] = getattr(user[0], "state")
         user_dict["skill_level"] = getattr(user[0], "skill_level")
         user_dict["age_range"] = getattr(user[0], "age_range")
         user_dict["frequented_courses"] = getattr(user[0], "frequented_courses")

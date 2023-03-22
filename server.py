@@ -1,10 +1,11 @@
 """Server for FrolfBuddy"""
 
 from flask import (Flask, render_template, request, flash, session, redirect, jsonify, url_for) 
+import json
 #adding functions for page view
 from model import connect_to_db, db
 import crud
-from datetime import datetime
+from datetime import datetime, date
 import cloudinary.uploader
 import os
 
@@ -29,8 +30,8 @@ def homepage():
     return render_template('homepage.html')
 
 #CHECK******************
-@app.route("/home/<user_id>") # user user_id here
-def welcome_page(user_id):
+@app.route("/home") # user user_id here
+def welcome_page():
     """shows user home page if logged in"""
     if crud.user_logged_in():
         name = session["name"]
@@ -58,7 +59,7 @@ def user_login():
 @app.route("/login")
 def show_login():
     if crud.user_logged_in():
-       return redirect(f"/home/{session['user_id']}")
+       return redirect("/home")
     else:
         return render_template('login.html') 
 
@@ -78,9 +79,10 @@ def create_new_account():
     password = request.form.get("password")
     date_today  = datetime.now()
     member_since = date_today.strftime("%b %d, %Y")
+    photo_link = "https://res.cloudinary.com/dxxwltu0a/image/upload/v1679457216/odvy1aramuksxvrsbyg1.png"
     check_email = crud.get_user_by_email(email)
     if not check_email:
-        crud.create_user(email, password, fname, pronouns, gender, birthday, member_since)
+        crud.create_user(email, password, fname, pronouns, gender, birthday, member_since, photo_link)
         flash(f"Hey there {fname.title()}, thanks for joining! Please log in!")
         return redirect("/login")
     else:
@@ -88,7 +90,7 @@ def create_new_account():
         return redirect('/create-new-account')
 
 # @app.route("/login-help")
-# def forgot_password(): #will write later
+# def forgot_password(): #will write later maybe
 
 #------------complete-----------------
 @app.route("/profile") #<user_id>
@@ -113,11 +115,6 @@ def load_user_details():
     user = crud.turn_one_profile_to_dict(user_details)
     return jsonify(user)
 #-----------------------------
-#------------complete-----------------
-@app.route("/load-cities-regular")
-def load_cities_regular():
-    city_list = crud.get_all_cities()
-    return jsonify(city_list)
 
 @app.route("/load-cities", methods=["POST"])
 def load_cities():
@@ -147,26 +144,50 @@ def load_states():
 @app.route("/process-edit", methods=["POST"])
 def process_edit():
     # user = crud.get_user_by_id(session['user_id'])
-    location = request.form.get("user-location") 
-    intro_text =  request.form.get("intro-text") 
-    calendar = request.form.get("calendar") 
-    skill_level = request.form.get("skill-level") 
-    age_range = request.form.get("age-range") 
-    frequented_courses = request.form.get("frequented-courses")
-    gender_preference = request.form.get("gender-pref") 
-    kids_okay = request.form.get("kids-ok")
-    dogs_okay = request.form.get("dogs-ok") 
-    friendly_or_stakes_game = request.form.get("friendly-stakes")
-    type_of_game = request.form.get("game-type")
-    alcohol_okay = request.form.get("alcohol-ok")
-    tobacco_okay = request.form.get("tobacco-ok")
-    smoke_420_okay = request.form.get("smoke-420-ok")
-    crud.update_user_info(session['user_id'], intro_text, calendar, location, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay)
+    state = request.json.get("user-state") 
+    location = request.json.get("user-location") 
+    intro_text =  request.json.get("intro-text") 
+    # calendar_input = request.json.get("calendar")
+    # calendar = json.dumps(calendar_input) 
+    calendar = "['Evenings (5pm - Sunset)']"
+    skill_level = request.json.get("skill-level") 
+    # age_range_input = request.json.get("age-range") 
+    # age_range = json.dumps(age_range_input)
+    age_range = "['18-35', '26-30']"
+    frequented_courses = request.json.get("frequented-courses")
+    gender_preference = request.json.get("gender-pref") 
+    kids_okay = request.json.get("kids-ok")
+    dogs_okay = request.json.get("dogs-ok") 
+    friendly_or_stakes_game = request.json.get("friendly-stakes")
+    type_of_game = request.json.get("game-type")
+    alcohol_okay = request.json.get("alcohol-ok")
+    tobacco_okay = request.json.get("tobacco-ok")
+    smoke_420_okay = request.json.get("smoke-420-ok")
+    crud.update_user_info(session['user_id'], intro_text, calendar, location, state, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay)
+
+    return 'successfully updated profile'
+
+@app.route("/edit-account")
+def edit_account():
+    user = crud.get_user_by_id(session["user_id"])
+    today = date.today()
+    return render_template("edit-account.html", user=user, today=today)
+
+@app.route("/process-edit-account", methods=["POST"])
+def process_edit_account():
+    user = crud.get_user_by_id(session["user_id"])
+    fname = request.json.get("fname")
+    pronouns = request.json.get("pronouns")
+    gender = request.json.get("gender")
+    birthday = request.json.get("birthday")
+    crud.update_user_account(user,fname, pronouns, gender, birthday)
     flash("success")
+    return "success"
+        
 
-    return redirect('/edit-profile')
+   
 
-#CHECK******************
+#CHECK****************** to delete existing photo in cloudinary?
 @app.route("/process-photo", methods=["POST"])
 def process_photo():
     user = crud.get_user_by_id(session['user_id'])

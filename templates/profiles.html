@@ -3,9 +3,10 @@
 
 {% block body %}
 
-    <div id="search-city"> 
+    <div id="cities"> 
 
     </div>
+    <button type="submit">Search</button>
     <div id="brolfrs" >
 
     </div>
@@ -16,9 +17,12 @@
             <App />,
             document.querySelector('#brolfrs')
         )
+    </script>
+    <script type="text/jsx" src="/static/jsx/searching.jsx"></script>
+    <script type="text/jsx">
         ReactDOM.render(
-            <CitySearch />,
-            document.querySelector('#search-city')
+            <LoadCities />,
+            document.querySelector('#cities')
         )
     </script>
 

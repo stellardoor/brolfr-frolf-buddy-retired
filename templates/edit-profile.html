@@ -2,7 +2,10 @@
 {% block title %} Edit Profile {% endblock %}
 
 {% block body %}
+
 <input type="button" onclick="window.location.href='/profile';" value="Back to profile" />
+<h1> {{user.fname}}'s Profile Specifics</h1>
+
 <div id="photo-uploader">
 </div>
 <text> Location: {{user.location}}</text>
@@ -10,118 +13,102 @@
 
 </div>
 
-<form action="/process-edit" method="post">
-    <text>Name: </text>
-    <input type="text" placeholder={{user.fname}}> </input><br>
 
-    <label for="gender">Gender:</label>
-    <select name="gender" id="gender" placeholder="{{user.gender}}">
-        <option value="Woman">Woman</option>
-        <option value="Man">Man</option>
-        <option value="Non-Binary">Non-Binary</option>
-        <option value="">Other</option>
-    </select><br>
-    <label for="pronouns">Pronouns:{{user.pronouns}}</label>
-    <select name="pronouns" id="pronouns">
-        <option value="(She/Her)">She/Her</option>
-        <option value="(He/Him)">He/Him</option>
-        <option value="(They/Them)">They/Them</option>
-        <option value="(She/They)">She/They</option>
-        <option value="(He/They)">He/They</option>
-        <option value="(He/She/They)">He/She/They</option>
-        <option value="">I prefer not to say.</option>
-    </select>
-    </div>
-    <div> Birthday: {{user.birthday}} </div>
-    <input type="tel" id="month" name="month" size="3.5" minlength="1" maxlength="2" pattern="[0-9]{2}"
-        placeholder="MM" /> /
-    <input type="tel" id="day" name="day" size="2.5" minlength="1" maxlength="2" pattern="[0-9]{2}" placeholder="DD" />
-    /
-    <input type="tel" id="day" name="day" size="4" minlength="4" maxlength="4" pattern="[0-9]{4}"
-        placeholder="YYYY" /><br>
+<form id="edit-profile-form">
     <label for="intro-text">Introduce yourself:</label><br>
-    <textarea name="intro-text" id="intro-text" maxlength="200" placeholder="{{user.intro_text}}"></textarea> <br>
-    <label for="gender-pref">Looking to throw with: {{user.gender_preference}}</label>
+    <div>
+    <textarea name="intro-text" id="intro-text" maxlength="200" value={{user.intro_text}} >{{user.intro_text}}</textarea><br>
+
+    <label for="gender-pref">Looking to throw with:</label>
     <select name="gender-pref" id="gender-pref">
+        <option value="{{user.gender_preference}}" selected disabled hidden>{{user.gender_preference}}</option>
         <option value="Women">Women</option>
         <option value="Men">Men</option>
         <option value="All Genders">All Genders</option>
-    </select>
+    </select><br><br>
     <text> Availability: {{user.calendar}}</text>
-    <div>
-        <input type="checkbox" name="calendar" value="mornings" id="mornings"></input>
-        <label for="mornings"> Early Mornings (Sunrise - 8am) </label><br>
-        <input type="checkbox" name="calendar" value="mornings" id="mornings"></input>
+    <div id="calendar">
+        <input type="checkbox" name="calendar" id="early-mornings"{% if "Early Mornings (Sunrise - 8am)" in user.calendar %} checked {% endif %}></input>
+        <label for="early-mornings"> Early Mornings (Sunrise - 8am) </label><br>
+        <input type="checkbox" name="calendar" id="mornings" {% if "Mornings (8am - 11am)" in user.calendar %} checked {% endif %}></input>
         <label for="mornings"> Mornings (8am - 11am) </label><br>
-        <input type="checkbox" name="calendar" value="afternoons" id="afternoon"></input>
+        <input type="checkbox" name="calendar" id="afternoons" {% if "Afternoons (11am - 2pm)" in user.calendar %} checked {% endif %}></input>
         <label for="afternoons"> Afternoons (11am - 2pm) </label><br>
-        <input type="checkbox" name="calendar" value="late-afternoons" id="late-afternoon"></input>
+        <input type="checkbox" name="calendar" id="late-afternoon" {% if "Late Afternoons (2pm - 5pm)" in user.calendar %} checked {% endif %}></input>
         <label for="late-afternoons"> Late Afternoons (2pm - 5pm) </label><br>
-        <input type="checkbox" name="calendar" value="evenings" id="evenings"></input>
+        <input type="checkbox" name="calendar" id="evenings" {% if "Evenings (5pm - Sunset)" in user.calendar %} checked {% endif %}></input>
         <label for="evenings"> Evenings (5pm - Sunset) </label><br>
-    </div>
-    <label for="skill-level">Skill Level: {{user.skill_level}}</label>
+    </div><br>
+    <label for="skill-level">Skill Level:</label>
     <select name="skill-level" id="skill-level">
+        <option value="{{user.skill_level}}" selected disabled hidden>{{user.skill_level}}</option>
         <option value="Beginner">Beginner</option>
         <option value="Intermediate">Intermediate</option>
         <option value="Advanced">Advanced</option>
-    </select><br>
-    <text>Preferred Age Range: {{user.age_range}}</text>
-    <div>
-        <input type="checkbox" name="age-range" value="18-25" id="18-25"></input>
+    </select><br><br>
+    <div id="age-range">
+        <text> Preferred Age Range:</text><br>
+        <input type="checkbox" class="age-range" name="age-range" value="18-25" id="18-25" {% if "18-25" in user.age_range %} checked {% endif %}></input>
         <label for="18-25"> 18-25 </label><br>
-        <input type="checkbox" name="age-range" value="26-30" id="26-30"></input>
+        <input type="checkbox" class="age-range" name="age-range" value="26-30" id="26-30" {% if "26-30" in user.age_range %} checked {% endif %}></input>
         <label for="26-30"> 26-30</label><br>
-        <input type="checkbox" name="age-range" value="31-35" id="31-35"></input>
+        <input type="checkbox" class="age-range" name="age-range" value="31-35" id="31-35" {% if "31-35" in user.age_range %} checked {% endif %}></input>
         <label for="31-35"> 31-35 </label><br>
-        <input type="checkbox" name="age-range" value="36-40" id="36-40"></input>
+        <input type="checkbox" class="age-range" name="age-range" value="36-40" id="36-40" {% if "36-40" in user.age_range %} checked {% endif %}></input>
         <label for="36-40"> 36-40 </label><br>
-        <input type="checkbox" name="age-range" value="41-50" id="41-50"></input>
+        <input type="checkbox" class="age-range" name="age-range" value="41-50" id="41-50" {% if "41-50" in user.age_range %} checked {% endif %}></input>
         <label for="41-50"> 41-50 </label><br>
-        <input type="checkbox" name="age-range" value="51+" id="51+"></input>
-        <label for="51+"> 51+ </label><br>
+        <input type="checkbox" class="age-range" name="age-range" value="51+" id="51+" {% if "51+" in user.age_range %} checked {% endif %}></input>
+        <label for="51+"> 51+ </label><br><br>
     </div>
     <label for="frequented-courses">Frequented Courses:</label><br>
-    <textarea name="frequented-courses" id="frequented-courses" maxlength="200" placeholder="{{user.frequented_courses}}"></textarea> <br>
-    <label for="kids-ok">Kids okay?: {{user.kids_okay}}</label>
+    <textarea name="frequented-courses" id="frequented-courses" maxlength="200">{{user.frequented_courses}}</textarea> <br>
+    <label for="kids-ok">Kids okay?:</label>
     <select name="kids-ok" id="kids-ok">
+        <option value="{{user.kids_okay}}" selected disabled hidden>{{user.kids_okay}}</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
         <option value="No Preference">No Preference</option>
     </select><br>
-    <label for="dogs-ok">Dogs okay?: {{user.dogs_okay}}</label>
+    <label for="dogs-ok">Dogs okay?:</label>
     <select name="dogs-ok" id="dogs-ok">
+        <option value="{{user.dogs_okay}}" selected disabled hidden>{{user.dogs_okay}}</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
         <option value="No Preference">No Preference</option>
     </select><br>
-    <label for="friendly-stakes">Friendly or Stakes games? {{user.friendly_or_stakes_game}}</label>
+    <label for="friendly-stakes">Friendly or Stakes games?</label>
     <select name="friendly-stakes" id="friendly-stakes">
-        <option value="Friendly game">Friendly</option>
-        <option value="Stakes game">Stakes</option>
-        <option value="Friendly and Stakes">Friendly AND Stakes</option>
+        <option value="{{user.friendly_or_stakes_game}}" selected disabled hidden>{{user.friendly_or_stakes_game}}</option>
+        <option value="Friendly game">Friendly game</option>
+        <option value="Stakes game">Stakes game</option>
+        <option value="Friendly and Stakes">Friendly and Stakes</option>
     </select><br>
-    <label for="game-type">Game preference: {{user.type_of_game}}</label>
+    <label for="game-type">Game preference:</label>
     <select name="game-type" id="game-type">
+        <option value="{{user.type_of_game}}" selected disabled hidden>{{user.type_of_game}}</option>
         <option value="Front 9">Front 9</option>
         <option value="Back 9">Back 9</option>
         <option value="Full Course">Full Course</option>
         <option value="No Preference">No Preference</option>
     </select><br>
-    <label for="alcohol-ok">Alcohol okay? {{user.alcohol_okay}}</label>
+    <label for="alcohol-ok">Alcohol okay?</label>
     <select name="alcohol-ok" id="alcohol-ok">
+        <option value="{{user.alcohol_okay}}" selected disabled hidden>{{user.alcohol_okay}}</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
         <option value="No Preference">No Preference</option>
     </select><br>
-    <label for="tobacco-ok">Tobacco okay? {{user.tobacco_okay}}</label>
+    <label for="tobacco-ok">Tobacco okay?</label>
     <select name="tobacco-ok" id="tobacco-ok">
+        <option value="{{user.tobacco_okay}}" selected disabled hidden>{{user.tobacco_okay}}</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
         <option value="No Preference">No Preference</option>
     </select><br>
-    <label for="smoke-420-ok">420/Marijuana Friendly? {{user.smoke_420_okay}}</label>
+    <label for="smoke-420-ok">420/Marijuana Friendly?</label>
     <select name="smoke-420-ok" id="smoke-420-ok">
+        <option value="{{user.smoke_420_okay}}" selected disabled hidden>{{user.smoke_420_okay}}</option>
         <option value="Yes">Yes</option>
         <option value="No">No</option>
         <option value="No Preference">No Preference</option>
@@ -138,13 +125,14 @@
             document.querySelector('#cities')
         )
 </script>
-<script type="text/jsx" src="/static/jsx/edit-profile.jsx"></script>
+<script type="text/jsx" src="/static/jsx/upload-photo.jsx"></script>
 <script type="text/jsx">
         ReactDOM.render(
             <UploadProfilePicture />,
             document.querySelector('#photo-uploader')
         )
     </script>
+</script>
 <script src="/static/js/edit-profile.js"></script>
 
 {% endblock %}

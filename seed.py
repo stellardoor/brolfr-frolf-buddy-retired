@@ -5,8 +5,9 @@ import os # operating system - establishes interaction between the user and the 
 
 import crud
 import model
-from random import choice
+from random import choice, sample
 from datetime import date
+import json
 
 from server import app
 
@@ -30,9 +31,10 @@ def add_test_users():
         gender = choice(["Man", "Woman", "Non-Binary", ""])
         birthday = choice(["12/25/1989", "1/2/2000", "3/6/1975"])
         member_since = date.today()
+        photo_link = ""
 
 
-        user = crud.create_user(email, password, fname, pronouns, gender, birthday, member_since)
+        user = crud.create_user(email, password, fname, pronouns, gender, birthday, member_since, photo_link)
     #     model.db.session.add(user)
 
     # model.db.session.commit()
@@ -45,11 +47,12 @@ def add_profile_specifics():
         user = crud.get_user_by_email(f"{user.lower()}@testing.com")
         user.photo_link = f"/static/images/{user.fname.lower()}.jpeg"
         user.intro_text = f"Hi, I'm {user.fname}! Let's Play!"
-        user.calendar = "nothing for now"
+        user.calendar = "['Evenings (5pm - Sunset)']"
         user.location = choice(["Sacramento", "San Francisco", "San Diego", "Oakland", "Roseville"])
-        user.us_state = "California"
+        user.state = "California"
         user.skill_level = choice(["Beginner", "Intermediate", "Advanced"])
-        user.age_range = choice(["18-25", "26-30", "31-35", "36-40", "41-50", "51+"])
+        age_range_choice = sample(["18-25", "26-30", "31-35", "36-40", "41-50", "51+"], 3)
+        user.age_range = json.dumps(age_range_choice)
         user.frequented_courses = choice(["Hooker Oak", "Peregrine Point", "Golden Gate Park", "Oyster Bay", "John Mackey", "Bijou", "Lagoon Valley", "Anderson Valley", "Your mom"])
         user.gender_preference = choice(["Men", "Women", "All Genders"])
         user.kids_okay = choice(["Yes", "No", "No Preference"])

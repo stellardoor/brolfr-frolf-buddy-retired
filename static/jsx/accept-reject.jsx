@@ -12,7 +12,6 @@ function App() {
     }, []);
     const userRequests = [];
     for (const user of users) {
-        // userRequests.push(<loadRequests item = {user} key={user.user_id}/>);
         userRequests.push(<LoadRequest  user ={user} key={user.user_id} />);
     }
     return (
