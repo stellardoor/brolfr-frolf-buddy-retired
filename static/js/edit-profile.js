@@ -1,23 +1,8 @@
 // """Functions for Profile edit form"""
 // 'use strict';
 
-// const buttonToggle = document.querySelector("#button-toggle")
 const profileForm = document.querySelector('#edit-profile-form')
 
-// function DisableEnableElement(evt, elementName) {
-//     evt.preventDefault();
-//     const disabledElement = document.getElementById(elementName)
-
-//     clickEnabled = false
-// };     
-// //     if (disabledElement.disabled = true) {
-// //         disabledElement.disabled = false   
-// //     }
-// //     else {
-// //         disabledElement.disabled = true
-// //         buttonToggle.innerHTML = "Edit"
-// //     }
-// })
 
 profileForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -26,30 +11,33 @@ profileForm.addEventListener('submit', (evt) => {
     const calendarInfo = document.querySelectorAll(".calendar")
 
     console.log(ageRange)
-    const ageRangeList = []
-    for (input of ageRange) {
+    const ageRangeList = [];
+    for (const input of ageRange) {
         if (input.checked) {
-            ageRangeList.push(input.value) 
+            ageRangeList.push(input.value); 
         }
         }
     console.log(ageRangeList)
+    // const ageRangeListDumps = json.dumps(ageRangeList)
 
     console.log(calendarInfo)
-    const calendarList = []
-    for (input of calendarInfo) {
+    const calendarList = [];
+    for (const input of calendarInfo) {
         if (input.checked) {
-            calendarList.push(input.value) 
-        }        }
+            calendarList.push(input.value); 
+        }        
+    }
     console.log(calendarList)
+    // const calendarListDumps = json.dumps(calendarList)
 
     const formInputs = {
         "user-state" : document.querySelector("#user-state").value,
         "user-location": document.querySelector("#user-location").value,
         "intro-text": document.querySelector("#intro-text").value,
-        // calendar: calendarList,
+        "calendar" :calendarList,
         "skill-level": document.querySelector("#skill-level").value,
-        // age_range: ageRangeList,
-        "frequented-courses": document.querySelector("#frequented-courses").value,
+        "age_range" : ageRangeList,
+        "frequented-courses" : document.querySelector("#frequented-courses").value,
         "gender-pref": document.querySelector("#gender-pref").value,
         "kids-ok": document.querySelector("#kids-ok").value,
         "dogs-ok": document.querySelector("#dogs-ok").value,

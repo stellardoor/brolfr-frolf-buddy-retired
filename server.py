@@ -8,7 +8,7 @@ import crud
 from datetime import datetime, date
 import cloudinary.uploader
 import os
-
+from passlib.hash import argon2
 # from imagekitio import ImageKit <---- maybe I want to use this later
 # imagekit = ImageKit(
 #     private_key = 'private_b7/fsyEee8F0XLNLFCnOm/zNbdQ=',
@@ -77,6 +77,9 @@ def create_new_account():
     birthday = request.form.get("birthday")
     email = request.form.get("email").lower().strip()
     password = request.form.get("password")
+# process and hash password: 
+
+
     date_today  = datetime.now()
     member_since = date_today.strftime("%b %d, %Y")
     photo_link = "https://res.cloudinary.com/dxxwltu0a/image/upload/v1679457216/odvy1aramuksxvrsbyg1.png"
@@ -140,20 +143,39 @@ def load_states():
 #     crud.edit_profile(user, location)
 #     flash("success")
 #     return "Successfully Edited Profile!"
+@app.route("/get-user-state", methods=["POST"])
+def get_user_state():
+    user = crud.get_user_by_id(session['user_id'])
+    return user.state
+
+@app.route("/get-user-city", methods=["POST"])
+def get_user_location():
+    user = crud.get_user_by_id(session['user_id'])
+    return user.location
+
+@app.route("/process-city-state", methods=["POST"])
+def process_state():
+    user = crud.get_user_by_id(session['user_id'])
+    state = request.json.get("user-state") 
+    check_city_list = crud.get_all_cities_by_state(state)
+    location = request.json.get("user-location") 
+    if location not in check_city_list:
+        return ("error - please only select city from drop down")
+    else:
+        crud.update_user_location(user, state, location)
+        return "Successfully edited your location!!"
 
 @app.route("/process-edit", methods=["POST"])
 def process_edit():
-    # user = crud.get_user_by_id(session['user_id'])
-    state = request.json.get("user-state") 
-    location = request.json.get("user-location") 
+    user = crud.get_user_by_id(session['user_id'])
+    age_range_input = request.json.get("age-range") 
+    age_range = json.dumps(age_range_input)
+    calendar_input = request.json.get("calendar")
+    calendar = json.dumps(calendar_input) 
+    # calendar = request.json.get("calendar")
     intro_text =  request.json.get("intro-text") 
-    # calendar_input = request.json.get("calendar")
-    # calendar = json.dumps(calendar_input) 
-    calendar = "['Evenings (5pm - Sunset)']"
     skill_level = request.json.get("skill-level") 
-    # age_range_input = request.json.get("age-range") 
-    # age_range = json.dumps(age_range_input)
-    age_range = "['18-35', '26-30']"
+    # age_range = request.json.get("age-range") 
     frequented_courses = request.json.get("frequented-courses")
     gender_preference = request.json.get("gender-pref") 
     kids_okay = request.json.get("kids-ok")
@@ -163,7 +185,7 @@ def process_edit():
     alcohol_okay = request.json.get("alcohol-ok")
     tobacco_okay = request.json.get("tobacco-ok")
     smoke_420_okay = request.json.get("smoke-420-ok")
-    crud.update_user_info(session['user_id'], intro_text, calendar, location, state, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay)
+    crud.update_user_info(user, intro_text, calendar, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay)
 
     return 'successfully updated profile'
 
@@ -171,7 +193,7 @@ def process_edit():
 def edit_account():
     user = crud.get_user_by_id(session["user_id"])
     today = date.today()
-    return render_template("edit-account.html", user=user, today=today)
+    return render_template("edit-account.html", user=user, today=today) # today so the calendar does not load in the future
 
 @app.route("/process-edit-account", methods=["POST"])
 def process_edit_account():
@@ -218,6 +240,12 @@ def show_profiles():
 @app.route("/load-profiles")
 def load_profiles():
     all_users = crud.get_all_profiles(session['user_id'])
+    return jsonify(all_users)
+
+@app.route("/load-users-by-city")
+def load_users_by_city():
+    city = request.json.get("user-location")
+    all_users = crud.get_all_profiles_by_city(session['user_id'], city)
     return jsonify(all_users)
 #-----------------------------
 #------------complete-----------------

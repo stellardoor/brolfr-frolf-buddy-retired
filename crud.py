@@ -33,12 +33,14 @@ def update_user_account(user, fname, pronouns, gender, birthday):
     user.birthday = birthday
     db.session.commit()
 
-def update_user_info(user_id, intro_text, calendar, location, state, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay):
-    user = get_user_by_id(user_id)
+def update_user_location(user, state, location):
+    user.location = location, 
+    user.state = state
+    db.session.commit()
+
+def update_user_info(user, intro_text, calendar, skill_level, age_range, frequented_courses, gender_preference, kids_okay, dogs_okay, friendly_or_stakes_game, type_of_game, alcohol_okay, tobacco_okay, smoke_420_okay):
     user.intro_text = intro_text,
     user.calendar = calendar, 
-    user.location = location, 
-    user.state = state,
     user.skill_level = skill_level, 
     user.age_range = age_range,
     user.frequented_courses = frequented_courses,
@@ -199,6 +201,17 @@ def get_all_profiles(user_id):
     profiles_data = []
     for user in users:
         if user.user_id not in buddies:
+            profiles_data.append(user)
+    new_buddy_data = turn_profiles_to_dict(profiles_data)
+    return new_buddy_data
+
+def get_all_profiles_by_city(user_id, city):
+    """pulls all users that are not logged in user, not rejected, requested, or already matched buddies"""
+    users = User.query.filter(db.not_(User.user_id == user_id)).all()
+    buddies  = get_all_buddy_user_ids(user_id)
+    profiles_data = []
+    for user in users:
+        if user.user_id not in buddies and user.location == city:
             profiles_data.append(user)
     new_buddy_data = turn_profiles_to_dict(profiles_data)
     return new_buddy_data
