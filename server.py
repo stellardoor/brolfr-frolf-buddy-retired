@@ -53,7 +53,7 @@ def user_login():
         session["user_id"] = user.user_id
         session["name"] = user.fname
         flash(f"Hey, {user.fname}!")
-        return redirect(f"/home/{user.user_id}")
+        return redirect(f"/home")
 
 #CHECK******************
 @app.route("/login")
@@ -176,7 +176,7 @@ def edit_account():
 @app.route("/process-edit-account", methods=["POST"])
 def process_edit_account():
     user = crud.get_user_by_id(session["user_id"])
-    fname = request.json.get("fname")
+    fname = request.json.get("fname").strip()
     pronouns = request.json.get("pronouns")
     gender = request.json.get("gender")
     birthday = request.json.get("birthday")

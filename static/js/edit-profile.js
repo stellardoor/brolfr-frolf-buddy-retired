@@ -9,11 +9,9 @@ const profileForm = document.querySelector('#edit-profile-form')
 //     const disabledElement = document.getElementById(elementName)
 
 //     clickEnabled = false
-// };
-        
+// };     
 // //     if (disabledElement.disabled = true) {
-// //         disabledElement.disabled = false
-    
+// //         disabledElement.disabled = false   
 // //     }
 // //     else {
 // //         disabledElement.disabled = true
@@ -24,20 +22,31 @@ const profileForm = document.querySelector('#edit-profile-form')
 profileForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    // const ageRange = document.querySelectorAll("#age-range")
+    const ageRange = document.querySelectorAll(".age-range")
+    const calendarInfo = document.querySelectorAll(".calendar")
 
-    // console.log(ageRangeCheck)
-    // const ageRangeList = []
-    // for (input in ageRangeCheck) {
-    //   ageRangeList.push(input.value)
-    //     }
-    // console.log(ageRangeList)
+    console.log(ageRange)
+    const ageRangeList = []
+    for (input of ageRange) {
+        if (input.checked) {
+            ageRangeList.push(input.value) 
+        }
+        }
+    console.log(ageRangeList)
+
+    console.log(calendarInfo)
+    const calendarList = []
+    for (input of calendarInfo) {
+        if (input.checked) {
+            calendarList.push(input.value) 
+        }        }
+    console.log(calendarList)
 
     const formInputs = {
         "user-state" : document.querySelector("#user-state").value,
         "user-location": document.querySelector("#user-location").value,
         "intro-text": document.querySelector("#intro-text").value,
-        // calendar: document.querySelector("#calendar"),
+        // calendar: calendarList,
         "skill-level": document.querySelector("#skill-level").value,
         // age_range: ageRangeList,
         "frequented-courses": document.querySelector("#frequented-courses").value,

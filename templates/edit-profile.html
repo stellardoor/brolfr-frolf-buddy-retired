@@ -28,15 +28,15 @@
     </select><br><br>
     <text> Availability: {{user.calendar}}</text>
     <div id="calendar">
-        <input type="checkbox" name="calendar" id="early-mornings"{% if "Early Mornings (Sunrise - 8am)" in user.calendar %} checked {% endif %}></input>
+        <input type="checkbox" name="calendar" class ="calendar" id="early-mornings" value="Early Mornings (Sunrise - 8am)" {% if "Early Mornings (Sunrise - 8am)" in user.calendar %} checked {% endif %}></input>
         <label for="early-mornings"> Early Mornings (Sunrise - 8am) </label><br>
-        <input type="checkbox" name="calendar" id="mornings" {% if "Mornings (8am - 11am)" in user.calendar %} checked {% endif %}></input>
+        <input type="checkbox" name="calendar" class ="calendar" id="mornings" value="Mornings (8am - 11am)" {% if "Mornings (8am - 11am)" in user.calendar %} checked {% endif %}></input>
         <label for="mornings"> Mornings (8am - 11am) </label><br>
-        <input type="checkbox" name="calendar" id="afternoons" {% if "Afternoons (11am - 2pm)" in user.calendar %} checked {% endif %}></input>
+        <input type="checkbox" name="calendar" class ="calendar" id="afternoons" value="Afternoons (11am - 2pm)" {% if "Afternoons (11am - 2pm)" in user.calendar %} checked {% endif %}></input>
         <label for="afternoons"> Afternoons (11am - 2pm) </label><br>
-        <input type="checkbox" name="calendar" id="late-afternoon" {% if "Late Afternoons (2pm - 5pm)" in user.calendar %} checked {% endif %}></input>
+        <input type="checkbox" name="calendar" class ="calendar" id="late-afternoon" value="Late Afternoons (2pm - 5pm)" {% if "Late Afternoons (2pm - 5pm)" in user.calendar %} checked {% endif %}></input>
         <label for="late-afternoons"> Late Afternoons (2pm - 5pm) </label><br>
-        <input type="checkbox" name="calendar" id="evenings" {% if "Evenings (5pm - Sunset)" in user.calendar %} checked {% endif %}></input>
+        <input type="checkbox" name="calendar" class ="calendar" id="evenings" value ="Evenings (5pm - Sunset)" {% if "Evenings (5pm - Sunset)" in user.calendar %} checked {% endif %}></input>
         <label for="evenings"> Evenings (5pm - Sunset) </label><br>
     </div><br>
     <label for="skill-level">Skill Level:</label>
