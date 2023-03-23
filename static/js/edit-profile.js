@@ -36,7 +36,7 @@ profileForm.addEventListener('submit', (evt) => {
         "intro-text": document.querySelector("#intro-text").value,
         "calendar" :calendarList,
         "skill-level": document.querySelector("#skill-level").value,
-        "age_range" : ageRangeList,
+        "age-range" : ageRangeList,
         "frequented-courses" : document.querySelector("#frequented-courses").value,
         "gender-pref": document.querySelector("#gender-pref").value,
         "kids-ok": document.querySelector("#kids-ok").value,

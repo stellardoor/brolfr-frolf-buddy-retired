@@ -65,18 +65,22 @@ function LoadCities() {
 
     const processUserLocation = (evt) => { //idk how capture ???
         evt.preventDefault()
-
-        fetch("/load-users-by-city", {
+        const formInputs = { 
+            "user-state": document.querySelector("#user-state").value, 
+            "user-location" : document.querySelector("#user-location").value
+        }
+        
+        fetch("/process-city-state", {
             method: 'POST', 
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ "user-location" : document.querySelector("#user-location").value}),
+            body: JSON.stringify(formInputs),
             credentials: "same-origin"
         })
             .then((response) => response.text())
             .then((responseSubmit => {
-                responseSubmit
+                alert(responseSubmit)
             }))    
     //     }
     //     else {

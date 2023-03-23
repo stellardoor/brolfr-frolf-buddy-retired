@@ -1,7 +1,7 @@
 // """Functions for Account edit form"""
 // 'use strict';
 
-const accountForm = document.querySelector('#edit-profile-form')
+const accountForm = document.querySelector('#edit-account-form')
 
 
 accountForm.addEventListener('submit', (evt) => {
@@ -16,7 +16,7 @@ accountForm.addEventListener('submit', (evt) => {
 
     console.log(formInputs)
 
-    fetch('/process-edit', {
+    fetch('/process-edit-account', {
         method: 'POST',
         body: JSON.stringify(formInputs),
         headers: {
