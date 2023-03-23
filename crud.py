@@ -140,11 +140,11 @@ def turn_one_profile_to_dict(user):
         user_dict["member_since"] = getattr(user, "member_since")
         user_dict["photo_link"] = getattr(user, "photo_link")
         user_dict["intro_text"] = getattr(user, "intro_text")
-        user_dict["calendar"] = json.loads(getattr(user, "calendar"))
+        user_dict["calendar"] = json.loads((getattr(user, "calendar")))
         user_dict["location"] = getattr(user, "location")
         user_dict["state"] = getattr(user, "state")
         user_dict["skill_level"] = getattr(user, "skill_level")
-        user_dict["age_range"] = json.loads(getattr(user, "age_range"))
+        user_dict["age_range"] = json.loads((getattr(user, "age_range")))
         user_dict["frequented_courses"] = getattr(user, "frequented_courses")
         user_dict["gender_preference"] = getattr(user, "gender_preference")
         user_dict["kids_okay"] = getattr(user, "kids_okay")
@@ -159,7 +159,31 @@ def turn_one_profile_to_dict(user):
 def turn_profiles_to_dict(profiles):
     user_list = []
     for user in profiles:
-        user_dict = turn_one_profile_to_dict(user)
+        user_dict = {}
+        user_dict["fname"] = getattr(user, "fname")
+        user_dict["user_id"] = getattr(user, "user_id")
+        user_dict["pronouns"] = getattr(user, "pronouns")
+        user_dict["gender"] = getattr(user, "gender")
+        user_dict["birthday"] = getattr(user, "birthday")
+        age = get_age_by_birthday(getattr(user, "birthday"))
+        user_dict["age"] = age
+        user_dict["member_since"] = getattr(user, "member_since")
+        user_dict["photo_link"] = getattr(user, "photo_link")
+        user_dict["intro_text"] = getattr(user, "intro_text")
+        user_dict["calendar"] = (getattr(user, "calendar"))
+        user_dict["location"] = getattr(user, "location")
+        user_dict["state"] = getattr(user, "state")
+        user_dict["skill_level"] = getattr(user, "skill_level")
+        user_dict["age_range"] = (getattr(user, "age_range"))
+        user_dict["frequented_courses"] = getattr(user, "frequented_courses")
+        user_dict["gender_preference"] = getattr(user, "gender_preference")
+        user_dict["kids_okay"] = getattr(user, "kids_okay")
+        user_dict["dogs_okay"] = getattr(user, "dogs_okay")
+        user_dict["friendly_or_stakes_game"] = getattr(user, "friendly_or_stakes_game")
+        user_dict["type_of_game"] = getattr(user, "type_of_game")
+        user_dict["alcohol_okay"] = getattr(user, "alcohol_okay")
+        user_dict["tobacco_okay"] = getattr(user, "tobacco_okay")
+        user_dict["smoke_420_okay"] = getattr(user, "smoke_420_okay")
         user_list.append(user_dict)
     return user_list
 
@@ -176,11 +200,11 @@ def turn_profiles_to_dict_bud(profiles):
         user_dict["member_since"] = getattr(user[0], "member_since")
         user_dict["photo_link"] = getattr(user[0], "photo_link")
         user_dict["intro_text"] = getattr(user[0], "intro_text")
-        user_dict["calendar"] = json.loads(getattr(user[0], "calendar"))
+        user_dict["calendar"] = (getattr(user[0], "calendar"))
         user_dict["location"] = getattr(user[0], "location")
         user_dict["state"] = getattr(user[0], "state")
         user_dict["skill_level"] = getattr(user[0], "skill_level")
-        user_dict["age_range"] = json.loads(getattr(user[0], "age_range"))
+        user_dict["age_range"] = (getattr(user[0], "age_range"))
         user_dict["frequented_courses"] = getattr(user[0], "frequented_courses")
         user_dict["gender_preference"] = getattr(user[0], "gender_preference")
         user_dict["kids_okay"] = getattr(user[0], "kids_okay")
@@ -205,13 +229,24 @@ def get_all_profiles(user_id):
     new_buddy_data = turn_profiles_to_dict(profiles_data)
     return new_buddy_data
 
-def get_all_profiles_by_city(user_id, city):
+def get_all_profiles_by_city_state(user_id, city, state):
     """pulls all users that are not logged in user, not rejected, requested, or already matched buddies"""
     users = User.query.filter(db.not_(User.user_id == user_id)).all()
     buddies  = get_all_buddy_user_ids(user_id)
     profiles_data = []
     for user in users:
-        if user.user_id not in buddies and user.location == city:
+        if user.user_id not in buddies and user.state == state and user.location == city:
+            profiles_data.append(user)
+    new_buddy_data = turn_profiles_to_dict(profiles_data)
+    return new_buddy_data
+
+def get_all_profiles_by_state(user_id, state):
+    """pulls all users that are not logged in user, not rejected, requested, or already matched buddies"""
+    users = User.query.filter(db.not_(User.user_id == user_id)).all()
+    buddies  = get_all_buddy_user_ids(user_id)
+    profiles_data = []
+    for user in users:
+        if user.user_id not in buddies and user.state == state:
             profiles_data.append(user)
     new_buddy_data = turn_profiles_to_dict(profiles_data)
     return new_buddy_data

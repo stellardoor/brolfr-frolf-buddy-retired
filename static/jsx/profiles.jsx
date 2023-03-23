@@ -76,24 +76,24 @@ function LoadCities() {
 
     React.useEffect(() => {
         fetch("/get-user-state", {
-        method: 'POST'
-    })
-        .then(response => response.text())
-        .then(stateResponse=> {
-            setUserState(stateResponse)
-            }  
-        );
-        });
+            method: 'POST'
+        })
+            .then(response => response.text())
+            .then(stateResponse => {
+                setUserState(stateResponse)
+            }
+            );
+    });
     React.useEffect(() => {
         fetch("/get-user-city", {
-        method: 'POST'
-    })
-        .then(response => response.text())
-        .then(cityResponse=> {
-            setUserCity(cityResponse)
-            }  
-        );
-        });
+            method: 'POST'
+        })
+            .then(response => response.text())
+            .then(cityResponse => {
+                setUserCity(cityResponse)
+            }
+            );
+    });
 
     const [cityNames, setCityNames] = React.useState([])
     const [stateNames, setStateNames] = React.useState([])
@@ -101,7 +101,7 @@ function LoadCities() {
     React.useEffect(() => {
         fetch("/get-states")
             .then(response => response.json())
-            .then(stateList=> {
+            .then(stateList => {
                 const states = []
                 for (const state of stateList) {
                     states.push(<option value={state} key={state} >{state}</option>);
@@ -114,64 +114,94 @@ function LoadCities() {
     const captureUserInput = (evt) => { //idk how capture ???
 
         fetch("/load-cities", {
-            method: 'POST', 
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ "user-state": evt.target.value}),
+            body: JSON.stringify({ "user-state": evt.target.value }),
             credentials: "same-origin"
         })
             .then((response) => response.json())
             .then((responseCities) => {
                 const cityList = []
+                let i = 1
                 for (const city of responseCities) {
-                    cityList.push(<option  value={city} key={city} >{city}</option>);
+                    cityList.push(<option value={city} key={i} >{city}</option>);
+                    i +=1
                 }
                 setCityNames(cityList)
-                document.querySelector("#user-location").defaultValue=""
+                document.querySelector("#user-location").defaultValue = ""
             })
-            
-    
+
+
     };
 
-    const processNewProfiles = (evt) => { //idk how capture ???
+    const processProfilesByState = (evt) => { //idk how capture ???
         evt.preventDefault()
 
-        const formInputs = { 
-            "user-state": document.querySelector("#user-state").value, 
-            "user-location" : document.querySelector("#user-location").value
+        fetch("/load-users-by-state", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ "user-state": document.querySelector("#user-state").value }),
+            credentials: "same-origin"
+        })
+            .then((response) => response.text())
+            .then((responseSubmit => {
+                responseSubmit;
+                console.log(responseSubmit)
+                const userProfilesStates = [];
+                for (const user of responseSubmit) {
+                    userProfilesStates.push(<LoadRequest user={user} key={user.user_id} />);
+                }
+                document.querySelector("#brolfrs").innerHTML = {userProfilesStates}
+                console.log(userProfilesStates)
+            }));
+    };
+
+    const processProfilesByCity = (evt) => { //idk how capture ???
+        evt.preventDefault()
+
+        const formInputs = {
+            "user-state": document.querySelector("#user-state").value,
+            "user-location": document.querySelector("#user-location").value
         }
-        
-        fetch("/process-city-state", {
-            method: 'POST', 
+
+        fetch("/load-users-by-city", {
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(formInputs),
             credentials: "same-origin"
         })
-            .then((response) => response.text())
+            .then((response) => response.json())
             .then((responseSubmit => {
-                responseSubmit
-            }))    
+                responseSubmit;
+                const userProfilesCity = [];
+                for (const user of responseSubmit) {
+                    userProfilesCity.push(<LoadRequest user={user} key={user.user_id} />);
+                }
+                console.log(userProfilesCity)
+                document.querySelector("#brolfrs").innerHTML = {userProfiles}
+            }));
+
     };
 
     return (
         <div>
-            <form>
-                <select onChange={(evt)=>captureUserInput(evt)} name="user-state" id="user-state">
-                    <option defaultValue={userState} >{userState} </option>
-                    {stateNames} 
-                </select><br></br>
-            </form>
-            <form>
-                <label htmlFor="user-location" className="form-label">City: </label>
-                <input className="form-control" list="datalistOptions" name="user-location" id="user-location" defaultValue = {userCity} placeholder="Type to search your closest city..."></input>
-                <datalist id="datalistOptions">
-                    {cityNames}
-                </datalist>
-                <input type ="submit" onClick={(evt)=> processNewProfiles(evt)} ></input>
-            </form>
+            <select onChange={(evt) => captureUserInput(evt)} name="user-state" id="user-state">
+                <option defaultValue={userState} >{userState} </option>
+                {stateNames}
+            </select><br></br>
+            <button type="submit" onClick={(evt) => processProfilesByState(evt)}>Search folks by State</button>
+            <label htmlFor="user-location" className="form-label">City: </label>
+            <input className="form-control" list="datalistOptions" name="user-location" id="user-location" defaultValue={userCity} placeholder="Type to search your closest city..."></input>
+            <datalist id="datalistOptions">
+                {cityNames}
+            </datalist>
+            <button type="submit" onClick={(evt) => processProfilesByCity(evt)} >Search by City</button>
         </div>
     )
 

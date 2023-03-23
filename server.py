@@ -242,10 +242,17 @@ def load_profiles():
     all_users = crud.get_all_profiles(session['user_id'])
     return jsonify(all_users)
 
-@app.route("/load-users-by-city")
+@app.route("/load-users-by-state", methods=["POST"])
+def load_users_by_state():
+    state = request.json.get("user-state")
+    all_users = crud.get_all_profiles_by_state(session['user_id'], state)
+    return jsonify(all_users)
+
+@app.route("/load-users-by-city", methods=["POST"])
 def load_users_by_city():
     city = request.json.get("user-location")
-    all_users = crud.get_all_profiles_by_city(session['user_id'], city)
+    state = city = request.json.get("user-state")
+    all_users = crud.get_all_profiles_by_city_state(session['user_id'], state, city)
     return jsonify(all_users)
 #-----------------------------
 #------------complete-----------------
