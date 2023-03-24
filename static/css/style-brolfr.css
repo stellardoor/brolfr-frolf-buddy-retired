@@ -15,6 +15,14 @@ div.buddy-message {
     overflow: auto;
 }
 
+div.left-message {
+
+}
+
+div.right-message {
+
+}
+
 img.tiny {
     height: 30px;
     width: flex;
@@ -27,7 +35,7 @@ img.profile {
     border: 5px solid rgb(81, 116, 100)
 }
 
-text.timestamp {
+small.timestamp {
     font-size: x-small;
     font-style: italic;
     color: rgb(120, 120, 120);

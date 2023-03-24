@@ -76,8 +76,8 @@ class Chat(db.Model):
     sender = db.relationship("User", primaryjoin = "Chat.sender_id == User.user_id")
     receiver = db.relationship("User", primaryjoin = "Chat.receiver_id == User.user_id")
 
-#     def __repr__(self):
-#         return f"<Chat chat_id = {self.chat_id} buddy_id = {self.buddy_id}>"
+    def __repr__(self):
+        return f"<Chat chat_id = {self.chat_id} buddy_id = {self.buddy_id}>"
     
 class City(db.Model):
     __tablename__ = "cities"

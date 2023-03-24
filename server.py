@@ -43,10 +43,10 @@ def welcome_page():
 @app.route("/process-login", methods=["POST"])
 def user_login():
     email = request.form.get('email').lower().strip()
-    password = request.form.get('password')
+    attempt = request.form.get('password')
     user = crud.get_user_by_email(email)
-
-    if not user or user.password != password:
+    hashed_pass = argon2.hash(attempt)
+    if not user or user.password != argon2.verify(attempt, hashed_pass):
         flash("Haha, oops: wrong email or password entered. Try again dude.")
         return redirect("/login")
     else:
@@ -81,16 +81,14 @@ def create_new_account():
     gender = request.json.get("gender")
     birthday = request.json.get("birthday")
     email = request.json.get("email").lower().strip()
-    password = request.json.get("password")
-# process and hash password: 
-
-
+    # process and hash password: 
+    hashed_pass = argon2.hash(request.form.get("password"))
     date_today  = datetime.now()
     member_since = date_today.strftime("%b %d, %Y")
     photo_link = "https://res.cloudinary.com/dxxwltu0a/image/upload/v1679457216/odvy1aramuksxvrsbyg1.png"
     check_email = crud.get_user_by_email(email)
     if not check_email:
-        crud.create_user(email, password, fname, pronouns, gender, birthday, member_since, photo_link)
+        crud.create_user(email, hashed_pass, fname, pronouns, gender, birthday, member_since, photo_link)
         return f"Hey there {fname.title()}, thanks for joining! Please log in!"
     else:
         return f"Error. User email {email} already exists."
@@ -388,13 +386,28 @@ def show_open_chats():
 #     return jsonify(chat_list)
 
 #CHECK******************  
+# @app.route("/chat/<buddy_id>")
+# def show_buddy_chat(buddy_id):
+#     user_1 = crud.get_user_by_id(session["user_id"])
+#     buddy = crud.get_buddy_from_id(buddy_id)
+#     user_2 = crud.get_other_user_id_from_buddy(buddy, user_1.user_id)
+#     chat_messages = crud.get_chats_by_buddy(buddy)
+#     return render_template('chat.html', user_1 = user_1, user_2 = user_2, chat_messages=chat_messages, buddy_id=buddy_id)
+
 @app.route("/chat/<buddy_id>")
 def show_buddy_chat(buddy_id):
     user_1 = crud.get_user_by_id(session["user_id"])
     buddy = crud.get_buddy_from_id(buddy_id)
-    user_2 = crud.get_other_user_id_from_buddy(buddy, user_1.user_id)
+    user_2_id = crud.get_other_user_id_from_buddy(buddy, user_1.user_id)
+    user_2 = crud.get_user_by_id(user_2_id)
+    return render_template('chat-2.html', buddy_id=buddy_id, user_1 = user_1.user_id, user_2 = user_2.user_id, user_2name = user_2.fname)
+
+@app.route("/load-buddy-chats", methods = ["POST"])
+def load_buddy_chats():
+    buddy_input = request.json.get("buddy-id")
+    buddy = crud.get_buddy_from_id(buddy_input)
     chat_messages = crud.get_chats_by_buddy(buddy)
-    return render_template('chat.html', user_1 = user_1, user_2 = user_2, chat_messages=chat_messages)
+    return jsonify(chat_messages)
 
 #CHECK******************
 @app.route("/send-message", methods=["POST"])
@@ -402,11 +415,12 @@ def send_message():
     sender_id = session["user_id"]
     user = crud.get_user_by_id(session["user_id"])
     receiver_id = request.json.get("receiver-id")
-    message = request.json.get("send-message")
+    buddy_id = request.json.get("buddy-id")
+
     sender_name = user.fname
+    message = request.json.get("send-message")
     time = datetime.now()
     time_stamp = time.strftime("%a, %b %d, %Y %I:%M %p")
-    buddy_id = crud.get_buddy_id_from_user_ids(sender_id, receiver_id)
     crud.create_chat(buddy_id, sender_id, receiver_id, sender_name, message, time_stamp)
     return "sent"
 

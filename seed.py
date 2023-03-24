@@ -8,7 +8,7 @@ import model
 from random import choice, sample
 from datetime import date
 import json
-
+from passlib.hash import argon2
 from server import app
 
 os.system("dropdb frolfers")
@@ -25,7 +25,7 @@ mario_test_users = ["Wario", "Luigi", "Yoshi", "Princess", "Goomba", "Bowser", "
 def add_test_users():
     for user in mario_test_users:
         email = f"{user}@testing.com".lower()
-        password = "testing"
+        password = argon2.hash("testing")
         fname = f"{user}"
         pronouns = choice(["(She/Her)", "(He/Him)", "(They/Them)", "(He/They)", "(She/They)"])
         gender = choice(["Man", "Woman", "Non-Binary", ""])

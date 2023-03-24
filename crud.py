@@ -130,7 +130,7 @@ def get_other_user_id_from_buddy(buddy, user_id):
         user_2 = get_user_by_id(buddy.user_id_2)
     elif buddy.user_id_2 == user_id:
         user_2 = get_user_by_id(buddy.user_id_1)
-    return user_2
+    return user_2.user_id
 
 def get_all_cities():
     all_cities = City.query.all()
@@ -347,15 +347,26 @@ def create_chat(buddy_id, sender_id, receiver_id,sender_name, message, time_stam
     db.session.add(chat)
     db.session.commit()
 
+def turn_chat_to_dict(chat):
+    user_chat = {}
+    user_chat["chat_id"] = getattr(chat, "chat_id")
+    user_chat["sender_id"] = getattr(chat, "sender_id")
+    user_chat["receiver_id"] = getattr(chat, "receiver_id")
+    user_chat["message"] = getattr(chat, "message")
+    user_chat["sender_name"] = getattr(chat, "sender_name")
+    user_chat["time_stamp"] = getattr(chat, "time_stamp")
+    return user_chat
+
 def get_chats_by_buddy(buddy):
     messages = []
     chats = Chat.query.filter(Chat.buddy_id == buddy.buddy_id).all()
     if chats:
         for chat in chats:
-            messages.append(chat)
+            new_chat = turn_chat_to_dict(chat)
+            messages.append(new_chat)
         return messages
     else:
-        return None
+        return []
 
 def get_chat_by_user_id(user_id):
     buddy_links = []
