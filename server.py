@@ -66,17 +66,22 @@ def show_login():
 #CHECK******************
 @app.route("/new-account")
 def show_new_account_form():
-    return render_template('new-account.html')
+    if crud.user_logged_in():
+       flash("Error. User already logged in.")
+       return redirect("/")
+    else:
+        today = date.today()
+        return render_template('new-account.html', today=today)
 
 #CHECK******************
 @app.route("/create-new-account", methods=["POST"])
 def create_new_account():
-    fname = request.form.get("fname").strip()
-    pronouns = request.form.get("pronouns")
-    gender = request.form.get("gender")
-    birthday = request.form.get("birthday")
-    email = request.form.get("email").lower().strip()
-    password = request.form.get("password")
+    fname = request.json.get("fname").strip()
+    pronouns = request.json.get("pronouns")
+    gender = request.json.get("gender")
+    birthday = request.json.get("birthday")
+    email = request.json.get("email").lower().strip()
+    password = request.json.get("password")
 # process and hash password: 
 
 
@@ -86,11 +91,9 @@ def create_new_account():
     check_email = crud.get_user_by_email(email)
     if not check_email:
         crud.create_user(email, password, fname, pronouns, gender, birthday, member_since, photo_link)
-        flash(f"Hey there {fname.title()}, thanks for joining! Please log in!")
-        return redirect("/login")
+        return f"Hey there {fname.title()}, thanks for joining! Please log in!"
     else:
-        flash(f"Error. User email {email} already exists.")
-        return redirect('/create-new-account')
+        return f"Error. User email {email} already exists."
 
 # @app.route("/login-help")
 # def forgot_password(): #will write later maybe
@@ -100,7 +103,7 @@ def create_new_account():
 def user_profile():
     if crud.user_logged_in():
         user_info = crud.get_user_by_id(session['user_id'])
-        user= crud.turn_one_profile_to_dict(user_info)
+        user = crud.turn_one_profile_to_dict(user_info)
         return render_template("user-profile.html", user=user)
     else:
         return redirect("/")
@@ -251,8 +254,8 @@ def load_users_by_state():
 @app.route("/load-users-by-city", methods=["POST"])
 def load_users_by_city():
     city = request.json.get("user-location")
-    state = city = request.json.get("user-state")
-    all_users = crud.get_all_profiles_by_city_state(session['user_id'], state, city)
+    state = request.json.get("user-state")
+    all_users = crud.get_all_profiles_by_city_state(session['user_id'], city, state)
     return jsonify(all_users)
 #-----------------------------
 #------------complete-----------------

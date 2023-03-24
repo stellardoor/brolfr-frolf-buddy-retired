@@ -22,6 +22,21 @@ def create_user(email, password, fname, pronouns, gender, birthday, member_since
         birthday = birthday,
         member_since=member_since,
         photo_link=photo_link,
+        calendar = "[]", 
+        age_range = "[]",
+        intro_text = "",
+        skill_level = "", 
+        frequented_courses = "",
+        gender_preference = "",
+        kids_okay = "", 
+        dogs_okay = "", 
+        friendly_or_stakes_game = "",
+        type_of_game = "",
+        alcohol_okay = "", 
+        tobacco_okay = "",
+        smoke_420_okay = "",
+        location = "Location Unknown",
+        state = ""
         )
     db.session.add(user)
     db.session.commit()
@@ -235,8 +250,10 @@ def get_all_profiles_by_city_state(user_id, city, state):
     buddies  = get_all_buddy_user_ids(user_id)
     profiles_data = []
     for user in users:
-        if user.user_id not in buddies and user.state == state and user.location == city:
-            profiles_data.append(user)
+        if user.user_id not in buddies: 
+            if user.state == state:
+                if user.location == city:
+                    profiles_data.append(user)
     new_buddy_data = turn_profiles_to_dict(profiles_data)
     return new_buddy_data
 
