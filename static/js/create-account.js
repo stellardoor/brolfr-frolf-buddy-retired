@@ -29,5 +29,6 @@ accountCreateForm.addEventListener('submit', (evt) => {
         .then((response) => response.text())
         .then((responseAccount) => {
             alert(responseAccount);
+            window.location.href="/login"
         })
     });

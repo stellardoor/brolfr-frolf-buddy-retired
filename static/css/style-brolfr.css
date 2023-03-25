@@ -16,11 +16,11 @@ div.buddy-message {
 }
 
 div.left-message {
-
+    float: left;
 }
 
 div.right-message {
-
+    float: right;
 }
 
 img.tiny {

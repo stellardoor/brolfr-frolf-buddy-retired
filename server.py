@@ -45,8 +45,7 @@ def user_login():
     email = request.form.get('email').lower().strip()
     attempt = request.form.get('password')
     user = crud.get_user_by_email(email)
-    hashed_pass = argon2.hash(attempt)
-    if not user or user.password != argon2.verify(attempt, hashed_pass):
+    if not user or not argon2.verify(attempt, user.password):
         flash("Haha, oops: wrong email or password entered. Try again dude.")
         return redirect("/login")
     else:
@@ -82,7 +81,8 @@ def create_new_account():
     birthday = request.json.get("birthday")
     email = request.json.get("email").lower().strip()
     # process and hash password: 
-    hashed_pass = argon2.hash(request.form.get("password"))
+    password = request.json.get("password")
+    hashed_pass = argon2.hash(password)
     date_today  = datetime.now()
     member_since = date_today.strftime("%b %d, %Y")
     photo_link = "https://res.cloudinary.com/dxxwltu0a/image/upload/v1679457216/odvy1aramuksxvrsbyg1.png"
