@@ -47,7 +47,7 @@ def add_profile_specifics():
         user = crud.get_user_by_email(f"{user.lower()}@testing.com")
         user.photo_link = f"/static/images/{user.fname.lower()}.jpeg"
         user.intro_text = f"Hi, I'm {user.fname}! Let's Play!"
-        user.calendar = "['Evenings (5pm - Sunset)']"
+        user.calendar = '["Evenings (5pm - Sunset)"]'
         user.location = choice(["Sacramento", "San Francisco", "San Diego", "Oakland", "Roseville"])
         user.state = "California"
         user.skill_level = choice(["Beginner", "Intermediate", "Advanced"])

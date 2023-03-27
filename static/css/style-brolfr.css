@@ -16,17 +16,18 @@ div.buddy-message {
 }
 
 div.left-message {
-    float: left;
+    margin-left: 2px;
 }
 
 div.right-message {
-    float: right;
+    margin-left: 200px;
 }
 
 img.tiny {
-    height: 30px;
+    height: 50px;
     width: flex;
     border: 5px solid rgb(81, 116, 100);
+    border-radius: 50%;
 }
 
 img.profile {

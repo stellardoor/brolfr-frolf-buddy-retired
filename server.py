@@ -21,7 +21,7 @@ app.secret_key = os.environ['secret_key']
 # app.jinja_env.undefined = StrictUndefined ---??
 CLOUDINARY_KEY = os.environ['CLOUDINARY_KEY']
 CLOUDINARY_SECRET = os.environ['CLOUDINARY_SECRET']
-CLOUD_NAME = "dxxwltu0a"
+CLOUD_NAME = "dt9gdwmnb"
 
 #CHECK******************
 @app.route("/")
@@ -39,6 +39,10 @@ def welcome_page():
     else:
          return redirect("/")
 
+
+# ========================================
+# ---- LOGIN ---
+# ========================================
 #CHECK******************
 @app.route("/process-login", methods=["POST"])
 def user_login():
@@ -62,6 +66,10 @@ def show_login():
     else:
         return render_template('login.html') 
 
+
+# ========================================
+# --- CREATE ACCOUNT --- 
+# ========================================
 #CHECK******************
 @app.route("/new-account")
 def show_new_account_form():
@@ -85,7 +93,7 @@ def create_new_account():
     hashed_pass = argon2.hash(password)
     date_today  = datetime.now()
     member_since = date_today.strftime("%b %d, %Y")
-    photo_link = "https://res.cloudinary.com/dxxwltu0a/image/upload/v1679457216/odvy1aramuksxvrsbyg1.png"
+    photo_link = "https://res.cloudinary.com/dt9gdwmnb/image/upload/v1679869060/squirrel_pciars.png"
     check_email = crud.get_user_by_email(email)
     if not check_email:
         crud.create_user(email, hashed_pass, fname, pronouns, gender, birthday, member_since, photo_link)
@@ -96,6 +104,10 @@ def create_new_account():
 # @app.route("/login-help")
 # def forgot_password(): #will write later maybe
 
+
+# ========================================
+# --- USER FUNCTIONS --- All functions for seeing session user profile, editing profile, uploading photo, setting location
+# ========================================
 #------------complete-----------------
 @app.route("/profile") #<user_id>
 def user_profile():
@@ -115,21 +127,25 @@ def edit_profile():
 #----------complete-------------------                        
 @app.route("/load-user")
 def load_user_details():
+    """returns a dictionary of all specifics from session users profile"""
     user_details = crud.get_user_by_id(session['user_id'])
     user = crud.turn_one_profile_to_dict(user_details)
     return jsonify(user)
 #-----------------------------
 
+@app.route("/get-states")
+def load_states():
+    """Loads all US State names for dropdown list"""
+    state_list = crud.get_states()
+    return jsonify(state_list)
+
 @app.route("/load-cities", methods=["POST"])
 def load_cities():
+    """returns a list of Cities according to the state user has set"""
     state = request.json.get("user-state")
     city_list = crud.get_all_cities_by_state(state)
     return jsonify(city_list)
 
-@app.route("/get-states")
-def load_states():
-    state_list = crud.get_states()
-    return jsonify(state_list)
 
 #-----------------------------
 #CHECK******************
@@ -146,18 +162,21 @@ def load_states():
 #     return "Successfully Edited Profile!"
 @app.route("/get-user-state", methods=["POST"])
 def get_user_state():
+    """ used for edit profile and profiles search - returns the session users saved state"""
     user = crud.get_user_by_id(session['user_id'])
     return user.state
 
 @app.route("/get-user-city", methods=["POST"])
 def get_user_location():
+    """ used for edit profile and profiles search - returns the session users saved city"""
     user = crud.get_user_by_id(session['user_id'])
     return user.location
 
 @app.route("/process-city-state", methods=["POST"])
 def process_state():
+    """ updates user loaction into DB from crud function"""
     user = crud.get_user_by_id(session['user_id'])
-    state = request.json.get("user-state") 
+    state = request.json.get("user-state").title() 
     check_city_list = crud.get_all_cities_by_state(state)
     location = request.json.get("user-location") 
     if location not in check_city_list:
@@ -168,6 +187,7 @@ def process_state():
 
 @app.route("/process-edit", methods=["POST"])
 def process_edit():
+    """ processes edit input for profile and updates DB"""
     user = crud.get_user_by_id(session['user_id'])
     age_range_input = request.json.get("age-range") 
     age_range = json.dumps(age_range_input)
@@ -192,12 +212,14 @@ def process_edit():
 
 @app.route("/edit-account")
 def edit_account():
+    """ opens edit account page for account specific edits"""
     user = crud.get_user_by_id(session["user_id"])
     today = date.today()
     return render_template("edit-account.html", user=user, today=today) # today so the calendar does not load in the future
 
 @app.route("/process-edit-account", methods=["POST"])
 def process_edit_account():
+    """ processes account edit and updates USER db"""
     user = crud.get_user_by_id(session["user_id"])
     fname = request.json.get("fname").strip()
     pronouns = request.json.get("pronouns")
@@ -208,27 +230,34 @@ def process_edit_account():
     return "success"
         
 
-   
-
 #CHECK****************** to delete existing photo in cloudinary?
 @app.route("/process-photo", methods=["POST"])
 def process_photo():
+    """ processes user photo to new upload using cloudinary and returns success message - if no photo submitted returns error"""
     user = crud.get_user_by_id(session['user_id'])
+    #---- checking if old photo is squirrel default before deleting from cloud-----
+    old_photo = user.public_photo_id
+    if old_photo != "nc1ekzvocezydot0aa2b":
+        cloudinary.uploader.destroy(old_photo, 
+            api_key=CLOUDINARY_KEY,
+            api_secret=CLOUDINARY_SECRET,
+            cloud_name=CLOUD_NAME)
     photo_upload = request.files["form-file"] #grabbing whole file from upload in form
     result = cloudinary.uploader.upload(photo_upload,
         api_key=CLOUDINARY_KEY,
         api_secret=CLOUDINARY_SECRET,
         cloud_name=CLOUD_NAME)
     user.photo_link = result['secure_url']
+    user.public_photo_id = result["public_id"]
 
     if not photo_upload:
         return "photo not uploaded"
-    # user.photo_link = photo_link
     db.session.commit()
-    # flash("success")
-    # return redirect("/edit-profile")
     return "successfully uploaded photo"
 
+# ========================================
+# ---PROFILE SEARCH--- All functions for searching user profiles and sending a buddy request
+# ========================================
 #------------complete-----------------
 @app.route("/brolfrs")
 def show_profiles():
@@ -251,25 +280,29 @@ def load_users_by_state():
 
 @app.route("/load-users-by-city", methods=["POST"])
 def load_users_by_city():
-    city = request.json.get("user-location")
+    city = request.json.get("user-location").title()
     state = request.json.get("user-state")
-    all_users = crud.get_all_profiles_by_city_state(session['user_id'], city, state)
-    return jsonify(all_users)
-#-----------------------------
-#------------complete-----------------
-@app.route("/buddies")
-def show_user_matches():
-    if crud.user_logged_in():
-        return render_template("show-buddies.html")
+    check_city_list = crud.get_all_cities_by_state(state)
+    if city not in check_city_list:
+        return jsonify(["Error"])
     else:
-        return redirect("/")
-#-----------------------------
-#-------------complete----------------
-@app.route("/get-buddies")
-def show_buddies():
-   all_buddies = crud.get_accepted_buddies(session['user_id'])
-   return jsonify(all_buddies)
-#-----------------------------
+        all_users = crud.get_all_profiles_by_city_state(session['user_id'], city, state)
+        return jsonify(all_users)
+    
+@app.route("/load-users-by-calendar-match", methods=["POST"])
+def load_users_by_calendar_match():
+    city = request.json.get("user-location").title()
+    state = request.json.get("user-state")
+    check_city_list = crud.get_all_cities_by_state(state)
+    if city not in check_city_list:
+        return jsonify(["Error"])
+    else:
+        calendar_input = request.json.get("calendar")
+        all_users = crud.get_all_profiles_by_calendar(session['user_id'], city, state, calendar_input)
+        return jsonify(all_users)
+
+
+
 #----------complete-------------------
 @app.route("/send-buddy-request", methods=["POST"])
 def request_buddy():
@@ -283,6 +316,43 @@ def request_buddy():
     else:
         return  f"cannot request {user_2.fname}!"
 #-----------------------------
+
+
+# ========================================
+# --- BUDDY MATCHES --- All functions for seeing current buddies, denying the buddy after match, , viewing denied buddy page, and opening chat
+# ========================================
+#------------complete-----------------
+
+@app.route("/buddies")
+def show_user_matches():
+    if crud.user_logged_in():
+        return render_template("show-buddies.html")
+    else:
+        return redirect("/")
+#-----------------------------
+#-------------complete----------------
+@app.route("/get-buddies")
+def show_buddies():
+   all_buddies = crud.get_accepted_buddies(session['user_id'])
+   return jsonify(all_buddies)
+#-----------------------------
+#-------------complete----------------
+@app.route("/deny-buddy-again", methods=["POST"])
+def deny_buddy_again():
+    user_id_1 = session["user_id"]
+    user_id_2 = request.json.get("buddy-deny-again-id")
+    user_id_2 = int(user_id_2)
+    user_2 = crud.get_user_by_id(user_id_2)
+    buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
+    crud.deny_buddy_again(buddy_id, user_id_1)
+    # committing in the crud file ^
+    return  f"No longer buds {user_2.fname}!"
+#-----------------------------
+
+
+# ========================================
+# - REQUESTS-- All functions for seeing current buddy requests, denying the buddy after match, , viewing denied buddy page, and opening chat
+# ========================================
 #-------------complete----------------
 @app.route("/requests")
 def show_buddy_requests():
@@ -294,9 +364,14 @@ def show_buddy_requests():
 #------------complete-----------------   
 @app.route('/get-requests')
 def get_requests():
+    """function for retrieving all pending buddy requests for session user"""
     pending_buddies = crud.get_all_pending_buddies(session['user_id'])
     return jsonify(pending_buddies)
 #-----------------------------
+
+# ========================================
+# All functions for re-adding/ re-accepting previously denied buddies
+# ========================================
 #------------complete-----------------
 @app.route("/denied-buddies")
 def open_denied_buddies():
@@ -324,6 +399,11 @@ def accept_buddy():
     
     return  f"Now buds with {user_2.fname}!"
 #-----------------------------
+
+# ========================================
+# All functions for seeing current buddies, denying the buddy after match, and opening chat
+# ========================================
+
 #-------------complete----------------
 @app.route("/accept-buddy-again", methods=["POST"])
 def accept_buddy_again():
@@ -347,18 +427,6 @@ def deny_buddy():
     crud.deny_buddy_request(buddy_id)
     # committing in the crud file ^
     return  f"Rejected {user_2.fname}!"
-#-----------------------------
-#-------------complete----------------
-@app.route("/deny-buddy-again", methods=["POST"])
-def deny_buddy_again():
-    user_id_1 = session["user_id"]
-    user_id_2 = request.json.get("buddy-deny-again-id")
-    user_id_2 = int(user_id_2)
-    user_2 = crud.get_user_by_id(user_id_2)
-    buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
-    crud.deny_buddy_again(buddy_id, user_id_1)
-    # committing in the crud file ^
-    return  f"No longer buds {user_2.fname}!"
 #-----------------------------
 
 # @app.route("/chat", methods = ["POST"]) #no js

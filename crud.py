@@ -6,8 +6,6 @@ import json
 import server 
 from datetime import date
 
-# missing import ^  Chat
-
 #join example from skillstest:
 # animals = Animal.query.options(db.joinedload("human")).filter(Animal.animal_species == animal_species).all()
 
@@ -22,8 +20,9 @@ def create_user(email, password, fname, pronouns, gender, birthday, member_since
         birthday = birthday,
         member_since=member_since,
         photo_link=photo_link,
-        calendar = "[]", 
-        age_range = "[]",
+        public_photo_id = "",
+        calendar = '[]', 
+        age_range = '[]',
         intro_text = "",
         skill_level = "", 
         frequented_courses = "",
@@ -267,6 +266,26 @@ def get_all_profiles_by_state(user_id, state):
             profiles_data.append(user)
     new_buddy_data = turn_profiles_to_dict(profiles_data)
     return new_buddy_data
+
+def get_all_profiles_by_calendar(user_id, city, state, calendar_input):
+    users = User.query.filter(db.not_(User.user_id == user_id)).all()
+    buddies  = get_all_buddy_user_ids(user_id)
+    profiles_data = []
+    for user in users:
+        user_match = False
+        if user.user_id not in buddies and user.state == state:
+            if user.location == city:
+                user_calendar = json.loads(user.calendar)
+                for item in calendar_input:
+                    if item in user_calendar:
+                        user_match = True
+                        break
+        if user_match:
+            profiles_data.append(user)
+    new_buddy_data = turn_profiles_to_dict(profiles_data)
+    return new_buddy_data
+
+
         
 def get_all_buddy_user_ids(user_id):
     '''returns a list of user ids that are matched with session user'''

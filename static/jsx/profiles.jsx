@@ -17,7 +17,8 @@ function App() {
     return (
     <div>
         <div id="cities"> 
-            <LoadCities setUsers={setUsers}  />
+            <LoadCities setUsers={setUsers} />
+            <LoadCalendar setUsers={setUsers} />
         </div>
         <div>
             {userProfiles}
@@ -78,9 +79,9 @@ function LoadRequest(props) {
 function LoadCities(props) {
 
     const [initialState, setInitialState] = React.useState("")
-    const [initialCity, setInitialCity] = React.useState("")
+    // const [initialCity, setInitialCity] = React.useState("")
     const [userState, setUserState] = React.useState("")
-    const [userCity, setUserCity] = React.useState("")
+    // const [userCity, setUserCity] = React.useState("")
     const [cityNames, setCityNames] = React.useState([])
     const [stateNames, setStateNames] = React.useState([])
 
@@ -95,16 +96,16 @@ function LoadCities(props) {
             );
     });
 
-    React.useEffect(() => {
-        fetch("/get-user-city", {
-            method: 'POST'
-        })
-            .then(response => response.text())
-            .then(cityResponse => {
-                setInitialCity(cityResponse)
-            }
-            );
-    });
+    // React.useEffect(() => {
+    //     fetch("/get-user-city", {
+    //         method: 'POST'
+    //     })
+    //         .then(response => response.text())
+    //         .then(cityResponse => {
+    //             setInitialCity(cityResponse)
+    //         }
+    //         );
+    // });
 
 
     React.useEffect(() => {
@@ -147,12 +148,6 @@ function LoadCities(props) {
             document.querySelector("#user-location").defaultValue=""
     };
 
-    // const handleCityChange = (evt) => {
-    //     const userCityInput = evt.target.value
-    //     setUserCity(userCityInput)
-    //     console.log(userCity)
-    // }
-
 
     const processProfilesByState = (evt) => { //idk how capture ???
         evt.preventDefault()
@@ -175,21 +170,77 @@ function LoadCities(props) {
 }
 
 
-    const processProfilesByCity = (evt) => { //idk how capture ???
+    const processProfilesByCity = (evt) => { 
         evt.preventDefault()
         console.log(document.querySelector("#user-location").value)
         const formInputs = { 
             "user-state": document.querySelector("#user-state").value, 
             "user-location" : document.querySelector("#user-location").value
         }
-        // setUserCity(userCityInput)
-        // const formInputs = {
-        //     "user-state": userState,
-        //     // "user-location": document.querySelector("#user-location").value
-        //     "user-location": userCity
-        // }
 
         fetch("/load-users-by-city", {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formInputs),
+            credentials: "same-origin"
+        })
+            .then((response) => response.json())
+            .then((responseSubmit => {
+                if (responseSubmit.includes("Error")) {
+                    alert("ERROR: Please choose a valid city from the dropdown list after selecting a state")
+                }
+                else {
+                    console.log(responseSubmit)
+                    props.setUsers(responseSubmit);
+            }
+            }));
+
+    };
+
+    return (
+        <div>
+            <select onChange={(evt) => captureUserInput(evt)} name="user-state" id="user-state">
+                <option selecteddisabledhidden="true" >{initialState}</option>
+                {stateNames}
+            </select><br></br>
+            <button type="submit"  onClick={(evt) => processProfilesByState(evt)}>Search folks by State</button><br></br>
+
+
+            <label htmlFor="datalist" className="form-label">City: </label>
+            <input  className="form-control" list="datalistOptions" name="user-location" id="user-location"  placeholder="Type to search your closest city..." ></input>
+            <datalist id="datalistOptions">
+                {cityNames}
+            </datalist>
+            <button htmlFor= "user-location" name="user-location"  type="submit" onClick={(evt) => processProfilesByCity(evt)} >Search folks by City</button>
+        </div>
+    )
+
+    }
+
+    // --------------- test user calendar filter----------
+function LoadCalendar(props) {
+
+    const processProfilesByCalendar = (evt) => { 
+        evt.preventDefault()
+        const calendarInfo = document.querySelectorAll(".calendar")
+        console.log(calendarInfo)
+        const calendarList = [];
+        for (const input of calendarInfo) {
+            if (input.checked) {
+                calendarList.push(input.value); 
+            }        
+        }
+        console.log(calendarList)
+        const formInputs = { 
+            "user-state": document.querySelector("#user-state").value, 
+            "user-location" : document.querySelector("#user-location").value, 
+            "calendar": calendarList
+        }
+
+
+        fetch("/load-users-by-calendar-match", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -204,20 +255,23 @@ function LoadCities(props) {
             }));
 
     };
-
-    return (
+    return(
         <div>
-            <select onChange={(evt) => captureUserInput(evt)} name="user-state" id="user-state">
-                <option selecteddisabledhidden="true" >{initialState}</option>
-                {stateNames}
-            </select><br></br>
-            <button type="submit"  onClick={(evt) => processProfilesByState(evt)}>Search folks by State</button><br></br>
-            <label htmlFor="datalist" className="form-label">City: </label>
-            <input  className="form-control" list="datalistOptions" name="user-location" id="user-location"  placeholder="Type to search your closest city..." ></input>
-            <datalist id="datalistOptions">
-                {cityNames}
-            </datalist>
-            <button htmlFor= "user-location" name="user-location"  type="submit" onClick={(evt) => processProfilesByCity(evt)} >Search by City</button>
+            <div id="calendar">
+            <input type="checkbox" name="calendar" className ="calendar" id="early-mornings" value="Early Mornings (Sunrise - 8am)" ></input>
+            <label htmlFor="early-mornings"> Early Mornings (Sunrise - 8am) </label><br></br>
+            <input type="checkbox" name="calendar" className ="calendar" id="mornings" value="Mornings (8am - 11am)" ></input>
+            <label htmlFor="mornings"> Mornings (8am - 11am) </label><br></br>
+            <input type="checkbox" name="calendar" className ="calendar" id="afternoons" value="Afternoons (11am - 2pm)"></input>
+            <label htmlFor="afternoons"> Afternoons (11am - 2pm) </label><br></br>
+            <input type="checkbox" name="calendar" className ="calendar" id="late-afternoon" value="Late Afternoons (2pm - 5pm)"></input>
+            <label htmlFor="late-afternoons"> Late Afternoons (2pm - 5pm) </label><br></br>
+            <input type="checkbox" name="calendar" className ="calendar" id="evenings" value ="Evenings (5pm - Sunset)" ></input>
+            <label htmlFor="evenings"> Evenings (5pm - Sunset) </label><br></br>
+            <button htmlFor= "calendar" name="calendar"  type="submit" onClick={(evt) => processProfilesByCalendar(evt)} >Filter by Calendar</button>
+            </div>
         </div>
-    )
-    }
+        )
+        }
+
+

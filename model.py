@@ -17,6 +17,7 @@ class User(db.Model):
     state = db.Column(db.String)
     member_since = db.Column(db.Date)
     photo_link = db.Column(db.String)
+    public_photo_id = db.Column(db.String)
     intro_text = db.Column(db.Text)
     calendar = db.Column(db.String)
     skill_level = db.Column(db.String)

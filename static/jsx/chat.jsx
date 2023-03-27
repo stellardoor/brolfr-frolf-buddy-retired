@@ -24,10 +24,10 @@ function App() {
                 const chatLogList = [];
                 for (const chat of resultList) {
                     if (chat.sender_id == user1) {
-                    chatLogList.push(<LoadChats chat={chat} user1={user1} key={chat.chat_id} />);
+                    chatLogList.push(<LoadChatsRight chat={chat} user1={user1} key={chat.chat_id} />);
                     }
                     else {
-                        chatLogList.push(<LoadChatsRight chat={chat} user1={user1} key={chat.chat_id} />);
+                        chatLogList.push(<LoadChats chat={chat} user1={user1} key={chat.chat_id} />);
                     }
                 }
                 setBuddyChat(chatLogList)
