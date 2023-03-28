@@ -131,6 +131,10 @@ def get_other_user_id_from_buddy(buddy, user_id):
         user_2 = get_user_by_id(buddy.user_id_1)
     return user_2.user_id
 
+def get_photo_link_from_id(sender_id):
+    user_link = User.query.filter(User.user_id == sender_id).first()
+    return user_link.photo_link
+
 def get_all_cities():
     all_cities = City.query.all()
     city_list = []
@@ -232,6 +236,17 @@ def turn_profiles_to_dict_bud(profiles):
         user_list.append(user_dict)
     return user_list
 
+def turn_profiles_to_dict_chat(profiles):
+    user_list = []
+    for user in profiles:
+        user_dict = {}
+        user_dict["fname"] = getattr(user[0], "fname")
+        user_dict["user_id"] = getattr(user[0], "user_id")
+        user_dict["photo_link"] = getattr(user[0], "photo_link")
+        user_dict["buddy_id"] = user[1]
+        user_list.append(user_dict)
+    return user_list
+
 def get_all_profiles(user_id):
     """pulls all users that are not logged in user, not rejected, requested, or already matched buddies"""
     users = User.query.filter(db.not_(User.user_id == user_id)).all()
@@ -312,6 +327,21 @@ def get_accepted_buddies(user_id):
                 user = get_user_by_id(buddy.user_id_1)
                 buddy_data.append([user, buddy.buddy_id])
     new_buddy_data = turn_profiles_to_dict_bud(buddy_data)
+    return new_buddy_data
+
+def get_accepted_buddies_chat(user_id):
+    "pulls buddies that are instantiated as a Buddy as of now - filters out session user, rejected buds"
+    buddies = Buddy.query.filter(db.or_(Buddy.user_id_1 == user_id, Buddy.user_id_2 == user_id)).all()
+    buddy_data = []
+    for buddy in buddies:
+        if buddy.accepted == True:
+            if buddy.user_id_1 == user_id:
+                user = get_user_by_id(buddy.user_id_2)
+                buddy_data.append([user, buddy.buddy_id])
+            elif buddy.user_id_2 == user_id:
+                user = get_user_by_id(buddy.user_id_1)
+                buddy_data.append([user, buddy.buddy_id])
+    new_buddy_data = turn_profiles_to_dict_chat(buddy_data)
     print(buddy_data)
     return new_buddy_data
 
@@ -368,12 +398,15 @@ def create_chat(buddy_id, sender_id, receiver_id,sender_name, message, time_stam
 
 def turn_chat_to_dict(chat):
     user_chat = {}
+    sender_id = getattr(chat, "sender_id")
     user_chat["chat_id"] = getattr(chat, "chat_id")
-    user_chat["sender_id"] = getattr(chat, "sender_id")
+    user_chat["sender_id"] = sender_id
     user_chat["receiver_id"] = getattr(chat, "receiver_id")
     user_chat["message"] = getattr(chat, "message")
     user_chat["sender_name"] = getattr(chat, "sender_name")
     user_chat["time_stamp"] = getattr(chat, "time_stamp")
+    sender_link = get_photo_link_from_id(sender_id)
+    user_chat["sender_link"] = sender_link
     return user_chat
 
 def get_chats_by_buddy(buddy):

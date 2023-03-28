@@ -6,6 +6,29 @@ p.flash {
     
 } */
 
+div.sidenav {
+    width: 130px;
+    position: fixed;
+    z-index: 1;
+    top: 20px;
+    left: 10px;
+    background-color: #232824;
+    overflow-x: hidden;
+    padding: 8px 0;
+  }
+  
+div.sidenav button {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #c5dbd5;
+    display: block;
+  }
+  
+div.sidenav button:hover {
+    color: #f1f1f1;
+  }
+
 div.buddy-message {
     font-size: large;
     height: 480px;
@@ -13,6 +36,18 @@ div.buddy-message {
     border: 5px solid rgb(99, 172, 138);
     margin-bottom: 10px; 
     overflow: auto;
+    border-radius: 10%;
+    background-color: rgb(221, 251, 251);
+}
+
+div.bubble {
+    border: 2px solid rgb(74, 106, 91);
+    overflow: auto;
+    width: 150px;
+    border-radius: 10%;
+    background-color: rgb(226, 226, 226);
+    margin-right: 10px;
+    margin-top: 2px;
 }
 
 div.left-message {
@@ -27,6 +62,13 @@ img.tiny {
     height: 50px;
     width: flex;
     border: 5px solid rgb(81, 116, 100);
+    border-radius: 50%;
+}
+
+img.extra-tiny {
+    height: 20px;
+    width: flex;
+    border: 2px solid rgb(81, 116, 100);
     border-radius: 50%;
 }
 

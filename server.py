@@ -336,6 +336,10 @@ def show_buddies():
    all_buddies = crud.get_accepted_buddies(session['user_id'])
    return jsonify(all_buddies)
 #-----------------------------
+@app.route("/get-buddies-chat")
+def buddy_chat_loads():
+   all_buddies = crud.get_accepted_buddies_chat(session['user_id'])
+   return jsonify(all_buddies)
 #-------------complete----------------
 @app.route("/deny-buddy-again", methods=["POST"])
 def deny_buddy_again():
@@ -443,7 +447,9 @@ def deny_buddy():
 @app.route("/chats") 
 def show_open_chats():
     if crud.user_logged_in():
-        return render_template('all-chats.html')
+        user = crud.get_user_by_id(session["user_id"])
+        # return render_template('all-chats.html')
+        return render_template('chat.html', user=user)
     else:
         return redirect("/")
 #-----------------------------
@@ -476,6 +482,23 @@ def load_buddy_chats():
     buddy = crud.get_buddy_from_id(buddy_input)
     chat_messages = crud.get_chats_by_buddy(buddy)
     return jsonify(chat_messages)
+
+@app.route("/load-buddy-chats-2", methods = ["POST"])
+def load_buddy_chats2():
+    buddy_input = request.json.get("buddy-id")
+    if buddy_input == "":
+        return jsonify(["Error"])
+    else:
+        buddy = crud.get_buddy_from_id(buddy_input)
+        chat_messages = crud.get_chats_by_buddy(buddy)
+        return jsonify(chat_messages)
+    
+@app.route("/get-buddy-other-id", methods = ["POST"])
+def get_buddy_other_id():
+    buddy_input = request.json.get("buddy-id")
+    buddy = crud.get_buddy_from_id(buddy_input)
+    receiver_id = crud.get_other_user_id_from_buddy(buddy, session["user_id"])
+    return str(receiver_id)
 
 #CHECK******************
 @app.route("/send-message", methods=["POST"])
