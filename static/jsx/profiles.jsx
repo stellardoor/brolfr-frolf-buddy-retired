@@ -1,6 +1,11 @@
 // """loading profiles to search potential buds"""
 function App() {
     const [users, setUsers] = React.useState([]);
+    // const [loadingCircle, setLoadingCircle] = React.useState(true)
+
+    // if (loadingCircle) {
+    //     document.querySelector("")
+    // }
 
     React.useEffect(() => {
         fetch("/load-profiles")

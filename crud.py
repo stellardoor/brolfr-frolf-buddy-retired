@@ -123,13 +123,16 @@ def get_age_by_birthday(birthday):
     return age
 
 
-def get_other_user_id_from_buddy(buddy, user_id):
+def get_other_username_and_id_from_buddy(buddy, user_id):
     """gets the other user from session user in a buddy match"""
+    user_list = []
     if buddy.user_id_1 == user_id:
         user_2 = get_user_by_id(buddy.user_id_2)
     elif buddy.user_id_2 == user_id:
         user_2 = get_user_by_id(buddy.user_id_1)
-    return user_2.user_id
+    user_list.append(user_2.user_id)
+    user_list.append(user_2.fname)
+    return user_list
 
 def get_photo_link_from_id(sender_id):
     user_link = User.query.filter(User.user_id == sender_id).first()

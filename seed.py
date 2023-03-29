@@ -46,6 +46,7 @@ def add_profile_specifics():
     for user in mario_test_users:
         user = crud.get_user_by_email(f"{user.lower()}@testing.com")
         user.photo_link = f"/static/images/{user.fname.lower()}.jpeg"
+        user.public_photo_id = "eh2czragl5gdnhj1ie9w"
         user.intro_text = f"Hi, I'm {user.fname}! Let's Play!"
         user.calendar = '["Evenings (5pm - Sunset)"]'
         user.location = choice(["Sacramento", "San Francisco", "San Diego", "Oakland", "Roseville"])

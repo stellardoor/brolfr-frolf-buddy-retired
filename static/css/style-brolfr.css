@@ -1,53 +1,94 @@
-p.flash {
-    color: rgb(159, 0, 0)
+@keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
+
+.rotate {
+animation: rotation 3s infinite linear;
+width: 200px;
 }
 
-/* form.chat-message {
-    
-} */
-
-div.sidenav {
-    width: 130px;
-    position: fixed;
-    z-index: 1;
-    top: 20px;
-    left: 10px;
+div.container-for-buddies-chat {
     background-color: #232824;
-    overflow-x: hidden;
-    padding: 8px 0;
+    overflow-x: auto;
+    bottom: 0;
+    width: 150px;
+    height:flex;
   }
   
-div.sidenav button {
+.nav { margin-bottom: 0 }
+
+button.buddy-button {
+    border: 2px solid rgb(74, 106, 91);
+    width: 150px;
+    border-radius: 10%;
+
+}
+  
+div.container-for-buddies-chat button {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
-    font-size: 25px;
+    font-size: 20px;
     color: #c5dbd5;
     display: block;
   }
   
-div.sidenav button:hover {
+div.nav button:hover {
     color: #f1f1f1;
   }
 
+  /* chatbox */
 div.buddy-message {
     font-size: large;
     height: 480px;
     width: 400px;
     border: 5px solid rgb(99, 172, 138);
-    margin-bottom: 10px; 
     overflow: auto;
-    border-radius: 10%;
+    border-radius: 2.5%;
     background-color: rgb(221, 251, 251);
+    opacity: 30ms
+}
+
+b.rolfr {
+    font-size: large;
+    color: #c5dbd5;
 }
 
 div.bubble {
     border: 2px solid rgb(74, 106, 91);
     overflow: auto;
-    width: 150px;
+    width: 100px;
     border-radius: 10%;
     background-color: rgb(226, 226, 226);
     margin-right: 10px;
     margin-top: 2px;
+}
+
+div.send-button-fixed {
+    position: fixed;
+    height: 100px;
+    bottom: 0;
+    width: 100%;
+}
+button.send-button {
+    border: 2px solid rgb(74, 106, 91);
+    width: 150px;
+    border-radius: 10%;
+    bottom: 0;
+    position: fixed;
+
+}
+input.send-input {
+    border: 2px solid rgb(74, 106, 91);
+    width: 130px;
+    border-radius: 10%;
+    bottom: 0;
+    position: fixed;
+
 }
 
 div.left-message {
@@ -75,11 +116,52 @@ img.extra-tiny {
 img.profile {
     height: 300px;
     width: flex;
-    border: 5px solid rgb(81, 116, 100)
+    border: 5px solid rgb(81, 116, 100);
+    border-radius: 20px;
 }
 
 small.timestamp {
     font-size: x-small;
     font-style: italic;
     color: rgb(120, 120, 120);
+}
+
+.color-nav {
+    background: rgb(17,36,0);
+    background: linear-gradient(90deg, rgba(17,36,0,1) 0%, rgba(9,121,74,1) 57%, rgba(6,158,153,1) 100%); 
+    border-bottom: 5px solid rgb(8, 18, 13);
+    overflow: hidden;
+    height: 55px;
+}
+
+/* Style the links inside the navigation bar */
+.color-nav a {
+  float: left;
+  color: rgb(214, 255, 243);
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.color-nav a:hover {
+  background-color: #b5eecf;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.color-nav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+/* Right-aligned section inside the top navigation */
+.color-nav-right {
+  float: right;
+}
+
+a.brolf-button {
+    top: 0;
+    padding: 5px 14px;
 }

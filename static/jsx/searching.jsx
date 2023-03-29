@@ -1,5 +1,7 @@
 function LoadCities() {
 
+    const alertLocation = document.getElementById("live-alert-location")
+
     const [userState, setUserState] = React.useState("")
     const [userCity, setUserCity] = React.useState("")
 
@@ -80,13 +82,23 @@ function LoadCities() {
         })
             .then((response) => response.text())
             .then((responseSubmit => {
-                alert(responseSubmit)
+                alert(responseSubmit, "success")
             }))    
-    //     }
-    //     else {
-    //         alert("please only use city selected from dropdown")    
-    //     }
     };
+
+    // alert - taken from bootstrap site:::
+
+    const alert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+          `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+          `   <div>${message}</div>`,
+          '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+          '</div>'
+        ].join('')
+      
+        alertLocation.append(wrapper)
+      }
 
     return (
         <div>
@@ -104,8 +116,8 @@ function LoadCities() {
                 </datalist>
                 <input type ="submit" onClick={(evt)=> processUserLocation(evt)} ></input>
             </form>
+            <div id="live-alert-location"></div>
         </div>
     )
 
 };
-

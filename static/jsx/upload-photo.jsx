@@ -1,8 +1,7 @@
 // """loads upload photo feature"""
 
+
 function UploadProfilePicture() {
-    // const buttonPhoto = document.querySelector("photo-submit")
-    // const [userFile, setuserFile] = React.useState()
 
     const handleUpload = (evt) => {
         evt.preventDefault()

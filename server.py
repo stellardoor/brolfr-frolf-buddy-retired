@@ -50,12 +50,11 @@ def user_login():
     attempt = request.form.get('password')
     user = crud.get_user_by_email(email)
     if not user or not argon2.verify(attempt, user.password):
-        flash("Haha, oops: wrong email or password entered. Try again dude.")
+        flash("Haha, oops: wrong email or password entered. Try again dude.", "danger")
         return redirect("/login")
     else:
         session["user_id"] = user.user_id
         session["name"] = user.fname
-        flash(f"Hey, {user.fname}!")
         return redirect(f"/home")
 
 #CHECK******************
@@ -101,8 +100,10 @@ def create_new_account():
     else:
         return f"Error. User email {email} already exists."
 
-# @app.route("/login-help")
-# def forgot_password(): #will write later maybe
+@app.route("/login-help")
+def forgot_password(): #will write later maybe
+    flash(" ☠️☠️☠️☠️☠️ Lol, you can't forget your password because the code does not exist. (yet!) ☠️☠️☠️☠️☠️", "dark")
+    return redirect("/login")
 
 
 # ========================================
@@ -237,7 +238,7 @@ def process_photo():
     user = crud.get_user_by_id(session['user_id'])
     #---- checking if old photo is squirrel default before deleting from cloud-----
     old_photo = user.public_photo_id
-    if old_photo != "nc1ekzvocezydot0aa2b":
+    if old_photo != "eh2czragl5gdnhj1ie9w":
         cloudinary.uploader.destroy(old_photo, 
             api_key=CLOUDINARY_KEY,
             api_secret=CLOUDINARY_SECRET,
@@ -250,11 +251,10 @@ def process_photo():
     user.photo_link = result['secure_url']
     user.public_photo_id = result["public_id"]
 
-    if not photo_upload:
-        return "photo not uploaded"
+    if not result or not photo_upload:
+        return "Unable to upload photo"
     db.session.commit()
-    return "successfully uploaded photo"
-
+    return "Photo successfully uploaded!"
 # ========================================
 # ---PROFILE SEARCH--- All functions for searching user profiles and sending a buddy request
 # ========================================
@@ -486,19 +486,20 @@ def load_buddy_chats():
 @app.route("/load-buddy-chats-2", methods = ["POST"])
 def load_buddy_chats2():
     buddy_input = request.json.get("buddy-id")
-    if buddy_input == "":
-        return jsonify(["Error"])
-    else:
+    if buddy_input:
         buddy = crud.get_buddy_from_id(buddy_input)
         chat_messages = crud.get_chats_by_buddy(buddy)
         return jsonify(chat_messages)
+    else:
+        return jsonify(["Error"])
+
     
 @app.route("/get-buddy-other-id", methods = ["POST"])
 def get_buddy_other_id():
     buddy_input = request.json.get("buddy-id")
     buddy = crud.get_buddy_from_id(buddy_input)
-    receiver_id = crud.get_other_user_id_from_buddy(buddy, session["user_id"])
-    return str(receiver_id)
+    receiver_id = crud.get_other_username_and_id_from_buddy(buddy, session["user_id"])
+    return jsonify(receiver_id)
 
 #CHECK******************
 @app.route("/send-message", methods=["POST"])
