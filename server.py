@@ -530,7 +530,7 @@ def sign_user_out():
     """signs the user out - automatically keeps session data saved"""
     if crud.user_logged_in(): 
         session.pop("user_id")
-        flash("Thanks for coming!")
+        flash("Thanks for coming!", "success")
     else:
        flash("Not logged in. Cannot sign out.")
     return redirect("/")

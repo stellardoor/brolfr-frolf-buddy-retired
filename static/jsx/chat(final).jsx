@@ -161,6 +161,7 @@ function App() {
                 </div>
                 <div >
                     <h1 className="middle-headline"> {receiverName}</h1>
+                    <button onClick="window.location.href='/chat/${buddyID}';" >Chat with only this dude</button>
                     <div className="middle-chat-final">
                     <div class="buddy-message">
                         {buddyChat}
