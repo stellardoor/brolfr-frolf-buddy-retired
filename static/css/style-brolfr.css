@@ -1,3 +1,4 @@
+/* W3 schools */
 @keyframes rotation {
     from {
       transform: rotate(0deg);
@@ -7,28 +8,118 @@
     }
   }
 
-.rotate {
+/* W3 schools */
+@keyframes shake {
+0% { transform: translate(1px, 1px) rotate(0deg); }
+10% { transform: translate(-1px, -2px) rotate(-1deg); }
+20% { transform: translate(-3px, 0px) rotate(1deg); }
+30% { transform: translate(3px, 2px) rotate(0deg); }
+40% { transform: translate(1px, -1px) rotate(1deg); }
+50% { transform: translate(-1px, 2px) rotate(-1deg); }
+60% { transform: translate(-3px, 1px) rotate(0deg); }
+70% { transform: translate(3px, 1px) rotate(-1deg); }
+80% { transform: translate(-1px, -1px) rotate(1deg); }
+90% { transform: translate(1px, 2px) rotate(0deg); }
+100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+.rotate-forever {
 animation: rotation 3s infinite linear;
-width: 200px;
 }
 
+.rotate-once {
+    animation: rotation 3s;
+    animation-iteration-count: 1;
+    }
+
+img.shake {
+    /* Start the shake animation and make the animation last for 0.5 seconds */
+    animation: shake 0.5s;
+  
+    /* When the animation is finished, do 6 more times (3 secs) */
+    animation-iteration-count: 6;
+  }
+
+/* this is for side tab for buddies */
 div.container-for-buddies-chat {
-    background-color: #232824;
-    overflow-x: auto;
-    bottom: 0;
-    width: 150px;
-    height:flex;
+    height: 100%;
+    width: 175px;
+    left: 0;
+    position: fixed;
+    top: 7.8%;	
+    
+
+    /* align items inside vertically centered */
+    align-content: center;
+    justify-content: center;
+    display: flex;
+    background-color:rgb(2, 7, 4, .7);
+    overflow: auto;
+    border-radius: 2%;
+    border: 5px, rgb(55, 0, 62);
   }
   
-.nav { margin-bottom: 0 }
-
-button.buddy-button {
-    border: 2px solid rgb(74, 106, 91);
-    width: 150px;
-    border-radius: 10%;
-
+div.middle-chat {
+    position: fixed; 
+    top: 22%;
+    left: 10%;
 }
-  
+
+h1.middle-headline {
+    position: fixed; 
+    top: 10%;
+    left: 30%;
+}
+
+div.middle-chat-final {
+    position: fixed; 
+    top: 22%;
+    left: 30%;
+}
+
+ul.buddy-button-list {
+    float: left;
+    clear: left;
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove padding */
+    margin: 0;
+}
+/* buddies listed in sidebar */
+.buddy-button {
+    border: 4px solid rgb(74, 106, 91);
+    width: 100%;
+    border-radius: 10%;
+    font: small;
+    background: rgb(231, 231, 231);
+    color:rgb(8, 18, 13);
+}
+
+button {
+    border: 2px solid rgb(4, 53, 30);
+    background: rgb(238,232,255);
+    background: radial-gradient(circle, rgba(238,232,255,0.7973564425770308) 0%, rgba(211,255,237,1) 100%);
+    color:rgb(6, 8, 7);
+    font: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 500;
+    width: 100%;
+    border-radius: 20%;
+    left: 0%;
+}
+
+button.buddy-button:hover {
+    background-color: #5b65d5;
+    color: rgb(200, 207, 214);
+    border: 2px solid rgb(191, 205, 198);
+  }
+
+button:hover {
+    background: rgb(4,9,2);
+    background: radial-gradient(circle, rgba(4,9,2,0.7973564425770308) 44%, rgba(65,0,69,1) 100%);
+    color: rgb(219, 237, 255);
+    border: 2px solid rgb(191, 205, 198);
+  }
+ 
+/* user buttons in container */
 div.container-for-buddies-chat button {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
@@ -46,22 +137,16 @@ div.buddy-message {
     font-size: large;
     height: 480px;
     width: 400px;
-    border: 5px solid rgb(99, 172, 138);
+    border: 2px solid rgba(14, 79, 79, 0.6);
     overflow: auto;
     border-radius: 2.5%;
-    background-color: rgb(221, 251, 251);
-    opacity: 30ms
-}
-
-b.rolfr {
-    font-size: large;
-    color: #c5dbd5;
+    background-color: rgb(221, 251, 251, .6);
 }
 
 div.bubble {
     border: 2px solid rgb(74, 106, 91);
     overflow: auto;
-    width: 100px;
+    width: 100%;
     border-radius: 10%;
     background-color: rgb(226, 226, 226);
     margin-right: 10px;
@@ -78,25 +163,31 @@ button.send-button {
     border: 2px solid rgb(74, 106, 91);
     width: 150px;
     border-radius: 10%;
-    bottom: 0;
+    margin-top: 0;
     position: fixed;
+    left: 30%;
 
 }
-input.send-input {
+input.send-message {
     border: 2px solid rgb(74, 106, 91);
     width: 130px;
     border-radius: 10%;
-    bottom: 0;
     position: fixed;
+    left: 30%;
 
 }
 
 div.left-message {
-    margin-left: 2px;
+    float: left;
+    width: 90%;
+    margin-right: 20px;
 }
 
 div.right-message {
-    margin-left: 200px;
+    float: right;
+    width: 90%;
+    margin-left: 20px;
+    margin-right: 2;
 }
 
 img.tiny {
@@ -104,13 +195,44 @@ img.tiny {
     width: flex;
     border: 5px solid rgb(81, 116, 100);
     border-radius: 50%;
+    float: left;
+}
+
+div.middle-ben {
+    position: fixed; 
+    top: 20%;
+    left: 40%;
+
+}
+
+img.ben {
+    height: 200px;
+    width: flex;
+}
+
+img.ben-mad {
+    height: 220px;
+    width: flex;
+}
+
+b.rolfr {
+    font-size: large;
+    color: #c5dbd5;
 }
 
 img.extra-tiny {
-    height: 20px;
+    height: 25px;
     width: flex;
     border: 2px solid rgb(81, 116, 100);
     border-radius: 50%;
+}
+
+img.extra-tiny-right {
+    height: 25px;
+    width: flex;
+    border: 2px solid rgb(81, 116, 100);
+    border-radius: 50%;
+    float: right;
 }
 
 img.profile {
@@ -124,6 +246,15 @@ small.timestamp {
     font-size: x-small;
     font-style: italic;
     color: rgb(120, 120, 120);
+    left: 0%;
+}
+
+small.timestamp-right {
+    font-size: x-small;
+    font-style: italic;
+    color: rgb(120, 120, 120);
+    float: right;
+    padding-right: 1%;
 }
 
 .color-nav {

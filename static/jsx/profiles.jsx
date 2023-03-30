@@ -280,3 +280,12 @@ function LoadCalendar(props) {
         }
 
 
+//         <div className="card" style="width:400px">
+{/* <img className="card-img-top" src={props.user.photo_link}>
+<div className="card-body">
+    <h4 className="card-title">{props.user.fname}</h4>
+    <p className="card-text">{props.user.gender}, {props.user.age} <br></br>
+    Located in {props.user.location}<br></br> {props.user.intro_text}</p>
+    <a href="#" className="btn btn-primary">See Profile</a>
+</div>
+</div> */}

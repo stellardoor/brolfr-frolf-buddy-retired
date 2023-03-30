@@ -134,6 +134,14 @@ def get_other_username_and_id_from_buddy(buddy, user_id):
     user_list.append(user_2.fname)
     return user_list
 
+def get_other_user_id_from_buddy(buddy, user_id):
+    if buddy.user_id_1 == user_id:
+        user_2 = get_user_by_id(buddy.user_id_2)
+    elif buddy.user_id_2 == user_id:
+        user_2 = get_user_by_id(buddy.user_id_1)
+    return user_2.user_id
+
+
 def get_photo_link_from_id(sender_id):
     user_link = User.query.filter(User.user_id == sender_id).first()
     return user_link.photo_link

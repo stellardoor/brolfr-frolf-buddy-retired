@@ -27,7 +27,7 @@ CLOUD_NAME = "dt9gdwmnb"
 @app.route("/")
 def homepage():
     """main intro page for Brolfr"""
-    return render_template('homepage.html')
+    return render_template('welcome.html')
 
 #CHECK******************
 @app.route("/home") # user user_id here
@@ -35,7 +35,7 @@ def welcome_page():
     """shows user home page if logged in"""
     if crud.user_logged_in():
         name = session["name"]
-        return render_template("welcome.html", name=name)
+        return render_template("homepage.html", name=name)
     else:
          return redirect("/")
 
@@ -46,16 +46,18 @@ def welcome_page():
 #CHECK******************
 @app.route("/process-login", methods=["POST"])
 def user_login():
-    email = request.form.get('email').lower().strip()
-    attempt = request.form.get('password')
+    email = request.json.get('email').lower().strip()
+    attempt = request.json.get('password')
     user = crud.get_user_by_email(email)
     if not user or not argon2.verify(attempt, user.password):
-        flash("Haha, oops: wrong email or password entered. Try again dude.", "danger")
-        return redirect("/login")
+        # flash("Haha, oops: wrong email or password entered. Try again dude.", "danger")
+        # return redirect("/login")
+        return "error"
     else:
         session["user_id"] = user.user_id
         session["name"] = user.fname
-        return redirect(f"/home")
+        # return redirect(f"/home")
+        return "success"
 
 #CHECK******************
 @app.route("/login")
@@ -148,19 +150,8 @@ def load_cities():
     return jsonify(city_list)
 
 
-#-----------------------------
-#CHECK******************
-# @app.route("/process-edit", methods=["POST"])
-# def process_edit():
-#     user = crud.get_user_by_id(session['user_id'])
-#     location = request.form.get("user-location") 
-#     city_list = crud.get_all_cities()
-#     if location not in city_list:
-#         flash("Please use autocompleted city only.")
-#         return redirect("/edit-profile")
-#     crud.edit_profile(user, location)
-#     flash("success")
-#     return "Successfully Edited Profile!"
+# ========= Everything for updating profile/account =============
+
 @app.route("/get-user-state", methods=["POST"])
 def get_user_state():
     """ used for edit profile and profiles search - returns the session users saved state"""
@@ -230,8 +221,8 @@ def process_edit_account():
     flash("success")
     return "success"
         
+ #-------- cloudinary photo processing-------------
 
-#CHECK****************** to delete existing photo in cloudinary?
 @app.route("/process-photo", methods=["POST"])
 def process_photo():
     """ processes user photo to new upload using cloudinary and returns success message - if no photo submitted returns error"""
@@ -255,6 +246,8 @@ def process_photo():
         return "Unable to upload photo"
     db.session.commit()
     return "Photo successfully uploaded!"
+
+
 # ========================================
 # ---PROFILE SEARCH--- All functions for searching user profiles and sending a buddy request
 # ========================================
@@ -355,7 +348,7 @@ def deny_buddy_again():
 
 
 # ========================================
-# - REQUESTS-- All functions for seeing current buddy requests, denying the buddy after match, , viewing denied buddy page, and opening chat
+# - REQUESTS-- All functions for seeing current buddy requests, accepting/rejecting, viewing denied buddy page, and opening chat for specific buddy
 # ========================================
 #-------------complete----------------
 @app.route("/requests")
@@ -372,9 +365,35 @@ def get_requests():
     pending_buddies = crud.get_all_pending_buddies(session['user_id'])
     return jsonify(pending_buddies)
 #-----------------------------
+#------------complete-----------------
+@app.route("/accept-buddy", methods=["POST"])
+def accept_buddy():
+    user_id_1 = session["user_id"]
+    user_id_2 = request.json.get("buddy-accept-id")
+    user_id_2 = int(user_id_2)
+    user_2 = crud.get_user_by_id(user_id_2) #for the confirmation message
+    buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
+    crud.accept_buddy_request(buddy_id)
+    # committing in the crud file ^
+    
+    return  f"Now buds with {user_2.fname}!"
+#-----------------------------
+
+#------------complete-----------------
+@app.route("/deny-buddy", methods=["POST"])
+def deny_buddy():
+    user_id_1 = session["user_id"]
+    user_id_2 = request.json.get("buddy-deny-id")
+    user_id_2 = int(user_id_2)
+    user_2 = crud.get_user_by_id(user_id_2)
+    buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
+    crud.deny_buddy_request(buddy_id)
+    # committing in the crud file ^
+    return  f"Rejected {user_2.fname}!"
+#-----------------------------
 
 # ========================================
-# All functions for re-adding/ re-accepting previously denied buddies
+# --DENIED BUDDIES--- All functions for showing previously denied buddies and option to re-accept
 # ========================================
 #------------complete-----------------
 @app.route("/denied-buddies")
@@ -390,24 +409,6 @@ def show_denied_buddies():
     denied_buddies = crud.get_all_rejected_buddies(session['user_id'])
     return jsonify(denied_buddies)
 #-----------------------------
-#------------complete-----------------
-@app.route("/accept-buddy", methods=["POST"])
-def accept_buddy():
-    user_id_1 = session["user_id"]
-    user_id_2 = request.json.get("buddy-accept-id")
-    user_id_2 = int(user_id_2)
-    user_2 = crud.get_user_by_id(user_id_2) #for the confirmation message
-    buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
-    crud.accept_buddy_request(buddy_id)
-    # committing in the crud file ^
-    
-    return  f"Now buds with {user_2.fname}!"
-#-----------------------------
-
-# ========================================
-# All functions for seeing current buddies, denying the buddy after match, and opening chat
-# ========================================
-
 #-------------complete----------------
 @app.route("/accept-buddy-again", methods=["POST"])
 def accept_buddy_again():
@@ -420,18 +421,12 @@ def accept_buddy_again():
     
     return  f"Now buds again with {user_2.fname}!"
 #-----------------------------
-#------------complete-----------------
-@app.route("/deny-buddy", methods=["POST"])
-def deny_buddy():
-    user_id_1 = session["user_id"]
-    user_id_2 = request.json.get("buddy-deny-id")
-    user_id_2 = int(user_id_2)
-    user_2 = crud.get_user_by_id(user_id_2)
-    buddy_id = crud.get_buddy_id_from_user_ids(user_id_2, user_id_1)
-    crud.deny_buddy_request(buddy_id)
-    # committing in the crud file ^
-    return  f"Rejected {user_2.fname}!"
-#-----------------------------
+
+
+# ========================================
+# All functions for seeing current buddies, denying the buddy after match, and opening chat
+# ========================================
+
 
 # @app.route("/chat", methods = ["POST"]) #no js
 # def open_buddy_chat():
@@ -468,23 +463,31 @@ def show_open_chats():
 #     chat_messages = crud.get_chats_by_buddy(buddy)
 #     return render_template('chat.html', user_1 = user_1, user_2 = user_2, chat_messages=chat_messages, buddy_id=buddy_id)
 
+
+#--------------complete---------------
 @app.route("/chat/<buddy_id>")
 def show_buddy_chat(buddy_id):
     user_1 = crud.get_user_by_id(session["user_id"])
     buddy = crud.get_buddy_from_id(buddy_id)
     user_2_id = crud.get_other_user_id_from_buddy(buddy, user_1.user_id)
     user_2 = crud.get_user_by_id(user_2_id)
-    return render_template('chat-2.html', buddy_id=buddy_id, user_1 = user_1.user_id, user_2 = user_2.user_id, user_2name = user_2.fname)
+    return render_template('chat-2(retired-chat.jsx).html', buddy_id=buddy_id, user_1 = user_1.user_id, user_2 = user_2.user_id, user_2name = user_2.fname)
+#-----------------------------
 
+#--------------complete---------------
 @app.route("/load-buddy-chats", methods = ["POST"])
 def load_buddy_chats():
+    """keeping this here because individual buddy chats are still here"""
     buddy_input = request.json.get("buddy-id")
     buddy = crud.get_buddy_from_id(buddy_input)
     chat_messages = crud.get_chats_by_buddy(buddy)
     return jsonify(chat_messages)
+#-----------------------------
 
+#--------------complete---------------
 @app.route("/load-buddy-chats-2", methods = ["POST"])
 def load_buddy_chats2():
+    """ gets buddy chat for .jsx chat functions"""
     buddy_input = request.json.get("buddy-id")
     if buddy_input:
         buddy = crud.get_buddy_from_id(buddy_input)
@@ -492,18 +495,22 @@ def load_buddy_chats2():
         return jsonify(chat_messages)
     else:
         return jsonify(["Error"])
+#-----------------------------
 
-    
+#--------------complete---------------  
 @app.route("/get-buddy-other-id", methods = ["POST"])
 def get_buddy_other_id():
+    """finds the other buddy's user id to return back to chat.jsx"""
     buddy_input = request.json.get("buddy-id")
     buddy = crud.get_buddy_from_id(buddy_input)
     receiver_id = crud.get_other_username_and_id_from_buddy(buddy, session["user_id"])
     return jsonify(receiver_id)
+#-----------------------------
 
-#CHECK******************
+#--------------complete---------------
 @app.route("/send-message", methods=["POST"])
 def send_message():
+    """gets necessary info for adding a chat message"""
     sender_id = session["user_id"]
     user = crud.get_user_by_id(session["user_id"])
     receiver_id = request.json.get("receiver-id")
@@ -515,8 +522,9 @@ def send_message():
     time_stamp = time.strftime("%a, %b %d, %Y %I:%M %p")
     crud.create_chat(buddy_id, sender_id, receiver_id, sender_name, message, time_stamp)
     return "sent"
+#-----------------------------
 
-#CHECK******************
+#*************** sign out - end user session *************
 @app.route("/sign-out")
 def sign_user_out():
     """signs the user out - automatically keeps session data saved"""
@@ -526,6 +534,11 @@ def sign_user_out():
     else:
        flash("Not logged in. Cannot sign out.")
     return redirect("/")
+
+@app.route("/test")
+def testing_html():
+    """signs the user out - automatically keeps session data saved"""
+    return render_template("test.html")
 
 
 if __name__ == "__main__":

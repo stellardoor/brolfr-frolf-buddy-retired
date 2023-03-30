@@ -1,21 +1,11 @@
+
 {% extends 'base.html' %}
-{% block title %} welcome frolf buds {% endblock %}
+{% block title %} {{name}} {% endblock %}
 
 {% block body %}
-    <h1> welcome bro, frolf much?</h1>
-    <br>
-<body>
+    <h1> Welcome {{name}}, so happy you made it! cheers brah </h1>
 
-    <button type="button" class="btn btn-primary" onclick ="window.location.href='/login';">
-        Login
-      </button>
-
-      <button type="button" class="btn btn-primary" onclick ="window.location.href='/new-account';">
-        Create Account
-      </button>
-      
-      <!-- Modal -->
-
-
+    <img class = "rotate" src="static/images/bb.png">
+    
 
 {% endblock %}
