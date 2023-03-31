@@ -2,6 +2,17 @@
 {% block title %} welcome frolf buds {% endblock %}
 
 {% block body %}
+
+{% if 'user_id' in session %}
+      <div class="middle-headline-top"> 
+        <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-size:x-large;
+        color:rgb(1, 11, 6);
+        font-weight: 500;">Welcome back {{session['name']}}! <button class="app" type="button" style="font-size:large" onclick ="window.location.href='/home';">
+        Enter Site 🤠
+      </button>
+      </h1>
+  {% else %}
     <div class="middle-headline-top"> 
       <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif;
       font-size:x-large;
@@ -10,6 +21,8 @@
       Click here to join!
     </button>
     </h1>
+
+  {% endif %}
 
     </div>
 <body>

@@ -293,7 +293,7 @@ def get_all_profiles_by_state(user_id, state):
     new_buddy_data = turn_profiles_to_dict(profiles_data)
     return new_buddy_data
 
-def get_all_profiles_by_calendar(user_id, city, state, calendar_input):
+def get_all_profiles_by_calendar_city(user_id, city, state, calendar_input):
     users = User.query.filter(db.not_(User.user_id == user_id)).all()
     buddies  = get_all_buddy_user_ids(user_id)
     profiles_data = []
@@ -306,6 +306,40 @@ def get_all_profiles_by_calendar(user_id, city, state, calendar_input):
                     if item in user_calendar:
                         user_match = True
                         break
+        if user_match:
+            profiles_data.append(user)
+    new_buddy_data = turn_profiles_to_dict(profiles_data)
+    return new_buddy_data
+
+def get_all_profiles_by_calendar_state(user_id, state, calendar_input):
+    users = User.query.filter(db.not_(User.user_id == user_id)).all()
+    buddies  = get_all_buddy_user_ids(user_id)
+    profiles_data = []
+    for user in users:
+        user_match = False
+        if user.user_id not in buddies and user.state == state:
+            user_calendar = json.loads(user.calendar)
+            for item in calendar_input:
+                if item in user_calendar:
+                    user_match = True
+                    break
+        if user_match:
+            profiles_data.append(user)
+    new_buddy_data = turn_profiles_to_dict(profiles_data)
+    return new_buddy_data
+
+def get_all_profiles_by_calendar_all(user_id, calendar_input):
+    users = User.query.filter(db.not_(User.user_id == user_id)).all()
+    buddies  = get_all_buddy_user_ids(user_id)
+    profiles_data = []
+    for user in users:
+        user_match = False
+        if user.user_id not in buddies:
+            user_calendar = json.loads(user.calendar)
+            for item in calendar_input:
+                if item in user_calendar:
+                    user_match = True
+                    break
         if user_match:
             profiles_data.append(user)
     new_buddy_data = turn_profiles_to_dict(profiles_data)

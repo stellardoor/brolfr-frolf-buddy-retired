@@ -85,10 +85,10 @@ function LoadRequest(props) {
                 <li>420 Friendly: {props.user.smoke_420_okay}</li>
             </ul>
 
-            <button disabled={click} type="submit" onClick={clickAccept}> {BuddyAccept} </button>
+            <button className="app" disabled={click} type="submit" onClick={clickAccept}> {BuddyAccept} </button>
 
             <br></br>
-            <button disabled={click} onClick={clickDeny} type="submit" > {BuddyDeny} </button>
+            <button className="app" disabled={click} onClick={clickDeny} type="submit" > {BuddyDeny} </button>
         </div>
     );
 }

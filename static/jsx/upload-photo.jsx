@@ -22,12 +22,12 @@ function UploadProfilePicture() {
 
     }
     return (
-        <div className="container">
+        <div>
             <form onSubmit={handleUpload} encType="multipart/form-data">
                 <div className="mb-3">
                     <label htmlFor="form-file" className="form-label">Upload a new profile photo:</label>
                     <input className="form-control" type="file" id="form-file" name="form-file" ></input>
-                    <input className="app" type="submit" id="photo-submit"></input>
+                    <input className="app" type="submit" id="photo-submit" value="Upload New Photo"></input>
                 </div>
             </form>
         </div>

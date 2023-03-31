@@ -261,37 +261,60 @@ def show_profiles():
 #-------------complete----------------
 @app.route("/load-profiles")
 def load_profiles():
-    all_users = crud.get_all_profiles(session['user_id'])
+    user = crud.get_user_by_id(session['user_id'])
+    all_users = crud.get_all_profiles_by_city_state(session['user_id'], user.location, user.state)
     return jsonify(all_users)
 
 @app.route("/load-users-by-state", methods=["POST"])
 def load_users_by_state():
     state = request.json.get("user-state")
-    all_users = crud.get_all_profiles_by_state(session['user_id'], state)
+    if not state:
+        all_users = crud.get_all_profiles(session['user_id'])
+    else:
+        all_users = crud.get_all_profiles_by_state(session['user_id'], state)
     return jsonify(all_users)
 
 @app.route("/load-users-by-city", methods=["POST"])
 def load_users_by_city():
     city = request.json.get("user-location").title()
     state = request.json.get("user-state")
-    check_city_list = crud.get_all_cities_by_state(state)
-    if city not in check_city_list:
-        return jsonify(["Error"])
-    else:
-        all_users = crud.get_all_profiles_by_city_state(session['user_id'], city, state)
-        return jsonify(all_users)
+    if state == "Select State" and not city:
+        all_users = crud.get_all_profiles(session['user_id'])
+    elif state and not city:
+        all_users = crud.get_all_profiles_by_state(session['user_id'], state)
+    elif city and state:
+        check_city_list = crud.get_all_cities_by_state(state)
+        if city not in check_city_list:
+            return jsonify(["Error"])
+        else:
+            all_users = crud.get_all_profiles_by_city_state(session['user_id'], city, state)
+
+    return jsonify(all_users)
     
 @app.route("/load-users-by-calendar-match", methods=["POST"])
 def load_users_by_calendar_match():
     city = request.json.get("user-location").title()
     state = request.json.get("user-state")
-    check_city_list = crud.get_all_cities_by_state(state)
-    if city not in check_city_list:
-        return jsonify(["Error"])
+    if state == "Select State":
+        calendar_input = request.json.get("calendar")
+        all_users = crud.get_all_profiles_by_calendar_all(session['user_id'], calendar_input)
+        return jsonify(all_users)
+    if city and state:
+        check_city_list = crud.get_all_cities_by_state(state)
+        if city not in check_city_list:
+            return jsonify(["Error"])
+        calendar_input = request.json.get("calendar")
+        all_users = crud.get_all_profiles_by_calendar_city(session['user_id'], city, state, calendar_input)
+        return jsonify(all_users)
+    elif not city and state:
+        calendar_input = request.json.get("calendar")
+        all_users = crud.get_all_profiles_by_calendar_state(session['user_id'], state, calendar_input)
+        return jsonify(all_users)
     else:
         calendar_input = request.json.get("calendar")
-        all_users = crud.get_all_profiles_by_calendar(session['user_id'], city, state, calendar_input)
+        all_users = crud.get_all_profiles_by_calendar_all(session['user_id'], calendar_input)
         return jsonify(all_users)
+
 
 
 

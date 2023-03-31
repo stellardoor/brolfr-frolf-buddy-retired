@@ -21,10 +21,17 @@ function App() {
     }
     return (
     <div>
-        <div id="cities"> 
-            <LoadCities setUsers={setUsers} />
-            <LoadCalendar setUsers={setUsers} />
+        <div className="container">
+            <div className="row justify-content-center p-3">
+                <div id="cities"> 
+                    <LoadCities setUsers={setUsers} />
+                </div>
+                <div className="col-12 col-lg-4">
+                    <LoadCalendar setUsers={setUsers} />
+                </div>
+            </div>
         </div>
+
         <div>
             {userProfiles}
         </div>
@@ -113,23 +120,23 @@ function LoadRequest(props) {
 
 function LoadCities(props) {
 
-    const [initialState, setInitialState] = React.useState("")
+    // const [initialState, setInitialState] = React.useState("")
     // const [initialCity, setInitialCity] = React.useState("")
     const [userState, setUserState] = React.useState("")
     // const [userCity, setUserCity] = React.useState("")
     const [cityNames, setCityNames] = React.useState([])
     const [stateNames, setStateNames] = React.useState([])
 
-    React.useEffect(() => {
-        fetch("/get-user-state", {
-            method: 'POST'
-        })
-            .then(response => response.text())
-            .then(stateResponse => {
-                setInitialState(stateResponse)
-            }
-            );
-    });
+    // React.useEffect(() => {
+    //     fetch("/get-user-state", {
+    //         method: 'POST'
+    //     })
+    //         .then(response => response.text())
+    //         .then(stateResponse => {
+    //             setInitialState(stateResponse)
+    //         }
+    //         );
+    // });
 
     // React.useEffect(() => {
     //     fetch("/get-user-city", {
@@ -236,19 +243,26 @@ function LoadCities(props) {
 
     return (
         <div>
-            <select onChange={(evt) => captureUserInput(evt)} name="user-state" id="user-state">
-                <option selecteddisabledhidden="true" >{initialState}</option>
-                {stateNames}
-            </select><br></br>
-            <button type="submit"  onClick={(evt) => processProfilesByState(evt)}>Search folks by State</button><br></br>
+            <div className="container">
+            <div className="row">
+                <div className="col-12 col-lg-4" >
+                    <select onChange={(evt) => captureUserInput(evt)} name="user-state" id="user-state">
+                        <option selecteddisabledhidden="true" >Select State</option>
+                        {stateNames}
+                    </select><br></br>
+                    <button type="submit"  onClick={(evt) => processProfilesByState(evt)}>Search folks by State</button><br></br>
+                </div>
 
-
-            <label htmlFor="datalist" className="form-label">City: </label>
-            <input  className="form-control" list="datalistOptions" name="user-location" id="user-location"  placeholder="Type to search your closest city..." ></input>
-            <datalist id="datalistOptions">
-                {cityNames}
-            </datalist>
-            <button htmlFor= "user-location" name="user-location"  type="submit" onClick={(evt) => processProfilesByCity(evt)} >Search folks by City</button>
+                <div className="col-12 col-lg-4" >
+                    <label htmlFor="datalist" className="form-label">City: </label>
+                    <input  className="form-control" list="datalistOptions" name="user-location" id="user-location"  placeholder="Type to search your closest city..." ></input>
+                    <datalist id="datalistOptions">
+                        {cityNames}
+                    </datalist>
+                    <button htmlFor= "user-location" name="user-location"  type="submit" onClick={(evt) => processProfilesByCity(evt)} >Search folks by City</button>
+                </div>
+                </div>
+                </div>
         </div>
     )
 
@@ -291,7 +305,7 @@ function LoadCalendar(props) {
 
     };
     return(
-        <div>
+        <div className="">
             <div id="calendar">
             <input type="checkbox" name="calendar" className ="calendar" id="early-mornings" value="Early Mornings (Sunrise - 8am)" ></input>
             <label htmlFor="early-mornings"> Early Mornings (Sunrise - 8am) </label><br></br>

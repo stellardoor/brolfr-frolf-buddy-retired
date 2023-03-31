@@ -3,9 +3,11 @@
 
 {% block body %}
 <br>
-<button onclick='window.location.href="/chats";'> See all chats</button>
+<button class="app" onclick='window.location.href="/chats";'> See all chats</button>
 <br>
+<div class="middle-headline-chat">
 <h1> Chatting with {{user_2name}}</h1>
+</div>
 <input type = "hidden" id="buddy-id" value="{{buddy_id}}"></input>
 <input type = "hidden" id="user-1" value="{{user_1}}"></input>
 <input type = "hidden" id="user-2" value="{{user_2}}"></input>

@@ -10,45 +10,46 @@ function App() {
 
     // console.log([user1, user2, buddyID])
 
-    React.useEffect(() => {
-        function loadChatMessages() {
-            const user2 = document.getElementById("receiver-id-hidden").value
-            console.log(`reciever-id = ${user2}`)
-            const buddyIDinput = document.getElementById("send-message-hidden").value
-            console.log(`buddy-id = ${buddyIDinput}`)
-            fetch("/load-buddy-chats", {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ "buddy-id": buddyIDinput }),
-                credentials: "same-origin"
-            })
-                .then(response => response.json())
-                .then(resultList => {
-                    console.log(`result-list = ${resultList}`)
-                    const chatLogList = [];
-                    if (resultList.includes("Error")) {
-                        setBuddyChat("none")
-                    }
-                    else {
-                        for (const chat of resultList) {
-                            if (chat.sender_id == user1) {
-                                chatLogList.push(<LoadChatsRight chat={chat} user1={user1} key={chat.chat_id} />);
-                            }
-                            else {
-                                chatLogList.push(<LoadChats chat={chat} user1={user2} key={chat.chat_id} />);
-                            }
-                        }
-                        setBuddyChat(chatLogList)
-                    }
+    // React.useEffect(() => {
+    //     function loadChatMessages() {
+    //         const user2 = document.getElementById("receiver-id-hidden").value
+    //         console.log(`reciever-id = ${user2}`)
+    //         const buddyIDinput = document.getElementById("send-message-hidden").value
+    //         console.log(`buddy-id = ${buddyIDinput}`)
+    //         fetch("/load-buddy-chats", {
+    //             method: 'POST',
+    //             headers: {
+    //                 "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify({ "buddy-id": buddyIDinput }),
+    //             credentials: "same-origin"
+    //         })
+    //             .then(response => response.json())
+    //             .then(resultList => {
+    //                 console.log(`result-list = ${resultList}`)
+    //                 const chatLogList = [];
+    //                 if (resultList.includes("Error")) {
+    //                     setBuddyChat("none")
+    //                 }
+    //                 else {
+    //                     for (const chat of resultList) {
+    //                         if (chat.sender_id == user1) {
+    //                             chatLogList.push(<LoadChatsRight chat={chat} user1={user1} key={chat.chat_id} />);
+    //                         }
+    //                         else {
+    //                             chatLogList.push(<LoadChats chat={chat} user1={user2} key={chat.chat_id} />);
+    //                         }
+    //                     }
+    //                     setBuddyChat(chatLogList)
+    //                 }
 
-                });
-        }
-        loadChatMessages();
-        let id = setInterval(loadChatMessages, 10000);
-        return () => {clearInterval(id)} //callback - when component unloads, stop timer
-    }, []);
+    //             });
+    //         }
+    //     })
+    //     loadChatMessages();
+    //     let id = setInterval(loadChatMessages, 10000);
+    //     return () => {clearInterval(id)} //callback - when component unloads, stop timer
+    // }, []);
 
     function loadInitialChats(buddyIDinput, receiverIDinput) {
         fetch("/load-buddy-chats", {
@@ -99,6 +100,7 @@ function App() {
                 setReceiverID(resultID[0])
                 setReceiverName(`Chatting with ${resultID[1]}!`)
                 loadInitialChats(idInput, resultID)
+                document.querySelector("#chat-dude").innerHTML = `<button onClick="window.location.href='/chat/${idInput}';" >Chat *live* with only this dude</button>`
             })
     }
 
@@ -111,8 +113,8 @@ function App() {
                 const userChats = [];
                 for (const user of resultUsers) {
                     // userRequests.push(<loadRequests item = {user} key={user.user_id}/>);
-                    userChats.push(<button id={user.buddy_id} key={user.buddy_id} type="button" value={user.buddy_id} onClick={(evt) => setNewChatMessages(evt)}
-                        className="buddy-button"> <img className="tiny" src={user.photo_link} ></img> {user.fname}</button>);
+                    userChats.push(<li><button id={user.buddy_id} key={user.buddy_id} type="button" value={user.buddy_id} onClick={(evt) => setNewChatMessages(evt)}
+                        className="buddy-button"> <img className="tiny" src={user.photo_link} ></img> {user.fname}</button></li>);
                 }
                 console.log(userChats)
                 setAllBuddiesToChat(userChats)
@@ -153,20 +155,24 @@ function App() {
     }
 
     return (
-        <div>
-                <div >
+        <div> 
+            <div id="chat-dude" className="middle-headline-button">
+               </div>
+                <div>
                     <div className="container-for-buddies-chat">
-                        {allBuddiesToChat}
+                        <ul className="buddy-button-list" >
+                            {allBuddiesToChat}
+                        </ul>
                     </div>
+
                 </div>
                 <div >
                     <h1 className="middle-headline"> {receiverName}</h1>
-                    <button onClick="window.location.href='/chat/${buddyID}';" >Chat with only this dude</button>
                     <div className="middle-chat-final">
                     <div class="buddy-message">
                         {buddyChat}
                     </div>
-                        <input className="send-input" type="text" id="send-message" name="send-message" />
+                        <input className="send-message" type="text" id="send-message" name="send-message" />
                         <button className="send-button" htmlFor="send-message" type="submit" onClick={(evt) => processSendMessage(evt)} > {button} </button>
 
                     </div>

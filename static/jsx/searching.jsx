@@ -114,7 +114,7 @@ function LoadCities() {
                 <datalist id="datalistOptions">
                     {cityNames}
                 </datalist>
-                <input type ="submit" onClick={(evt)=> processUserLocation(evt)} ></input>
+                <input className="app" type ="submit" onClick={(evt)=> processUserLocation(evt)} ></input>
             </form>
             <div id="live-alert-location"></div>
         </div>
