@@ -3,7 +3,7 @@
 
 {% block body %}
 
-<input type="button" onclick="window.location.href='/profile';" value="Back to profile" />
+<input class="app" type="button" onclick="window.location.href='/profile';" value="Back to profile" />
 <h1> {{user.fname}}'s Profile Specifics</h1>
 
 <div id="photo-uploader">
@@ -113,7 +113,7 @@
         <option value="No">No</option>
         <option value="No Preference">No Preference</option>
     </select><br>
-    <button type="submit"> Submit
+    <button class="app" type="submit"> Submit
     </button>
 </form>
 

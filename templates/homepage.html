@@ -3,11 +3,27 @@
 {% block title %} {{name}} {% endblock %}
 
 {% block body %}
-    <h1> Welcome {{name}}, so happy you made it! cheers brah </h1>
 
-    <img class="ben-home" src="static/images/bb.png">
+
+    <div class="col-12 col-md-8 col-lg-6" style="position: fixed;
+    top: 43%;
+    left: 52%;
+    transform: translate(-43%, -52%);">
     
-    <button onclick="window.location.href='/profile';">View Profile!</button>
-    <button onclick="window.location.href='/edit-profile';">Edit Your Profile!</button>
-    <button onclick="window.location.href='/edit-account';">update account</button>
+    <img class="ben-home" src="static/images/bb.png"> <br>
+    <div class="homepage"> Welcome {{name}},
+        so happy you made it!
+        cheers brah 🤙
+    </div><br>
+    </div>
+    
+    <br><br>
+    <div class="col-md-8 col-lg-6" style="position: fixed;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);">
+    <button class="app" onclick="window.location.href='/profile';">View Profile!</button>
+    <button class="app" onclick="window.location.href='/edit-profile';">Edit Your Profile!</button>
+    <button class="app" onclick="window.location.href='/edit-account';">update account</button>
+</div>
 {% endblock %}

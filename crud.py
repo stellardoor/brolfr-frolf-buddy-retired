@@ -10,7 +10,7 @@ from datetime import date
 # animals = Animal.query.options(db.joinedload("human")).filter(Animal.animal_species == animal_species).all()
 
 
-def create_user(email, password, fname, pronouns, gender, birthday, member_since, photo_link):
+def create_user(email, password, fname, pronouns, gender, birthday, member_since,):
     user = User(
         email=email, 
         password=password, 
@@ -19,8 +19,8 @@ def create_user(email, password, fname, pronouns, gender, birthday, member_since
         gender = gender,
         birthday = birthday,
         member_since=member_since,
-        photo_link=photo_link,
-        public_photo_id = "",
+        photo_link = "https://res.cloudinary.com/dt9gdwmnb/image/upload/v1680066398/eh2czragl5gdnhj1ie9w.png",
+        public_photo_id = "eh2czragl5gdnhj1ie9w",
         calendar = '[]', 
         age_range = '[]',
         intro_text = "",

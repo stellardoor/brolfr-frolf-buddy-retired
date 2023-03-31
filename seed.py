@@ -31,10 +31,9 @@ def add_test_users():
         gender = choice(["Man", "Woman", "Non-Binary", ""])
         birthday = choice(["12/25/1989", "1/2/2000", "3/6/1975"])
         member_since = date.today()
-        photo_link = ""
 
 
-        user = crud.create_user(email, password, fname, pronouns, gender, birthday, member_since, photo_link)
+        user = crud.create_user(email, password, fname, pronouns, gender, birthday, member_since)
     #     model.db.session.add(user)
 
     # model.db.session.commit()

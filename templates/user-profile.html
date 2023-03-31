@@ -2,31 +2,47 @@
 {% block title %} {{user.name}} {% endblock %}
 
 {% block body %}
+<input class="app" type="button" onclick="window.location.href='/edit-profile';" value="Edit Profile" />
 <div class="container">
-<h1>{{user.fname}} {{user.pronouns}}</h1>
-<img class = "profile" src="{{user.photo_link}}" >
-<li> {{user.gender}}, {{user.age}}, {{user.location}}, {{user.state}}</li>
-<p> {{user.intro_text}}</p>
-        <text>Member since: {{user.member_since}}</text>
-        <li>Looking to throw with: {{user.gender_preference}}</li>
-        <li>Availability: {% for item in user.calendar %} 
-            {{item}}
-        {% endfor %}
-        </li>
-        <li>Skill Level: {{user.skill_level}}</li>
-        <li>Age Range: {% for item in user.age_range %} 
-            {{item}}
-        {% endfor %}</li>
-        <li>Frequented Courses: {{user.frequented_courses}}</li>
-        <li>Kids: {{user.kids_okay}}</li>
-        <li>Dogs: {{user.dogs_okay}}</li>
-        <li>Friendly/Stakes: {{user.friendly_or_stakes_game}}</li>
-        <li>Game preference: {{user.type_of_game}}</li>
-        <li>Alcohol: {{user.alcohol_okay}}</li>
-        <li>Tobacco: {{user.tobacco_okay}}</li>
-        <li>420 Friendly: {{user.smoke_420_okay}}</li>
-    </ul>
-</div> 
-<input type="button" onclick="window.location.href='/edit-profile';" value="Edit Profile" />
+    <div class="row justify-content-center p-3">
+      <div class="col-auto">
+            <div class="container-brolfr">
+            <h1>{{user.fname}} {{user.pronouns}}</h1>
+            <img class = "profile" src="{{user.photo_link}}" ><br>
+            {{user.gender}}, {{user.age}}, {{user.location}}, {{user.state}}
+            <p> {{user.intro_text}}</p>
+
+                    <text>Member since: {{user.member_since}}</text>
+                    <li>Looking to throw with: {{user.gender_preference}}</li>
+                    <li>Availability: {% for item in user.calendar %} 
+                        {{item}}
+                    {% endfor %}
+                    </li>
+                    <li>Skill Level: {{user.skill_level}}</li>
+                    <li>Age Range: {% for item in user.age_range %} 
+                        {{item}}
+                    {% endfor %}</li>
+                    <li>Frequented Courses: {{user.frequented_courses}}</li>
+                    <li>Kids: {{user.kids_okay}}</li>
+                    <li>Dogs: {{user.dogs_okay}}</li>
+                    <li>Friendly/Stakes: {{user.friendly_or_stakes_game}}</li>
+                    <li>Game preference: {{user.type_of_game}}</li>
+                    <li>Alcohol: {{user.alcohol_okay}}</li>
+                    <li>Tobacco: {{user.tobacco_okay}}</li>
+                    <li>420 Friendly: {{user.smoke_420_okay}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="photo-uploader"></div>
+    </div>
+
+    <script type="text/jsx" src="/static/jsx/upload-photo.jsx"></script>
+<script type="text/jsx">
+        ReactDOM.render(
+            <UploadProfilePicture />,
+            document.querySelector('#photo-uploader')
+        )
+    </script>
 
 {% endblock %}

@@ -37,9 +37,10 @@ loginForm.addEventListener('submit', (evt) => {
                 })
             }
             else {
-                document.querySelector("#ben").innerHTML = '<img class="shake ben-mad" src="/static/images/bb-mad.png"></img><br><span class="red-fail">Haha, oops: wrong email or password entered.</span>';
+                document.querySelector("#ben").innerHTML = '<img class="shake ben-mad" src="/static/images/bb-mad.png"></img><br><span class="red-fail"> Wrong email or password!</span>';
+                document.querySelector("#password").value = ""
                 delay(3000).then(() => {
-                    document.querySelector("#ben").innerHTML='<img class="ben" src="/static/images/bb.png"></img><br><span>Try again. </span><br><br>';
+                    document.querySelector("#ben").innerHTML='<img class="ben" src="/static/images/bb.png"></img><br><span>Oopy Doopy. Try again. </span><br><br>';
                 })
             }
         })

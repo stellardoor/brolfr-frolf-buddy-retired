@@ -94,10 +94,9 @@ def create_new_account():
     hashed_pass = argon2.hash(password)
     date_today  = datetime.now()
     member_since = date_today.strftime("%b %d, %Y")
-    photo_link = "https://res.cloudinary.com/dt9gdwmnb/image/upload/v1679869060/squirrel_pciars.png"
     check_email = crud.get_user_by_email(email)
     if not check_email:
-        crud.create_user(email, hashed_pass, fname, pronouns, gender, birthday, member_since, photo_link)
+        crud.create_user(email, hashed_pass, fname, pronouns, gender, birthday, member_since)
         return f"Hey there {fname.title()}, thanks for joining! Please log in!"
     else:
         return f"Error. User email {email} already exists."

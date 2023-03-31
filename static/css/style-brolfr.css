@@ -39,6 +39,10 @@ img.shake {
     animation-iteration-count: 4;
   }
 
+
+html, body, form {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 /* this is for side tab for buddies */
 div.container-for-buddies-chat {
     height: 100%;
@@ -57,18 +61,95 @@ div.container-for-buddies-chat {
     border-radius: 2%;
     border: 5px, rgb(55, 0, 62);
   }
-  
+
+div.container-form {
+    font-size: large;
+    width: 380px;
+    height: flex;
+    border: 2px solid rgba(14, 79, 79, 0.6);
+    overflow: auto;
+    border-radius: 2.5%;
+    background-color: rgb(221, 251, 251, .3);
+    padding: 5px 16px;
+}
+
+div.container-brolfr {
+    font-size: large;
+    width: 400px;
+    border: 2px solid rgba(14, 79, 79, 0.6);
+    border-radius: 2.5%;
+    background-color: rgb(221, 251, 251, .3);
+    padding: 5px 16px;
+}
+
+div.homepage {
+    font-size: large;
+    width: 350px;
+    height: flex;
+    overflow: auto;
+    border-radius: 2.5%;
+    background-color: rgba(0, 248, 248, 0.141);
+    padding: 5px 16px;
+    text-align: center;
+}
+
+div.middle-ben {
+        position: absolute; 
+        top: 5%;
+        left: 40%;
+    
+    }
+div.container-ben {
+    font-size: large;
+    width: 380px;
+    height: flex;
+    border: 2px solid rgba(14, 79, 79, 0.6);
+    overflow: auto;
+    border-radius: 2.5%;
+    background-color: rgb(221, 251, 251, .3);
+    padding: 5px 16px;
+    text-align: center;
+    
+    }
+
 div.middle-chat {
     position: fixed; 
     top: 22%;
     left: 10%;
 }
 
+a:hover {
+    color: rgb(46, 0, 95);
+    font-size: medium;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+a {
+    color: rgb(0, 35, 30);
+    font-size: medium;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
 h1.middle-headline {
     position: fixed; 
     top: 10%;
     left: 30%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    color:rgb(1, 11, 6);
+    font-weight: 400;
 }
+
+div.middle-headline-top {
+    position: fixed; 
+    top: 12%;
+    left: 28%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: large;
+    color:rgb(1, 11, 6);
+    font-weight: 400;
+}
+
 
 div.middle-chat-final {
     position: fixed; 
@@ -93,7 +174,8 @@ button.buddy-button {
     color:rgb(8, 18, 13);
 }
 
-button {
+
+button.app {
     border: 2px solid rgb(4, 53, 30);
     background: rgb(238,232,255);
     background: radial-gradient(circle, rgba(238,232,255,0.7973564425770308) 0%, rgba(211,255,237,1) 100%);
@@ -104,6 +186,31 @@ button {
     width: 200px;
     border-radius: 20%;
     left: 0%;
+}
+input.app {
+    border: 2px solid rgb(4, 53, 30);
+    background: rgb(238,232,255);
+    background: radial-gradient(circle, rgba(238,232,255,0.7973564425770308) 0%, rgba(211,255,237,1) 100%);
+    color:rgb(6, 8, 7);
+    font: large;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 500;
+    width: 200px;
+    border-radius: 20%;
+    left: 0%;
+}
+input.app:hover {
+    background: rgb(4,9,2);
+    background: radial-gradient(circle, rgba(4,9,2,0.7973564425770308) 44%, rgba(65,0,69,1) 100%);
+    color: rgb(219, 237, 255);
+    border: 2px solid rgb(191, 205, 198);
+  }
+  
+button.app:hover {
+background: rgb(4,9,2);
+background: radial-gradient(circle, rgba(4,9,2,0.7973564425770308) 44%, rgba(65,0,69,1) 100%);
+color: rgb(219, 237, 255);
+border: 2px solid rgb(191, 205, 198);
 }
 
 button.buddy-button:hover {
@@ -198,12 +305,6 @@ img.tiny {
     float: left;
 }
 
-div.middle-ben {
-    position: fixed; 
-    top: 20%;
-    left: 40%;
-
-}
 
 img.ben {
     height: 200px;
@@ -211,8 +312,8 @@ img.ben {
 }
 
 img.ben-home {
-    height: 400px;
-    width: flex;
+    height: 50%;
+    width: 50%;
 }
 
 img.ben-mad {
@@ -315,3 +416,22 @@ div.brolfr-card {
 .container {
     padding: 2px 16px;
   }
+
+img.squirrel {
+    position:absolute;
+    /* display: flex;
+    justify-content: flex-end; */
+    bottom: 0;
+}
+div.squirrel {
+    position:absolute;
+    right: 300px;
+    bottom: 0;
+    z-index:-999;
+}
+
+/* div.brolf-carousel {
+    position:absolute;
+    bottom: 10;
+} */
+

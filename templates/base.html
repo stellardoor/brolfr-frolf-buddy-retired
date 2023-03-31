@@ -21,12 +21,6 @@
       background-attachment: fixed;
       background-size: cover;
     }
-    .background-img {
-    background: url('/static/images/sqrl.png');
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-}
 
   </style>
 
@@ -43,7 +37,7 @@
     <a href="/sign-out">Sign out</a>
   </div>
   {% else %}
-  <div class="topnav-right">
+  <div class="color-nav-right">
     <a href="/login">Login</a>
   </div>
   {% endif %}
@@ -78,9 +72,7 @@
 
 </html>
 
-
-<body>
-  <div id="insert"></div>
+<div class="squirrel"> <img class="squirrel" src="/static/images/sqrl.png"></img></div>
   {% with messages=get_flashed_messages(with_categories=true) %}
     {% for category, message in messages %}
       <div class='alert alert-{{category}} alert-dismissible fade show' role='alert' 
