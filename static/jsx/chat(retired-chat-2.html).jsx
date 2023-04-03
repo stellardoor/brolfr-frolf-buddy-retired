@@ -100,8 +100,8 @@ function LoadChatsRight(props) {
         <div className="right-message">
             <div className="bubble">
                 <b>{props.chat.sender_name}: </b> {props.chat.message}   </div>
-            <img className="extra-tiny" src="/static/images/tree-b.png" ></img> <br></br>
-            <small className="timestamp">{props.chat.time_stamp} </small>
+            <img className="extra-tiny-right" src="/static/images/tree-b.png" ></img> <br></br>
+            <small className="timestamp-right">{props.chat.time_stamp} </small>
         </div>
     )
 }

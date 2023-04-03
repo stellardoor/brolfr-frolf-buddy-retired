@@ -56,6 +56,8 @@ def user_login():
     else:
         session["user_id"] = user.user_id
         session["name"] = user.fname
+        request_number = crud.get_number_of_requests(user.user_id)
+        session["requests"] = request_number
         # return redirect(f"/home")
         return "success"
 
@@ -92,7 +94,7 @@ def create_new_account():
     # process and hash password: 
     password = request.json.get("password")
     hashed_pass = argon2.hash(password)
-    date_today  = datetime.now()
+    date_today  = datetime.today()
     member_since = date_today.strftime("%b %d, %Y")
     check_email = crud.get_user_by_email(email)
     if not check_email:
@@ -217,7 +219,7 @@ def process_edit_account():
     gender = request.json.get("gender")
     birthday = request.json.get("birthday")
     crud.update_user_account(user,fname, pronouns, gender, birthday)
-    flash("success")
+    
     return "success"
         
  #-------- cloudinary photo processing-------------

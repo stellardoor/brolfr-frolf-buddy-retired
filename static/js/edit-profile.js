@@ -3,6 +3,19 @@
 
 const profileForm = document.querySelector('#edit-profile-form')
 
+const alert = (message, type) => {
+    const alertLocation = document.getElementById("live-alert-location")
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+      `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+      `   <div>${message}</div>`,
+      '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+      '</div>'
+    ].join('')
+  
+    alertLocation.append(wrapper)
+  }
+
 
 profileForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -31,8 +44,8 @@ profileForm.addEventListener('submit', (evt) => {
     // const calendarListDumps = json.dumps(calendarList)
 
     const formInputs = {
-        "user-state" : document.querySelector("#user-state").value,
-        "user-location": document.querySelector("#user-location").value,
+        // "user-state" : document.querySelector("#user-state").value,
+        // "user-location": document.querySelector("#user-location").value,
         "intro-text": document.querySelector("#intro-text").value,
         "calendar" :calendarList,
         "skill-level": document.querySelector("#skill-level").value,
@@ -60,6 +73,6 @@ profileForm.addEventListener('submit', (evt) => {
     })
         .then((response) => response.text())
         .then((responseProfileEdit) => {
-            alert(responseProfileEdit);
+            alert(responseProfileEdit, "success");
         })
     });

@@ -199,11 +199,20 @@ def turn_profiles_to_dict(profiles):
         user_dict["member_since"] = getattr(user, "member_since")
         user_dict["photo_link"] = getattr(user, "photo_link")
         user_dict["intro_text"] = getattr(user, "intro_text")
-        user_dict["calendar"] = (getattr(user, "calendar"))
+        calendar_input = json.loads(getattr(user, "calendar"))
+        if len(calendar_input) <= 1:
+            user_dict["calendar"] = calendar_input
+        else:
+            user_dict["calendar"] = " * ".join(calendar_input)
+        
         user_dict["location"] = getattr(user, "location")
         user_dict["state"] = getattr(user, "state")
         user_dict["skill_level"] = getattr(user, "skill_level")
-        user_dict["age_range"] = (getattr(user, "age_range"))
+        age_input = json.loads(getattr(user, "age_range"))
+        if len(age_input) <= 1:
+            user_dict["age_range"] = age_input
+        else:
+            user_dict["age_range"] = " * ".join(age_input)
         user_dict["frequented_courses"] = getattr(user, "frequented_courses")
         user_dict["gender_preference"] = getattr(user, "gender_preference")
         user_dict["kids_okay"] = getattr(user, "kids_okay")
@@ -229,11 +238,19 @@ def turn_profiles_to_dict_bud(profiles):
         user_dict["member_since"] = getattr(user[0], "member_since")
         user_dict["photo_link"] = getattr(user[0], "photo_link")
         user_dict["intro_text"] = getattr(user[0], "intro_text")
-        user_dict["calendar"] = (getattr(user[0], "calendar"))
+        calendar_input = json.loads(getattr(user[0], "calendar"))
+        if len(calendar_input) <= 1:
+            user_dict["calendar"] = calendar_input
+        else:
+            user_dict["calendar"] = " * ".join(calendar_input)
         user_dict["location"] = getattr(user[0], "location")
         user_dict["state"] = getattr(user[0], "state")
         user_dict["skill_level"] = getattr(user[0], "skill_level")
-        user_dict["age_range"] = (getattr(user[0], "age_range"))
+        age_input = json.loads(getattr(user[0], "age_range"))
+        if len(age_input) <= 1:
+            user_dict["age_range"] = age_input
+        else:
+            user_dict["age_range"] = " * ".join(age_input)
         user_dict["frequented_courses"] = getattr(user[0], "frequented_courses")
         user_dict["gender_preference"] = getattr(user[0], "gender_preference")
         user_dict["kids_okay"] = getattr(user[0], "kids_okay")
@@ -403,6 +420,14 @@ def get_all_pending_buddies(user_id):
     new_buddy_data = turn_profiles_to_dict(buddy_data)
     return new_buddy_data
 
+def get_number_of_requests(user_id):
+    buddies = Buddy.query.filter(Buddy.user_id_2 == user_id).all()
+    if not buddies:
+        return ""
+    else:
+        return len(buddies)
+
+
 
 def get_all_rejected_buddies(user_id):
     """pulls buddies that are instantiated as a Buddy and have been rejected by other buddy"""
@@ -461,7 +486,8 @@ def get_chats_by_buddy(buddy):
         for chat in chats:
             new_chat = turn_chat_to_dict(chat)
             messages.append(new_chat)
-        return messages
+        new_messages = messages[::-1]
+        return new_messages
     else:
         return []
 

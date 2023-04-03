@@ -17,10 +17,25 @@ function UploadProfilePicture() {
         })
             .then((response) => response.text())
             .then((responsePhoto) => {
-                alert(responsePhoto)
+                // document.querySelector("#form-file").value= ""
+                alert(responsePhoto, "success")
             })
 
     }
+
+    const alert = (message, type) => {
+        const alertLocation = document.getElementById("live-alert-location")
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+          `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+          `   <div>${message}</div>`,
+          '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+          '</div>'
+        ].join('')
+      
+        alertLocation.append(wrapper)
+      }
+
     return (
         <div>
             <form onSubmit={handleUpload} encType="multipart/form-data">
@@ -30,6 +45,7 @@ function UploadProfilePicture() {
                     <input className="app" type="submit" id="photo-submit" value="Upload New Photo"></input>
                 </div>
             </form>
+            <div id="live-alert-location"></div>
         </div>
     )
 }

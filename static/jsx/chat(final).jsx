@@ -7,6 +7,8 @@ function App() {
     const [receiverName, setReceiverName] = React.useState("No Chats Open");
     const user1 = document.querySelector("#user-id").value
     const [button, setButton] = React.useState("Send Message");
+    const [disabled, setDisabled] = React.useState("true");
+
 
     // console.log([user1, user2, buddyID])
 
@@ -114,7 +116,7 @@ function App() {
                 for (const user of resultUsers) {
                     // userRequests.push(<loadRequests item = {user} key={user.user_id}/>);
                     userChats.push(<li><button id={user.buddy_id} key={user.buddy_id} type="button" value={user.buddy_id} onClick={(evt) => setNewChatMessages(evt)}
-                        className="buddy-button"> <img className="tiny" src={user.photo_link} ></img> {user.fname}</button></li>);
+                        className="buddy-button"> <img className="tiny" src={user.photo_link} ></img> <span className="buddy" >{user.fname}</span></button></li>);
                 }
                 console.log(userChats)
                 setAllBuddiesToChat(userChats)
@@ -169,11 +171,12 @@ function App() {
                 <div >
                     <h1 className="middle-headline"> {receiverName}</h1>
                     <div className="middle-chat-final">
-                    <div class="buddy-message">
+                    <div className="buddy-message">
                         {buddyChat}
                     </div>
-                        <input className="send-message" type="text" id="send-message" name="send-message" />
-                        <button className="send-button" htmlFor="send-message" type="submit" onClick={(evt) => processSendMessage(evt)} > {button} </button>
+
+                        <input type="text" id="send-message" name="send-message" />
+                        <button htmlFor="send-message" type="submit" onClick={(evt) => processSendMessage(evt)} > {button} </button>
 
                     </div>
                 </div>
@@ -193,21 +196,23 @@ function App() {
 function LoadChats(props) {
 
     return (
-        <div className="left-message">
+
+            <div className="left-message">
             <img className="extra-tiny" src="/static/images/tree-b.png" ></img>
             <div className="bubble">
                 <b>{props.chat.sender_name}: </b> {props.chat.message} </div><br></br>
             <small className="timestamp">{props.chat.time_stamp} </small>
-        </div>
+            </div>
     )
 }
 
 function LoadChatsRight(props) {
     return (
         <div className="right-message">
+            <img className="extra-tiny-right" src="/static/images/tree-b.png" ></img>
             <div className="bubble">
                 <b>{props.chat.sender_name}: </b> {props.chat.message}   </div>
-            <img className="extra-tiny-right" src="/static/images/tree-b.png" ></img> <br></br>
+            <br></br>
             <small className="timestamp-right">{props.chat.time_stamp} </small>
         </div>
     )
