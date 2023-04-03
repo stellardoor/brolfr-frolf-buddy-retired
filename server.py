@@ -173,10 +173,10 @@ def process_state():
     check_city_list = crud.get_all_cities_by_state(state)
     location = request.json.get("user-location") 
     if location not in check_city_list:
-        return ("error - please only select city from drop down")
+        return jsonify(["Error"])
     else:
         crud.update_user_location(user, state, location)
-        return "Successfully edited your location!!"
+        return jsonify(["Success"])
 
 @app.route("/process-edit", methods=["POST"])
 def process_edit():

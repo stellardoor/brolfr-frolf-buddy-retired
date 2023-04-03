@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %} {{user.name}} {% endblock %}
+{% block title %} {{user.fname}} {% endblock %}
 
 {% block body %}
 <div class="container">
@@ -21,7 +21,8 @@
         </div>
         </div>
         <div class="col-12 col-lg-4">
-            <div class="container-location">Current Location: {{user.location}}, {{user.state}}
+            <div class="container-location">
+                <div id="current-location">Current Location: {{user.location}}, {{user.state}}.</div>
                 <div id="cities"></div>
             </div>
         </div>

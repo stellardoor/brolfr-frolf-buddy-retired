@@ -1,3 +1,0 @@
-export secret_key="extrasupersaddiscgolferperson"
-export CLOUDINARY_KEY="682695254352571"
-export CLOUDINARY_SECRET="DJZhRWv5UjTQJD1b18Rj6814qNk"

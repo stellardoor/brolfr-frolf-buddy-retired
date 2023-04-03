@@ -1,30 +1,31 @@
 function LoadCities() {
 
-    const alertLocation = document.getElementById("live-alert-location")
+    const alertLiveLocation = document.getElementById("live-alert-for-location")
 
-    const [userState, setUserState] = React.useState("")
-    const [userCity, setUserCity] = React.useState("")
+    // const [userState, setUserState] = React.useState("")
+    // const [userCity, setUserCity] = React.useState("")
 
-    React.useEffect(() => {
-        fetch("/get-user-state", {
-        method: 'POST'
-    })
-        .then(response => response.text())
-        .then(stateResponse=> {
-            setUserState(stateResponse)
-            }  
-        );
-        });
-    React.useEffect(() => {
-        fetch("/get-user-city", {
-        method: 'POST'
-    })
-        .then(response => response.text())
-        .then(cityResponse=> {
-            setUserCity(cityResponse)
-            }  
-        );
-        });
+    // React.useEffect(() => {
+    //     fetch("/get-user-state", {
+    //     method: 'POST'
+    // })
+    //     .then(response => response.text())
+    //     .then(stateResponse=> {
+    //         setUserState(stateResponse)
+    //         }  
+    //     );
+    //     });
+
+    // React.useEffect(() => {
+    //     fetch("/get-user-city", {
+    //     method: 'POST'
+    // })
+    //     .then(response => response.text())
+    //     .then(cityResponse=> {
+    //         setUserCity(cityResponse)
+    //         }  
+    //     );
+    //     });
 
     const [cityNames, setCityNames] = React.useState([])
     const [stateNames, setStateNames] = React.useState([])
@@ -67,9 +68,11 @@ function LoadCities() {
 
     const processUserLocation = (evt) => { //idk how capture ???
         evt.preventDefault()
+        const stateInput = document.querySelector("#user-state").value
+        const cityInput = document.querySelector("#user-location").value
         const formInputs = { 
-            "user-state": document.querySelector("#user-state").value, 
-            "user-location" : document.querySelector("#user-location").value
+            "user-state": stateInput, 
+            "user-location" : cityInput
         }
         
         fetch("/process-city-state", {
@@ -80,9 +83,15 @@ function LoadCities() {
             body: JSON.stringify(formInputs),
             credentials: "same-origin"
         })
-            .then((response) => response.text())
+            .then((response) => response.json())
             .then((responseSubmit => {
-                alert(responseSubmit, "success")
+                if (responseSubmit.includes("Error")){
+                    alert("Error: Please select city from dropdown after selecting the US state.", "danger")
+                }
+                else {
+                document.getElementById("current-location").innerHTML = `Current Location: ${cityInput}, ${stateInput}. `
+                alert("Successfully updated location!", "success")
+            }
             }))    
     };
 
@@ -97,26 +106,26 @@ function LoadCities() {
           '</div>'
         ].join('')
       
-        alertLocation.append(wrapper)
+        alertLiveLocation.append(wrapper)
       }
 
     return (
         <div>
             <form>
                 <select onChange={(evt)=>captureUserInput(evt)} name="user-state" id="user-state">
-                    <option defaultValue={userState} >{userState} </option>
+                    <option selecteddisabledhidden="true" >Select State </option>
                     {stateNames} 
                 </select><br></br>
             </form>
             <form>
                 <label htmlFor="user-location" className="form-label">City: </label>
-                <input className="form-control" list="datalistOptions" name="user-location" id="user-location" defaultValue = {userCity} placeholder="Type to search your closest city..."></input>
+                <input className="form-control" list="datalistOptions" name="user-location" id="user-location" placeholder="Type to search your closest city..."></input>
                 <datalist id="datalistOptions">
                     {cityNames}
                 </datalist>
                 <input className="app" type ="submit" onClick={(evt)=> processUserLocation(evt)} ></input>
             </form>
-            <div id="live-alert-location"></div>
+            <div id="live-alert-for-location"></div>
         </div>
     )
 

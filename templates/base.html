@@ -23,6 +23,35 @@
     }
 
   </style>
+<!-- 
+<nav class="navbar navbar-expand-md color-nav">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      {% if 'user_id' in session %}
+      <li><a href="/brolfrs">Find Buds</a></li>
+      <li><a href="/buddies">Buddies</a></li>
+      <li><a href="/requests">Requests {{session["requests"]}}</a></li>
+      <li><a href="/chats">Messages</a></li>
+      </ul>
+      <div class="color-nav-right">
+        <a href="/sign-out">Sign out</a>
+      </div>
+      {% else %}
+      <div class="color-nav-right">
+        <a href="/login">Login</a>
+      </div>
+      {% endif %}
+  </div>
+</nav> -->
+
+
+
+
 
 <div class="color-nav">
   <a class="brolf-button" role="button" href='/home' >
@@ -31,7 +60,7 @@
   {% if 'user_id' in session %}
   <a href="/brolfrs">Find Buds</a>
   <a href="/buddies">Buddies</a>
-  <a href="/requests">Requests</a>
+  <a href="/requests">Requests {{session["requests"]}}</a>
   <a href="/chats">Messages</a>
   <div class="color-nav-right">
     <a href="/sign-out">Sign out</a>
