@@ -85,20 +85,20 @@ function LoadRequest(props) {
                                         </div>
                                         <div className="modal-body">
                                             <ul>
-                                                <li>Joined {props.user.member_since}</li>
-                                                <li>Looking to throw with: {props.user.gender_preference}</li>
-                                                <li>Age Range: {props.user.age_range}</li>
-                                                <li>Availability: {props.user.calendar}</li>
-                                                <li>Skill Level: {props.user.skill_level}</li>
-                                                <li>Frequented Courses: {props.user.frequented_courses}</li>
-                                                <li>Kids: {props.user.kids_okay}</li>
-                                                <li>Dogs: {props.user.dogs_okay}</li>
-                                                <li>Friendly/Stakes: {props.user.friendly_or_stakes_game}</li>
-                                                <li>Game preference: {props.user.type_of_game}</li>
-                                                <li>Alcohol: {props.user.alcohol_okay}</li>
-                                                <li>Tobacco: {props.user.tobacco_okay}</li>
-                                                <li>420 Friendly: {props.user.smoke_420_okay}</li>
-                                            </ul>
+                                                    <li><b>Joined:</b> {props.user.member_since}</li>
+                                                    <li><b>Looking to throw with:</b> {props.user.gender_preference}</li>
+                                                    <li><b>Age Range:</b> {props.user.age_range}</li>
+                                                    <li><b>Availability:</b> {props.user.calendar}</li>
+                                                    <li><b>Skill Level:</b> {props.user.skill_level}</li>
+                                                    <li><b>Frequented Courses:</b> {props.user.frequented_courses}</li>
+                                                    <li><b>Kids:</b> {props.user.kids_okay}</li>
+                                                    <li><b>Dogs:</b> {props.user.dogs_okay}</li>
+                                                    <li><b>Friendly/Stakes:</b> {props.user.friendly_or_stakes_game}</li>
+                                                    <li><b>Game preference:</b> {props.user.type_of_game}</li>
+                                                    <li><b>Alcohol:</b> {props.user.alcohol_okay}</li>
+                                                    <li><b>Tobacco:</b> {props.user.tobacco_okay}</li>
+                                                    <li><b>420 Friendly:</b> {props.user.smoke_420_okay}</li>
+                                                </ul>
                                             <div className="modal-footer">
                                             <button disabled={click} onClick={clickAcceptAgain} type="submit" > {BuddyAcceptAgain} </button>
                                             </div>

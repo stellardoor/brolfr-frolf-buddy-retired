@@ -1,6 +1,7 @@
 // """loading profiles to search potential buds"""
 function App() {
     const [users, setUsers] = React.useState([]);
+    // const [results, setResults] = React.useState("Showing profiles matching your location");
     // const [loadingCircle, setLoadingCircle] = React.useState(true)
 
     // if (loadingCircle) {
@@ -19,8 +20,22 @@ function App() {
     for (const user of users) {
         userProfiles.push(<LoadRequest user={user} key={user.user_id} />);
     }
+
+    const loadAllProfiles = (evt) => { //idk how capture ???
+        evt.preventDefault()
+        document.getElementById("show-results").innerText = ""
+
+        fetch("/load-all-profiles")
+            .then((response) => response.json())
+            .then((responseSubmit => {
+                setUsers(responseSubmit)
+
+            }));
+    }
+
     return (
         <div>
+            <small className = "results-small" >Showing all profiles <small id="show-results"> matching your location </small> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onClick = {loadAllProfiles} className="app" > Load all profiles</button></small>
             <div id="cities">
                 <LoadCities setUsers={setUsers} />
             </div>
@@ -96,19 +111,19 @@ function LoadRequest(props) {
                                             </div>
                                             <div className="modal-body">
                                                 <ul>
-                                                    <li>Joined {props.user.member_since}</li>
-                                                    <li>Looking to throw with: {props.user.gender_preference}</li>
-                                                    <li>Age Range: {props.user.age_range}</li>
-                                                    <li>Availability: {props.user.calendar}</li>
-                                                    <li>Skill Level: {props.user.skill_level}</li>
-                                                    <li>Frequented Courses: {props.user.frequented_courses}</li>
-                                                    <li>Kids: {props.user.kids_okay}</li>
-                                                    <li>Dogs: {props.user.dogs_okay}</li>
-                                                    <li>Friendly/Stakes: {props.user.friendly_or_stakes_game}</li>
-                                                    <li>Game preference: {props.user.type_of_game}</li>
-                                                    <li>Alcohol: {props.user.alcohol_okay}</li>
-                                                    <li>Tobacco: {props.user.tobacco_okay}</li>
-                                                    <li>420 Friendly: {props.user.smoke_420_okay}</li>
+                                                    <li><b>Joined:</b> {props.user.member_since}</li>
+                                                    <li><b>Looking to throw with:</b> {props.user.gender_preference}</li>
+                                                    <li><b>Age Range:</b> {props.user.age_range}</li>
+                                                    <li><b>Availability:</b> {props.user.calendar}</li>
+                                                    <li><b>Skill Level:</b> {props.user.skill_level}</li>
+                                                    <li><b>Frequented Courses:</b> {props.user.frequented_courses}</li>
+                                                    <li><b>Kids:</b> {props.user.kids_okay}</li>
+                                                    <li><b>Dogs:</b> {props.user.dogs_okay}</li>
+                                                    <li><b>Friendly/Stakes:</b> {props.user.friendly_or_stakes_game}</li>
+                                                    <li><b>Game preference:</b> {props.user.type_of_game}</li>
+                                                    <li><b>Alcohol:</b> {props.user.alcohol_okay}</li>
+                                                    <li><b>Tobacco:</b> {props.user.tobacco_okay}</li>
+                                                    <li><b>420 Friendly:</b> {props.user.smoke_420_okay}</li>
                                                 </ul>
                                                 <div className="modal-footer">
                                                     <button className="app" disabled={click} onClick={clickSendRequest} type="submit" > {SendBuddyRequest} </button>
@@ -202,7 +217,7 @@ function LoadCities(props) {
 
     const processProfilesByState = (evt) => { //idk how capture ???
         evt.preventDefault()
-        console.log(userState)
+        document.getElementById("show-results").innerText = ` matching ${userState}`
 
         fetch("/load-users-by-state", {
             method: 'POST',
@@ -214,7 +229,6 @@ function LoadCities(props) {
         })
             .then((response) => response.json())
             .then((responseSubmit => {
-                console.log(responseSubmit)
                 props.setUsers(responseSubmit)
 
             }));
@@ -225,7 +239,8 @@ function LoadCities(props) {
 
     const processProfilesByCity = (evt) => {
         evt.preventDefault()
-        console.log(document.querySelector("#user-location").value)
+        const cityInput = document.querySelector("#user-location").value
+        document.getElementById("show-results").innerText = ` matching ${cityInput} ${userState}`
         const formInputs = {
             "user-state": document.querySelector("#user-state").value,
             "user-location": document.querySelector("#user-location").value
@@ -268,6 +283,7 @@ function LoadCities(props) {
 
     const processProfilesByCalendar = (evt) => {
         evt.preventDefault()
+        document.getElementById("show-results").innerText = " matching calendar"
         const calendarInfo = document.querySelectorAll(".calendar")
         console.log(calendarInfo)
         const calendarList = [];
@@ -396,27 +412,5 @@ function LoadCities(props) {
 
 //     };
 
-
-//     return (
-//         <div>
-//             <div className="">
-//                 <div id="calendar">
-
-//                     <input type="checkbox" name="calendar" className="calendar" id="early-mornings" value="Early Mornings (Sunrise - 8am)" ></input>
-//                     <label htmlFor="early-mornings"> Early Mornings (Sunrise - 8am) </label><br></br>
-//                     <input type="checkbox" name="calendar" className="calendar" id="mornings" value="Mornings (8am - 11am)" ></input>
-//                     <label htmlFor="mornings"> Mornings (8am - 11am) </label><br></br>
-//                     <input type="checkbox" name="calendar" className="calendar" id="afternoons" value="Afternoons (11am - 2pm)"></input>
-//                     <label htmlFor="afternoons"> Afternoons (11am - 2pm) </label><br></br>
-//                     <input type="checkbox" name="calendar" className="calendar" id="late-afternoon" value="Late Afternoons (2pm - 5pm)"></input>
-//                     <label htmlFor="late-afternoons"> Late Afternoons (2pm - 5pm) </label><br></br>
-//                     <input type="checkbox" name="calendar" className="calendar" id="evenings" value="Evenings (5pm - Sunset)" ></input>
-//                     <label htmlFor="evenings"> Evenings (5pm - Sunset) </label><br></br>
-//                     <button htmlFor="calendar" name="calendar" type="submit" onClick={(evt) => processProfilesByCalendar(evt)} >Filter by Calendar</button>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
 
 

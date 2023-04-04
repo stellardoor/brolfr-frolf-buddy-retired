@@ -20,15 +20,15 @@ os.system("createdb frolfers")
 
 # i just want to add users!
 #adding test users below:
-mario_test_users = ["Wario", "Luigi", "Yoshi", "Princess", "Goomba", "Bowser", "Birdo", "Toad", "Mario", "Hammerbro"]
+mario_test_users = ["Wario", "Luigi", "Yoshi", "Peach", "Goomba", "Bowser", "Birdo", "Toad", "Mario", "Hammerbro", "Toadette", "Waluigi", "Daisy"]
 
 def add_test_users():
     for user in mario_test_users:
         email = f"{user}@testing.com".lower()
         password = argon2.hash("testing")
         fname = f"{user}"
-        pronouns = choice(["(She/Her)", "(He/Him)", "(They/Them)", "(He/They)", "(She/They)"])
-        gender = choice(["Man", "Woman", "Non-Binary", ""])
+        pronouns = choice(["(She/Her)", "(He/Him)", "(They/Them)", "(He/They)", "(She/They)", ""])
+        gender = choice(["Man", "Woman", "Non-Binary", "Man", "Woman"])
         birthday = choice(["12/25/1989", "1/2/2000", "3/6/1975"])
         member_since = date.today().strftime("%b %d, %Y")
 

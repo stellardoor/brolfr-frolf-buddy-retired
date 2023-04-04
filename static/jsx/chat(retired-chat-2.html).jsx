@@ -87,9 +87,9 @@ function LoadChats(props) {
 
     return (
         <div className="left-message">
-            <img className="extra-tiny" src="/static/images/tree-b.png" ></img>
+            <img className="extra-tiny" src={props.chat.sender_link} ></img>
             <div className="bubble">
-                <b>{props.chat.sender_name}: </b> {props.chat.message} </div><br></br>
+                <b>{props.chat.sender_name}: </b> {props.chat.message} </div>
             <small className="timestamp">{props.chat.time_stamp} </small>
         </div>
     )
@@ -100,7 +100,7 @@ function LoadChatsRight(props) {
         <div className="right-message">
             <div className="bubble">
                 <b>{props.chat.sender_name}: </b> {props.chat.message}   </div>
-            <img className="extra-tiny-right" src="/static/images/tree-b.png" ></img> <br></br>
+            <img className="extra-tiny-right" src={props.chat.sender_link} ></img> 
             <small className="timestamp-right">{props.chat.time_stamp} </small>
         </div>
     )

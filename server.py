@@ -56,8 +56,8 @@ def user_login():
     else:
         session["user_id"] = user.user_id
         session["name"] = user.fname
-        request_number = crud.get_number_of_requests(user.user_id)
-        session["requests"] = request_number
+        session["requests"] = crud.get_number_of_requests(user.user_id)
+        session["buddies"] = crud.get_number_of_buddies(user.user_id)
         # return redirect(f"/home")
         return "success"
 
@@ -93,6 +93,8 @@ def create_new_account():
     email = request.json.get("email").lower().strip()
     # process and hash password: 
     password = request.json.get("password")
+    # if len(password) < 8:
+    #     return "ERROR: Password must be at least 8 characters, with 1 uppercase letter"
     hashed_pass = argon2.hash(password)
     date_today  = datetime.today()
     member_since = date_today.strftime("%b %d, %Y")
@@ -116,6 +118,8 @@ def forgot_password(): #will write later maybe
 @app.route("/profile") #<user_id>
 def user_profile():
     if crud.user_logged_in():
+        session["requests"] = crud.get_number_of_requests(session["user_id"])
+        session["buddies"] = crud.get_number_of_buddies(session["user_id"])
         user_info = crud.get_user_by_id(session['user_id'])
         user = crud.turn_one_profile_to_dict(user_info)
         return render_template("user-profile.html", user=user)
@@ -125,6 +129,8 @@ def user_profile():
 #-----------complete------------------
 @app.route("/edit-profile")
 def edit_profile():
+    session["requests"] = crud.get_number_of_requests(session["user_id"])
+    session["buddies"] = crud.get_number_of_buddies(session["user_id"])
     user = crud.get_user_by_id(session['user_id'])
     return render_template("edit-profile.html", user=user)
 #-----------------------------
@@ -207,6 +213,8 @@ def process_edit():
 def edit_account():
     """ opens edit account page for account specific edits"""
     user = crud.get_user_by_id(session["user_id"])
+    session["requests"] = crud.get_number_of_requests(session["user_id"])
+    session["buddies"] = crud.get_number_of_buddies(session["user_id"])
     today = date.today()
     return render_template("edit-account.html", user=user, today=today) # today so the calendar does not load in the future
 
@@ -256,6 +264,8 @@ def process_photo():
 @app.route("/brolfrs")
 def show_profiles():
     if crud.user_logged_in():
+        session["requests"] = crud.get_number_of_requests(session["user_id"])
+        session["buddies"] = crud.get_number_of_buddies(session["user_id"])
         return render_template('profiles.html')
     else:
         return redirect("/")
@@ -265,6 +275,11 @@ def show_profiles():
 def load_profiles():
     user = crud.get_user_by_id(session['user_id'])
     all_users = crud.get_all_profiles_by_city_state(session['user_id'], user.location, user.state)
+    return jsonify(all_users)
+
+@app.route("/load-all-profiles")
+def load_all_profiles():
+    all_users = crud.get_all_profiles(session['user_id'])
     return jsonify(all_users)
 
 @app.route("/load-users-by-state", methods=["POST"])
@@ -343,6 +358,8 @@ def request_buddy():
 @app.route("/buddies")
 def show_user_matches():
     if crud.user_logged_in():
+        session["requests"] = crud.get_number_of_requests(session["user_id"])
+        session["buddies"] = crud.get_number_of_buddies(session["user_id"])
         return render_template("show-buddies.html")
     else:
         return redirect("/")
@@ -378,6 +395,8 @@ def deny_buddy_again():
 @app.route("/requests")
 def show_buddy_requests():
     if crud.user_logged_in():
+        session["requests"] = crud.get_number_of_requests(session["user_id"])
+        session["buddies"] = crud.get_number_of_buddies(session["user_id"])
         return render_template('requests.html')
     else:
         return redirect("/")
@@ -423,6 +442,8 @@ def deny_buddy():
 @app.route("/denied-buddies")
 def open_denied_buddies():
     if crud.user_logged_in():
+        session["requests"] = crud.get_number_of_requests(session["user_id"])
+        session["buddies"] = crud.get_number_of_buddies(session["user_id"])
         return render_template('rejections.html')
     else:
         return redirect("/")
@@ -466,6 +487,8 @@ def accept_buddy_again():
 @app.route("/chats") 
 def show_open_chats():
     if crud.user_logged_in():
+        session["requests"] = crud.get_number_of_requests(session["user_id"])
+        session["buddies"] = crud.get_number_of_buddies(session["user_id"])
         user = crud.get_user_by_id(session["user_id"])
         # return render_template('all-chats.html')
         return render_template('chat.html', user=user)
@@ -491,6 +514,8 @@ def show_open_chats():
 #--------------complete---------------
 @app.route("/chat/<buddy_id>")
 def show_buddy_chat(buddy_id):
+    session["requests"] = crud.get_number_of_requests(session["user_id"])
+    session["buddies"] = crud.get_number_of_buddies(session["user_id"])
     user_1 = crud.get_user_by_id(session["user_id"])
     buddy = crud.get_buddy_from_id(buddy_id)
     user_2_id = crud.get_other_user_id_from_buddy(buddy, user_1.user_id)

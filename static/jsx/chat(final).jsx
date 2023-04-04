@@ -102,7 +102,7 @@ function App() {
                 setReceiverID(resultID[0])
                 setReceiverName(`Chatting with ${resultID[1]}!`)
                 loadInitialChats(idInput, resultID)
-                document.querySelector("#chat-dude").innerHTML = `<button onClick="window.location.href='/chat/${idInput}';" >Chat *live* with only this dude</button>`
+                document.querySelector("#chat-dude").innerHTML = `<button class="app-big" onClick="window.location.href='/chat/${idInput}';" >Chat *live* with only this dude</button>`
             })
     }
 
@@ -198,9 +198,9 @@ function LoadChats(props) {
     return (
 
             <div className="left-message">
-            <img className="extra-tiny" src="/static/images/tree-b.png" ></img>
+            <img className="extra-tiny" src={props.chat.sender_link} ></img>
             <div className="bubble">
-                <b>{props.chat.sender_name}: </b> {props.chat.message} </div><br></br>
+                <b>{props.chat.sender_name}: </b> {props.chat.message} </div>
             <small className="timestamp">{props.chat.time_stamp} </small>
             </div>
     )
@@ -209,10 +209,10 @@ function LoadChats(props) {
 function LoadChatsRight(props) {
     return (
         <div className="right-message">
-            <img className="extra-tiny-right" src="/static/images/tree-b.png" ></img>
+
             <div className="bubble">
                 <b>{props.chat.sender_name}: </b> {props.chat.message}   </div>
-            <br></br>
+                <img className="extra-tiny-right" src={props.chat.sender_link} ></img>
             <small className="timestamp-right">{props.chat.time_stamp} </small>
         </div>
     )

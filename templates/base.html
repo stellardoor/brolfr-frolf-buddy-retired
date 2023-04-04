@@ -59,8 +59,8 @@
 
   {% if 'user_id' in session %}
   <a href="/brolfrs">Find Buds</a>
-  <a href="/buddies">Buddies</a>
-  <a href="/requests">Requests {{session["requests"]}}</a>
+  <a href="/buddies">Buddies <small class="request-number">&nbsp;{{session["buddies"]}}&nbsp;</small></a>
+  <a href="/requests">Requests <small class="request-number">&nbsp;{{session["requests"]}}&nbsp;</small></a>
   <a href="/chats">Messages</a>
   <div class="color-nav-right">
     <a href="/sign-out">Sign out</a>

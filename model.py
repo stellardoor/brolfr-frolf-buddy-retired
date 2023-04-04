@@ -15,7 +15,7 @@ class User(db.Model):
     birthday = db.Column(db.Date)
     location = db.Column(db.String)
     state = db.Column(db.String)
-    member_since = db.Column(db.Date)
+    member_since = db.Column(db.String)
     photo_link = db.Column(db.String)
     public_photo_id = db.Column(db.String)
     intro_text = db.Column(db.Text)

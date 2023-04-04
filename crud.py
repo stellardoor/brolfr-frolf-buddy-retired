@@ -410,20 +410,26 @@ def get_accepted_buddies_chat(user_id):
 
 def get_all_pending_buddies(user_id):
     """pulls buddies that are instantiated as a Buddy and have not been accepted by other user yet"""
-    buddies = Buddy.query.filter(Buddy.user_id_2 == user_id).all()
+    buddies = Buddy.query.filter(db.and_(Buddy.user_id_2 == user_id, Buddy.pending== True )).all()
     buddy_data = []
     for buddy in buddies:
-        if buddy.pending == True:
-            user = get_user_by_id(buddy.user_id_1)
-            buddy_data.append(user)
+        user = get_user_by_id(buddy.user_id_1)
+        buddy_data.append(user)
 
     new_buddy_data = turn_profiles_to_dict(buddy_data)
     return new_buddy_data
 
-def get_number_of_requests(user_id):
-    buddies = Buddy.query.filter(Buddy.user_id_2 == user_id).all()
+def get_number_of_buddies(user_id):
+    buddies = Buddy.query.filter(db.and_(db.or_(Buddy.user_id_2 == user_id, Buddy.user_id_1 == user_id ), Buddy.accepted == True)).all()
     if not buddies:
-        return ""
+        return "-"
+    else:
+        return len(buddies)
+
+def get_number_of_requests(user_id):
+    buddies = Buddy.query.filter(db.and_(Buddy.user_id_2 == user_id, Buddy.pending== True )).all()
+    if not buddies:
+        return "-"
     else:
         return len(buddies)
 
